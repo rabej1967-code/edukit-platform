@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Demo — SPIn Analytics | EduKit Pakej Guru</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, sans-serif; background: #f0f4f8; color: #1e293b; font-size: 13px; }
+#wrap { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* DEMO BAR */
+.demo-bar { background: linear-gradient(90deg,#1a56db,#7c3aed); padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+.demo-bar-left p { font-size: 12.5px; font-weight: 700; color: white; }
+.demo-bar-left span { font-size: 11px; color: rgba(255,255,255,.75); }
+.demo-cta { padding: 7px 18px; background: #f59e0b; border: none; border-radius: 20px; font-size: 12px; font-weight: 800; color: #0f172a; cursor: pointer; font-family: Arial, sans-serif; white-space: nowrap; flex-shrink: 0; }
+.demo-cta:hover { background: #e68a00; }
+
+/* HEADER — tepat sama dengan app sebenar */
+#header { background: #fff; border-bottom: 2px solid #1a56db; padding: 10px 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.hrow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.hrow:last-child { margin-bottom: 0; }
+.brand { font-size: 18px; font-weight: 800; color: #1a56db; margin-right: 4px; }
+.brand span { color: #0f172a; }
+.demo-pill { background: #fef9c3; color: #92400e; border: 1px solid #fde68a; border-radius: 20px; padding: 2px 9px; font-size: 10.5px; font-weight: 700; }
+.limit-pill { border-radius: 20px; padding: 2px 9px; font-size: 10.5px; font-weight: 700; }
+.limit-ok  { background: #d1fae5; color: #065f46; }
+.limit-warn { background: #fee2e2; color: #991b1b; }
+#saveStatus { font-size: 11px; padding: 3px 8px; background: #d1fae5; color: #065f46; border-radius: 4px; font-weight: 600; }
+
+.btn { padding: 6px 12px; border: 1px solid #cbd5e1; background: #fff; color: #475569; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-family: Arial, sans-serif; transition: .15s; }
+.btn:hover { background: #f1f5f9; }
+.btn-blue  { background: #1a56db; color: #fff; border-color: #1a56db; }
+.btn-blue:hover  { background: #1240b0; }
+.btn-green { background: #10b981; color: #fff; border-color: #10b981; }
+.btn-orange { background: #f97316; color: #fff; border-color: #f97316; }
+.btn-red   { background: #ef4444; color: #fff; border-color: #ef4444; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+select.sel { padding: 6px 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; color: #1e293b; cursor: pointer; font-family: Arial, sans-serif; }
+.btn-mode { background: #f1f5f9; }
+.btn-mode.active { background: #1a56db; color: #fff; border-color: #1a56db; }
+.subj-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+.subj-btn.active { background: #1a56db; color: #fff; border-color: #1a56db; }
+
+/* CONTENT */
+#content { flex: 1; padding: 14px 16px; overflow-y: auto; }
+
+/* TABLE */
+.tbl-wrap { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 14px; }
+.tbl-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: #1e293b; color: #fff; padding: 10px 8px; font-weight: 600; text-align: center; white-space: nowrap; font-size: 11px; }
+th:first-child { text-align: left; padding-left: 14px; min-width: 180px; position: sticky; left: 0; z-index: 3; background: #1e293b; }
+th:nth-child(2) { position: sticky; left: 180px; z-index: 3; background: #1e293b; min-width: 60px; }
+td { padding: 8px; border-bottom: 1px solid #f1f5f9; text-align: center; }
+td:first-child { position: sticky; left: 0; z-index: 2; background: #fff; }
+td:nth-child(2) { position: sticky; left: 180px; z-index: 2; background: #fff; border-right: 1px solid #e2e8f0; min-width: 60px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+tr:hover td:first-child, tr:hover td:nth-child(2) { background: #f1f5f9; }
+.sum-row td { background: #f1f5f9 !important; font-weight: 700; border-top: 2px solid #e2e8f0; }
+.sum-row td:first-child { background: #f1f5f9 !important; }
+.sum-row td:nth-child(2) { background: #f1f5f9 !important; }
+.cg { background: #d1fae5; color: #065f46; font-weight: 700; }
+.cy { background: #fef9c3; color: #713f12; font-weight: 700; }
+.cr { background: #fee2e2; color: #991b1b; font-weight: 700; }
+td input[type=number] { width: 52px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center; font-size: 12px; font-family: monospace; }
+td input[type=number]:focus { outline: none; border-color: #1a56db; box-shadow: 0 0 0 2px rgba(26,86,219,.15); }
+.ic { background: none; border: none; cursor: pointer; color: #94a3b8; padding: 2px 5px; border-radius: 3px; font-size: 12px; }
+.ic:hover { color: #1a56db; background: #eff6ff; }
+.ic-del:hover { color: #ef4444 !important; background: #fee2e2 !important; }
+
+/* CARDS */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 12px; }
+.card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
+.card-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; }
+.card-hd-left { display: flex; align-items: center; gap: 8px; }
+.card-ico { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: #475569; }
+.card-bd { padding: 12px 14px; }
+.card-scroll { max-height: 210px; overflow-y: auto; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+.stat-row:last-child { border-bottom: none; }
+.stat-val { font-weight: 700; color: #1a56db; font-family: monospace; }
+.no-data { color: #94a3b8; font-size: 12px; text-align: center; padding: 20px; font-style: italic; }
+.bar-wrap { margin-bottom: 8px; }
+.bar-label { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+.bar-track { background: #e2e8f0; height: 24px; border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-weight: 700; font-size: 11px; font-family: monospace; border-radius: 5px; min-width: 48px; transition: width .5s; }
+.heatmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px,1fr)); gap: 5px; }
+.hm-cell { aspect-ratio: 1; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: default; }
+.hm-name  { font-size: 10px; font-weight: 700; color: #fff; }
+.hm-kelas { font-size: 9px; color: rgba(255,255,255,.8); }
+.hm-score { font-size: 13px; font-weight: 800; color: #fff; font-family: monospace; }
+.chart-sel { font-size: 11px; padding: 3px 7px; border: 1px solid #e2e8f0; border-radius: 5px; background: #f8fafc; color: #475569; cursor: pointer; font-family: Arial, sans-serif; font-weight: 600; }
+
+/* MODAL */
+#modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 999; align-items: center; justify-content: center; }
+#modal-bg.show { display: flex; }
+#modal-box { background: #fff; border-radius: 12px; padding: 24px; width: 90%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,.15); }
+#modal-title { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
+#modal-msg { font-size: 13px; color: #64748b; margin-bottom: 14px; }
+#modal-input { width: 100%; padding: 9px 11px; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; display: none; margin-bottom: 14px; }
+#modal-input:focus { outline: none; border-color: #1a56db; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* LIMIT OVERLAY */
+#limitOverlay { position: fixed; inset: 0; background: rgba(10,22,40,.85); z-index: 9999; display: none; align-items: center; justify-content: center; }
+#limitOverlay.show { display: flex; }
+.lo-box { background: white; border-radius: 20px; width: 440px; max-width: 93vw; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.3); }
+.lo-head { background: linear-gradient(135deg,#1a56db,#7c3aed); padding: 28px; text-align: center; }
+.lo-head h2 { font-size: 22px; font-weight: 800; color: white; margin-bottom: 6px; }
+.lo-head p  { font-size: 13px; color: rgba(255,255,255,.8); }
+.lo-body { padding: 22px 28px; }
+.lo-body p { font-size: 14px; color: #475569; line-height: 1.7; margin-bottom: 14px; }
+.lo-body ul { list-style: none; }
+.lo-body ul li { font-size: 13px; color: #0f172a; padding: 5px 0; display: flex; align-items: center; gap: 8px; }
+.lo-body ul li::before { content: '✓'; color: #10b981; font-weight: 700; flex-shrink: 0; }
+.lo-foot { padding: 14px 28px 22px; display: flex; flex-direction: column; gap: 8px; }
+.lo-main { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; color: #0f172a; cursor: pointer; font-family: Arial, sans-serif; }
+.lo-main:hover { background: #e68a00; }
+.lo-back { background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer; font-family: Arial, sans-serif; text-align: center; }
+
+@media(max-width:600px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="wrap">
+
+<!-- DEMO BAR -->
+<div class="demo-bar">
+  <div class="demo-bar-left">
+    <p>🎯 DEMO — SPIn Analytics (Pakej Guru EduKit)</p>
+    <span>Had demo: 10 pelajar. Versi penuh: pelajar tanpa had + simpan ke cloud + PDF laporan.</span>
+  </div>
+  <button class="demo-cta" onclick="location.href='index.html#pricing'">Dapatkan Akses Penuh →</button>
+</div>
+
+<!-- HEADER (sama rupa dengan app sebenar) -->
+<div id="header">
+  <div class="hrow">
+    <span class="brand">SP<span>In</span> Analytics</span>
+    <span class="demo-pill">DEMO</span>
+    <span class="limit-pill limit-ok" id="limitPill">0 / 10 Pelajar</span>
+    <div class="hrow" style="margin:0 0 0 auto;">
+      <span id="saveStatus">💾 Sesi Demo (Data tidak disimpan)</span>
+    </div>
+  </div>
+  <div class="hrow">
+    <button class="btn btn-mode active" id="btnKelas" onclick="setMode('kelas')">Kelas</button>
+    <button class="btn btn-mode" id="btnMulti" onclick="setMode('multi')">Multi-Kelas</button>
+    <select class="sel" id="kelasSel" onchange="renderAll()"></select>
+    <button class="btn btn-blue" onclick="doTambahKelas()">+ Kelas</button>
+    <button class="btn btn-blue" id="btnAddP" onclick="doTambahPelajar()">+ Pelajar</button>
+    <button class="btn btn-blue" onclick="doTambahUjian()">+ Ujian</button>
+    <button class="btn btn-red" onclick="doReset()">Reset Kelas</button>
+  </div>
+  <div class="hrow">
+    <button class="btn btn-orange" onclick="demoOnly('PDF Laporan')">PDF Kelas</button>
+    <button class="btn btn-orange" onclick="demoOnly('PDF Multi-Kelas')">PDF Multi</button>
+    <button class="btn btn-orange" onclick="demoOnly('Laporan Penuh')">Laporan Penuh</button>
+    <button class="btn" onclick="demoOnly('Eksport JSON')">Eksport JSON</button>
+    <div style="display:flex;align-items:center;gap:5px;">
+      <span style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Subjek:</span>
+      <div id="subjList" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+      <button class="btn" onclick="doTambahSubjek()">+ Subjek</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <div class="tbl-wrap">
+    <div class="tbl-scroll">
+      <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-ico" style="background:#dbeafe;color:#1a56db">📈</div><span class="card-title">Trend Ujian</span></div>
+        <select class="chart-sel" id="trendType" onchange="rebuildTrend(this.value)"><option value="line">Garisan</option><option value="bar">Bar</option><option value="pie">Pai</option></select>
+      </div>
+      <div class="card-bd"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">📊</div><span class="card-title">Analisis Gred</span></div>
+        <select class="chart-sel" id="gradeType" onchange="rebuildGrade(this.value)"><option value="bar">Bar</option><option value="pie">Pai</option><option value="line">Garisan</option></select>
+      </div>
+      <div class="card-bd"><canvas id="gradeChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fef9c3;color:#ca8a04">⭐</div><span class="card-title">Ranking Pelajar</span></div></div>
+      <div class="card-bd card-scroll" id="rankDiv"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#ede9fe;color:#7c3aed">▶</div><span class="card-title">Indeks Prestasi</span></div></div>
+      <div class="card-bd" id="indeksDiv"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fee2e2;color:#ef4444">⚠</div><span class="card-title">Pelajar Berisiko</span></div></div>
+      <div class="card-bd card-scroll" id="risikoDiv"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">↑</div><span class="card-title">Prestasi Meningkat</span></div></div>
+      <div class="card-bd card-scroll" id="improveDiv"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fff7ed;color:#ea580c">↓</div><span class="card-title">Prestasi Menurun</span></div></div>
+      <div class="card-bd card-scroll" id="declineDiv"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fdf4ff;color:#9333ea">■</div><span class="card-title">Heatmap Prestasi</span></div></div>
+      <div class="card-bd"><div id="heatmapDiv" class="heatmap"></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #wrap -->
+
+<!-- MODAL -->
+<div id="modal-bg">
+  <div id="modal-box">
+    <div id="modal-title"></div>
+    <div id="modal-msg"></div>
+    <input type="text" id="modal-input" autocomplete="off">
+    <div class="modal-btns">
+      <button class="btn" onclick="modalCancel()">Batal</button>
+      <button class="btn btn-blue" onclick="modalOK()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIMIT OVERLAY -->
+<div id="limitOverlay">
+  <div class="lo-box">
+    <div class="lo-head">
+      <h2>📊 Had Demo Dicapai!</h2>
+      <p>Anda telah mendaftarkan 10 pelajar (had demo)</p>
+    </div>
+    <div class="lo-body">
+      <p>Tahniah! Anda baru sahaja mencuba SPIn Analytics. Dalam versi penuh:</p>
+      <ul>
+        <li>Daftar pelajar tanpa had bilangan</li>
+        <li>Tambah kelas dan subjek tanpa had</li>
+        <li>Simpan data secara selamat ke cloud</li>
+        <li>Jana PDF laporan kelas & penuh secara automatik</li>
+        <li>Eksport/Import data CSV dan Excel</li>
+        <li>Multi-pengguna dengan kawalan admin</li>
+      </ul>
+    </div>
+    <div class="lo-foot">
+      <button class="lo-main" onclick="location.href='index.html#pricing'">Dapatkan Pakej Guru — RM 95 Sahaja →</button>
+      <button class="lo-back" onclick="document.getElementById('limitOverlay').classList.remove('show')">Teruskan demo (had 10 pelajar)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+// ── CONSTANTS ────────────────────────────────────────────────
+var DEMO_MAX = 10;
+var mode = 'kelas';
+var subjects = {};
+var curSubject = null;
+var tChart = null, gChart = null;
+var tLastData = null, gLastData = null;
+var modalResolve = null;
+var gradeRange = {'A+':90,'A':85,'A-':80,'B+':75,'B':70,'C+':65,'C':60,'D':50,'E':0,'G':-1};
+
+// ── DEFAULT DATA (sama struktur dengan app sebenar) ──────────
+function initDemo() {
+  subjects = {
+    'Matematik': {
+      kelasData: {
+        '5 Amanah': [
+          {nama:'Ahmad Fariz Rashid',  kelas:'5 Amanah', markah:[85,78,82]},
+          {nama:'Nurul Ain Hassan',    kelas:'5 Amanah', markah:[92,88,94]},
+          {nama:'Muhammad Izzat Saad', kelas:'5 Amanah', markah:[45,52,48]},
+          {nama:'Siti Hajar Yusof',   kelas:'5 Amanah', markah:[78,82,79]},
+          {nama:'Haziq bin Roslan',    kelas:'5 Amanah', markah:[61,65,70]},
+        ],
+        '5 Bestari': [
+          {nama:'Razak Ismail',        kelas:'5 Bestari', markah:[55,60,58]},
+          {nama:'Aminah Karim',        kelas:'5 Bestari', markah:[70,74,72]},
+        ]
+      },
+      ujian: ['Ujian 1','Ujian 2','Ujian 3']
+    }
+  };
+  curSubject = 'Matematik';
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function num(v)  { return isNaN(Number(v)) ? 0 : Number(v); }
+function avg(arr){ var v=arr.map(num).filter(m=>m>0); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : 0; }
+function gred(v) { var o=['A+','A','A-','B+','B','C+','C','D','E']; for(var i=0;i<o.length;i++) if(v>=gradeRange[o[i]]) return o[i]; return 'G'; }
+function cellClass(v){ var g=gred(v); if(['A+','A','A-'].includes(g)) return 'cg'; if(['B+','B','C+','C'].includes(g)) return 'cy'; return 'cr'; }
+function barColor(v){ var g=gred(v); if(['A+','A','A-'].includes(g)) return '#10b981'; if(['B+','B'].includes(g)) return '#84cc16'; if(['C+','C'].includes(g)) return '#f59e0b'; if(g==='D') return '#f97316'; return '#ef4444'; }
+function hmColor(v){ return v>=75?'#10b981':v>=60?'#f59e0b':'#ef4444'; }
+
+function getCurSubj(){ return (curSubject&&subjects[curSubject]) ? subjects[curSubject] : {kelasData:{},ujian:[]}; }
+
+function totalPelajar(){
+  var s=getCurSubj(); var t=0;
+  Object.values(s.kelasData).forEach(arr=>t+=arr.length);
+  return t;
+}
+
+function updateLimitUI(){
+  var n=totalPelajar();
+  var pill=document.getElementById('limitPill');
+  pill.textContent=n+' / '+DEMO_MAX+' Pelajar';
+  pill.className='limit-pill '+(n>=DEMO_MAX?'limit-warn':'limit-ok');
+  document.getElementById('btnAddP').disabled=(n>=DEMO_MAX);
+}
+
+function getDisplayData(){
+  var s=getCurSubj();
+  if(mode==='kelas'){
+    var k=document.getElementById('kelasSel').value;
+    return [].concat(s.kelasData[k]||[]).sort((a,b)=>a.nama.localeCompare(b.nama));
+  }
+  var all=[]; Object.values(s.kelasData).forEach(arr=>all=all.concat(arr));
+  return all.sort((a,b)=>a.nama.localeCompare(b.nama));
+}
+
+// ── RENDER KELAS SELECTOR ────────────────────────────────────
+function renderKelasSel(){
+  var sel=document.getElementById('kelasSel'), prev=sel.value;
+  var kelas=Object.keys(getCurSubj().kelasData);
+  sel.innerHTML=kelas.map(k=>'<option value="'+k+'"'+(k===prev?' selected':'')+'>'+k+'</option>').join('');
+}
+
+// ── RENDER SUBJEK BUTTONS ────────────────────────────────────
+function renderSubjList(){
+  document.getElementById('subjList').innerHTML=Object.keys(subjects).map(s=>
+    '<button class="subj-btn'+(s===curSubject?' active':'')+'" onclick="switchSubj(\''+s+'\')">'+s+'</button>'
+  ).join('');
+}
+
+// ── RENDER TABLE (tepat sama dengan app sebenar) ──────────────
+function renderTable(data){
+  var s=getCurSubj();
+  var ranked=[].concat(data).sort((a,b)=>avg(b.markah)-avg(a.markah));
+  var rankMap={}; ranked.forEach((p,i)=>rankMap[p.kelas+'|'+p.nama]=i+1);
+
+  var h='<tr><th style="text-align:left;padding-left:14px;">Nama Pelajar</th><th>Kelas</th>';
+  s.ujian.forEach((u,i)=>{
+    h+='<th style="min-width:100px"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">'+
+       '<span>'+u+'</span>'+
+       '<span style="display:flex;gap:2px">'+
+       '<button class="ic" onclick="editUjian('+i+')" title="Edit">✎</button>'+
+       '<button class="ic ic-del" onclick="delUjian('+i+')" title="Padam">✖</button>'+
+       '</span></div></th>';
+  });
+  h+='<th>Purata</th><th>Gred</th><th>Rank</th><th>Tindakan</th></tr>';
+  document.getElementById('thead').innerHTML=h;
+
+  var b='';
+  data.forEach(p=>{
+    var a=avg(p.markah);
+    b+='<tr><td style="text-align:left;padding-left:14px;">'+
+       '<div style="display:flex;align-items:center;justify-content:space-between;">'+
+       '<span style="font-weight:600">'+p.nama+'</span>'+
+       '<button class="ic" onclick="editPelajar(\''+p.kelas+'\',\''+p.nama+'\')">✎</button>'+
+       '</div></td>'+
+       '<td style="color:#64748b">'+p.kelas+'</td>';
+    p.markah.forEach((m,j)=>{
+      b+='<td class="'+cellClass(num(m))+'">'+
+         '<input type="number" value="'+Math.round(num(m))+'" min="0" max="100" '+
+         'onchange="updateMark(\''+p.kelas+'\',\''+p.nama+'\','+j+',this.value)">'+
+         '</td>';
+    });
+    b+='<td class="'+cellClass(a)+'" style="font-family:monospace;font-weight:700">'+a.toFixed(1)+'</td>'+
+       '<td class="'+cellClass(a)+'" style="font-weight:800">'+gred(a)+'</td>'+
+       '<td style="color:#64748b;font-weight:700">'+rankMap[p.kelas+'|'+p.nama]+'</td>'+
+       '<td><button class="ic ic-del" onclick="delPelajar(\''+p.kelas+'\',\''+p.nama+'\')">🗑</button></td>'+
+       '</tr>';
+  });
+
+  // Summary row
+  var uAvgs=s.ujian.map((_,i)=>{ var v=data.map(p=>num(p.markah[i])).filter(m=>m>0); return v.length?v.reduce((a,b)=>a+b,0)/v.length:0; });
+  var totAvg=uAvgs.filter(v=>v>0).length ? uAvgs.filter(v=>v>0).reduce((a,b)=>a+b,0)/uAvgs.filter(v=>v>0).length : 0;
+  b+='<tr class="sum-row"><td style="text-align:left;padding-left:14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px">Rumusan</td><td>'+data.length+' pelajar</td>';
+  uAvgs.forEach(av=>b+='<td style="font-family:monospace">'+av.toFixed(1)+'</td>');
+  b+='<td class="'+cellClass(totAvg)+'" style="font-family:monospace;font-weight:800">'+totAvg.toFixed(1)+'</td>'+
+     '<td class="'+cellClass(totAvg)+'" style="font-size:15px;font-weight:800">'+gred(totAvg)+'</td>'+
+     '<td>-</td><td>-</td></tr>';
+
+  document.getElementById('tbody').innerHTML=b||
+    '<tr><td colspan="'+(4+s.ujian.length)+'" style="text-align:center;padding:24px;color:#94a3b8;font-style:italic">Tiada pelajar. Klik "+ Pelajar" untuk tambah.</td></tr>';
+}
+
+// ── RENDER ANALYTICS ─────────────────────────────────────────
+function renderAnalytics(data){
+  if(!data.length){
+    ['rankDiv','risikoDiv','improveDiv','declineDiv','indeksDiv'].forEach(id=>
+      document.getElementById(id).innerHTML='<div class="no-data">Tiada data</div>');
+    document.getElementById('heatmapDiv').innerHTML='';
+    return;
+  }
+
+  // Ranking
+  var ranked=[].concat(data).sort((a,b)=>avg(b.markah)-avg(a.markah));
+  document.getElementById('rankDiv').innerHTML=ranked.map((p,i)=>{
+    var medal=['🥇','🥈','🥉'];
+    var badge=i<3?medal[i]:(i+1)+'.';
+    return '<div class="stat-row"><span>'+badge+' '+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'+
+           '<span class="stat-val '+cellClass(avg(p.markah))+'">'+avg(p.markah).toFixed(1)+'</span></div>';
+  }).join('');
+
+  // Indeks Prestasi
+  var s=getCurSubj(); var indHtml='';
+  if(mode==='kelas'){
+    var k=document.getElementById('kelasSel').value;
+    var sts=s.kelasData[k]||[];
+    var av=sts.length?avg(sts.map(p=>avg(p.markah))):0;
+    indHtml='<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'+
+             '<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+barColor(av)+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
+  } else {
+    Object.keys(s.kelasData).forEach(k=>{
+      var sts=s.kelasData[k]||[];
+      var av=sts.length?avg(sts.map(p=>avg(p.markah))):0;
+      indHtml+='<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'+
+               '<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+barColor(av)+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
+    });
+  }
+  document.getElementById('indeksDiv').innerHTML=indHtml;
+
+  // Pelajar berisiko (<40)
+  var risiko=data.filter(p=>avg(p.markah)<40);
+  document.getElementById('risikoDiv').innerHTML=risiko.length
+    ? risiko.map(p=>'<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'+
+                    '<span style="color:#ef4444;font-weight:700;font-family:monospace">'+avg(p.markah).toFixed(1)+'</span></div>').join('')
+    : '<div class="no-data" style="color:#10b981">✓ Tiada pelajar berisiko</div>';
+
+  // Prestasi meningkat / menurun
+  var diffs=data.filter(p=>p.markah.length>=2).map(p=>{
+    var v=p.markah.map(num).filter(m=>m>0);
+    return v.length>=2 ? {nama:p.nama,kelas:p.kelas,diff:v[v.length-1]-v[0]} : null;
+  }).filter(Boolean);
+
+  var imp=diffs.filter(d=>d.diff>0).sort((a,b)=>b.diff-a.diff).slice(0,5);
+  document.getElementById('improveDiv').innerHTML=imp.length
+    ? imp.map(p=>'<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'+
+                  '<span style="color:#10b981;font-weight:700;font-family:monospace">+'+p.diff.toFixed(1)+'</span></div>').join('')
+    : '<div class="no-data">Tiada data mencukupi</div>';
+
+  var dec=diffs.filter(d=>d.diff<0).sort((a,b)=>a.diff-b.diff).slice(0,5);
+  document.getElementById('declineDiv').innerHTML=dec.length
+    ? dec.map(p=>'<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'+
+                  '<span style="color:#ef4444;font-weight:700;font-family:monospace">'+p.diff.toFixed(1)+'</span></div>').join('')
+    : '<div class="no-data">Tiada data mencukupi</div>';
+
+  // Heatmap
+  document.getElementById('heatmapDiv').innerHTML=data.map(p=>{
+    var a=avg(p.markah);
+    return '<div class="hm-cell" style="background:'+hmColor(a)+'" title="'+p.nama+': '+a.toFixed(1)+'">'+
+           '<div class="hm-name">'+p.nama.split(' ')[0]+'</div>'+
+           '<div class="hm-kelas">'+p.kelas+'</div>'+
+           '<div class="hm-score">'+a.toFixed(1)+'</div></div>';
+  }).join('');
+}
+
+// ── CHARTS ───────────────────────────────────────────────────
+function destroyCharts(){ if(tChart){tChart.destroy();tChart=null;} if(gChart){gChart.destroy();gChart=null;} tLastData=null;gLastData=null; }
+
+function buildChart(id,type,labels,vals,lbl,colors){
+  var isPie=type==='pie';
+  var def=['#1a56db','#0ea5e9','#7c3aed','#10b981','#f59e0b','#ef4444','#ec4899','#8b5cf6'];
+  var bg=isPie?(colors||labels.map((_,i)=>def[i%def.length])):(type==='bar'?(colors||'rgba(26,86,219,0.75)'):'rgba(26,86,219,0.1)');
+  return new Chart(document.getElementById(id),{
+    type:isPie?'pie':type,
+    data:{labels,datasets:[{label:lbl,data:vals,backgroundColor:bg,borderColor:(!isPie&&type!=='bar')?'#1a56db':undefined,borderWidth:isPie?2:1.5,borderRadius:type==='bar'?4:undefined,tension:.4,fill:type==='line',pointRadius:type==='line'?5:undefined,pointBackgroundColor:type==='line'?'#1a56db':undefined,hoverOffset:isPie?8:undefined}]},
+    options:{responsive:true,plugins:{legend:{display:isPie,position:'bottom',labels:{font:{size:11}}},datalabels:{color:isPie?'#fff':'#1e293b',anchor:isPie?'center':'end',align:isPie?'center':'top',font:{weight:'bold',size:11},formatter:v=>lbl==='Bilangan'?v:v.toFixed(1)}},scales:isPie?{}:{y:{beginAtZero:true,max:lbl==='Purata'?100:undefined,grid:{color:'rgba(0,0,0,.04)'}}}}
+  });
+}
+
+function renderCharts(data){
+  var s=getCurSubj();
+  var tVals=s.ujian.map((_,i)=>{ var v=data.map(p=>num(p.markah[i])).filter(m=>m>0); return v.length?parseFloat((v.reduce((a,b)=>a+b,0)/v.length).toFixed(1)):0; });
+  tLastData={labels:s.ujian,vals:tVals};
+  if(tChart){tChart.destroy();tChart=null;}
+  tChart=buildChart('trendChart',document.getElementById('trendType').value,s.ujian,tVals,'Purata',null);
+
+  var gOrder=['A+','A','A-','B+','B','C+','C','D','E','G'];
+  var gCount={}; data.forEach(p=>{var g=gred(avg(p.markah));gCount[g]=(gCount[g]||0)+1;});
+  var gLabels=gOrder.filter(g=>gCount[g]);
+  var gVals=gLabels.map(g=>gCount[g]);
+  var gColors=gLabels.map(g=>['A+','A','A-'].includes(g)?'#10b981':['B+','B'].includes(g)?'#84cc16':['C+','C'].includes(g)?'#f59e0b':g==='D'?'#f97316':'#ef4444');
+  gLastData={labels:gLabels,vals:gVals,colors:gColors};
+  if(gChart){gChart.destroy();gChart=null;}
+  gChart=buildChart('gradeChart',document.getElementById('gradeType').value,gLabels,gVals,'Bilangan',gColors);
+}
+
+function rebuildTrend(t){ if(!tLastData)return; if(tChart){tChart.destroy();tChart=null;} tChart=buildChart('trendChart',t,tLastData.labels,tLastData.vals,'Purata',null); }
+function rebuildGrade(t){ if(!gLastData)return; if(gChart){gChart.destroy();gChart=null;} gChart=buildChart('gradeChart',t,gLastData.labels,gLastData.vals,'Bilangan',gLastData.colors); }
+
+// ── MAIN RENDER ──────────────────────────────────────────────
+function renderAll(){
+  var data=getDisplayData();
+  renderTable(data);
+  renderAnalytics(data);
+  renderCharts(data);
+  updateLimitUI();
+}
+
+// ── ACTIONS ──────────────────────────────────────────────────
+function setMode(m){
+  mode=m;
+  document.getElementById('btnKelas').classList.toggle('active',m==='kelas');
+  document.getElementById('btnMulti').classList.toggle('active',m==='multi');
+  destroyCharts(); renderAll();
+}
+
+function switchSubj(s){ curSubject=s; destroyCharts(); renderKelasSel(); renderSubjList(); renderAll(); }
+
+function doTambahKelas(){
+  showModal('Tambah Kelas','Nama kelas (cth: 5A):','input','').then(v=>{
+    if(!v||!curSubject)return;
+    if(getCurSubj().kelasData[v]){toast('Kelas sudah wujud');return;}
+    getCurSubj().kelasData[v]=[];
+    renderKelasSel(); renderAll();
+  });
+}
+
+function doTambahPelajar(){
+  if(totalPelajar()>=DEMO_MAX){ document.getElementById('limitOverlay').classList.add('show'); return; }
+  var k=document.getElementById('kelasSel').value;
+  if(!k){showModal('','Sila tambah kelas dahulu.','alert','');return;}
+  showModal('Tambah Pelajar','Nama penuh pelajar:','input','').then(v=>{
+    if(!v)return;
+    if(totalPelajar()>=DEMO_MAX){ document.getElementById('limitOverlay').classList.add('show'); return; }
+    var s=getCurSubj();
+    s.kelasData[k].push({nama:v,kelas:k,markah:s.ujian.map(()=>0)});
+    renderAll();
+  });
+}
+
+function doTambahUjian(){
+  if(!curSubject)return;
+  var n=getCurSubj().ujian.length+1;
+  showModal('Tambah Ujian','Nama ujian:','input','Ujian '+n).then(v=>{
+    if(!v)return;
+    var s=getCurSubj(); s.ujian.push(v);
+    Object.values(s.kelasData).forEach(arr=>arr.forEach(p=>p.markah.push(0)));
+    renderAll();
+  });
+}
+
+function doTambahSubjek(){
+  showModal('Tambah Subjek','Nama subjek (cth: Sains):','input','').then(v=>{
+    if(!v)return;
+    if(subjects[v]){toast('Subjek sudah wujud');return;}
+    subjects[v]={kelasData:{},ujian:[]};
+    curSubject=v; destroyCharts(); renderKelasSel(); renderSubjList(); renderAll();
+  });
+}
+
+function editUjian(i){
+  var s=getCurSubj();
+  showModal('Edit Ujian','Nama baharu:','input',s.ujian[i]).then(v=>{
+    if(!v||v===s.ujian[i])return; s.ujian[i]=v; renderAll();
+  });
+}
+
+function delUjian(i){
+  showModal('Padam Ujian','Padam ujian ini? Semua markah ujian akan hilang.','confirm').then(ok=>{
+    if(!ok)return; var s=getCurSubj(); s.ujian.splice(i,1);
+    Object.values(s.kelasData).forEach(arr=>arr.forEach(p=>p.markah.splice(i,1)));
+    renderAll();
+  });
+}
+
+function editPelajar(kelas,nama){
+  showModal('Edit Nama','Nama baharu:','input',nama).then(v=>{
+    if(!v||v===nama)return;
+    var p=getCurSubj().kelasData[kelas].find(x=>x.nama===nama);
+    if(p){p.nama=v;renderAll();}
+  });
+}
+
+function delPelajar(kelas,nama){
+  showModal('Padam Pelajar','Padam "'+nama+'"?','confirm').then(ok=>{
+    if(!ok)return;
+    var arr=getCurSubj().kelasData[kelas];
+    var i=arr.findIndex(x=>x.nama===nama);
+    if(i>=0){arr.splice(i,1);renderAll();}
+  });
+}
+
+function updateMark(kelas,nama,i,val){
+  var p=getCurSubj().kelasData[kelas].find(x=>x.nama===nama);
+  if(p){p.markah[i]=Math.round(num(val));renderAnalytics(getDisplayData());renderCharts(getDisplayData());}
+}
+
+function doReset(){
+  var k=document.getElementById('kelasSel').value;
+  if(!k)return;
+  showModal('Reset Kelas','Reset semua pelajar dalam kelas '+k+'?','confirm').then(ok=>{
+    if(!ok)return; getCurSubj().kelasData[k]=[]; renderAll();
+  });
+}
+
+function demoOnly(feat){
+  alert('Fungsi "'+feat+'" hanya tersedia dalam versi penuh.\n\nDapatkan Pakej Guru di EduKit untuk akses penuh!');
+}
+
+function toast(msg){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:20px;right:20px;background:#1e293b;color:white;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  t.textContent=msg; document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2500);
+}
+
+// ── MODAL ────────────────────────────────────────────────────
+function showModal(title,msg,type,defVal){
+  return new Promise(resolve=>{
+    modalResolve=resolve;
+    document.getElementById('modal-title').textContent=title;
+    document.getElementById('modal-msg').textContent=msg;
+    var inp=document.getElementById('modal-input');
+    if(type==='input'){ inp.style.display='block'; inp.value=defVal||''; setTimeout(()=>{inp.focus();inp.select();},80); }
+    else { inp.style.display='none'; }
+    document.getElementById('modal-bg').classList.add('show');
+  });
+}
+function modalOK(){
+  var inp=document.getElementById('modal-input');
+  var val=inp.style.display!=='none'?inp.value.trim():true;
+  document.getElementById('modal-bg').classList.remove('show');
+  if(modalResolve){modalResolve(val);modalResolve=null;}
+}
+function modalCancel(){
+  document.getElementById('modal-bg').classList.remove('show');
+  if(modalResolve){modalResolve(null);modalResolve=null;}
+}
+document.getElementById('modal-input').addEventListener('keydown',e=>{ if(e.key==='Enter')modalOK(); if(e.key==='Escape')modalCancel(); });
+
+// ── INIT ─────────────────────────────────────────────────────
+initDemo();
+renderSubjList();
+renderKelasSel();
+renderAll();
+</script>
+</body>
+</html>

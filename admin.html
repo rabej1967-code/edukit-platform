@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EduKit — Panel Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1a56db;--pd:#1447c0;--pl:#e8f0fe;
+  --gold:#f59e0b;--success:#16a34a;--danger:#ef4444;--warning:#f59e0b;
+  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
+  --bg:#0f172a;--panel:#1e293b;--card:#fff;
+  --border:#e2e8f4;--bdark:rgba(255,255,255,.08);
+  --r:10px;--rl:16px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f1f5f9;color:var(--text);}
+
+/* LOADING */
+#loadPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;}
+.spin{width:38px;height:38px;border:3px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* LOGIN */
+#loginPage{min-height:100vh;background:linear-gradient(135deg,#0a1628,#1a56db);display:flex;align-items:center;justify-content:center;}
+.lb{background:white;border-radius:20px;width:360px;max-width:93vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);}
+.lh{background:linear-gradient(135deg,#0a1628,#1a3a8f);padding:28px;text-align:center;}
+.lh-ic{width:48px;height:48px;background:rgba(255,255,255,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:white;margin:0 auto 10px;}
+.lh h2{font-size:19px;font-weight:800;color:white;margin-bottom:3px;}
+.lh p{font-size:11.5px;color:rgba(255,255,255,.55);}
+.lbd{padding:24px;}
+.fg{margin-bottom:12px;}
+.fg label{font-size:11px;font-weight:700;color:var(--t2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+.fc{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:#f8fafd;outline:none;transition:.15s;}
+.fc:focus{border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(26,86,219,.1);}
+.lbtn{width:100%;padding:11px;background:var(--primary);color:white;border:none;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+.lbtn:hover{background:var(--pd);}
+.lerr{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:8px 11px;border-radius:7px;font-size:11.5px;font-weight:600;margin-top:8px;display:none;text-align:center;}
+.lfoot{text-align:center;padding:12px;background:#f8fafd;border-top:1px solid var(--border);font-size:10.5px;color:var(--t3);}
+
+/* ADMIN LAYOUT */
+#adminPage{display:none;min-height:100vh;}
+.aside{width:220px;background:#0f172a;min-height:100vh;position:fixed;top:0;left:0;overflow-y:auto;z-index:200;}
+.aside-brand{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
+.aside-logo{display:flex;align-items:center;gap:9px;}
+.aside-ic{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:white;}
+.aside-name{font-size:15px;font-weight:800;color:white;}
+.aside-name span{color:#f59e0b;}
+.aside-admin{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+.aside-nav{padding:10px 10px;}
+.anav-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:10px 8px 5px;}
+.anav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12.5px;font-weight:600;transition:.15s;margin-bottom:2px;}
+.anav-item:hover{background:rgba(255,255,255,.06);color:white;}
+.anav-item.active{background:var(--primary);color:white;}
+.anav-ic{font-size:15px;width:20px;text-align:center;}
+.aside-foot{padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);margin-top:auto;}
+.aside-user{display:flex;align-items:center;gap:9px;}
+.aside-av{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.aside-uname{font-size:12px;font-weight:600;color:white;}
+.aside-ueml{font-size:10px;color:rgba(255,255,255,.4);}
+
+.main-area{margin-left:220px;padding:22px 24px;min-height:100vh;}
+.page-t{font-size:20px;font-weight:800;color:var(--text);margin-bottom:18px;}
+.page-sub{font-size:13px;color:var(--t2);margin-top:3px;}
+
+/* CARDS */
+.card{background:white;border:1px solid var(--border);border-radius:var(--rl);padding:18px;box-shadow:var(--sh);}
+.card-t{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px;}
+.stat{background:white;border:1px solid var(--border);border-radius:var(--rl);padding:16px;box-shadow:var(--sh);}
+.stat-l{font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-v{font-size:26px;font-weight:900;color:var(--text);line-height:1;}
+.stat-s{font-size:10.5px;color:var(--t3);margin-top:4px;}
+.stat.blue .stat-v{color:var(--primary);}
+.stat.green .stat-v{color:var(--success);}
+.stat.gold .stat-v{color:var(--gold);}
+.stat.red .stat-v{color:var(--danger);}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:#f8fafd;color:var(--t2);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#fafbff;}
+.td-name{font-weight:700;color:var(--text);font-size:12.5px;}
+.td-sub{font-size:10.5px;color:var(--t3);}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+.pill-guru{background:#dbeafe;color:#1e40af;}
+.pill-pentadbir{background:#f3e8ff;color:#6b21a8;}
+.pill-gabungan{background:#fef3c7;color:#92400e;}
+.pill-none{background:#f1f5f9;color:var(--t2);}
+.pill-aktif{background:#dcfce7;color:#15803d;}
+.pill-tamat{background:#fef2f2;color:#dc2626;}
+.abtn{background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:7px;font-size:11px;font-weight:600;color:var(--t2);transition:.15s;font-family:inherit;}
+.abtn:hover{background:#f1f5f9;color:var(--text);}
+.abtn.red:hover{background:#fef2f2;color:var(--danger);}
+.abtn.blue{color:var(--primary);}
+.abtn.blue:hover{background:var(--pl);}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.fg label{font-size:11px;font-weight:700;color:var(--t2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;}
+textarea.fc{min-height:80px;resize:vertical;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border:none;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;}
+.btn-p{background:var(--primary);color:white;}
+.btn-p:hover{background:var(--pd);}
+.btn-g{background:var(--success);color:white;}
+.btn-g:hover{background:#14852f;}
+.btn-o{background:white;color:var(--t2);border:1.5px solid var(--border);}
+.btn-o:hover{border-color:var(--primary);color:var(--primary);}
+.btn-r{background:var(--danger);color:white;}
+.btn-r:hover{background:#dc2626;}
+.btn-gold{background:var(--gold);color:#0f172a;}
+.btn-gold:hover{background:#e68a00;}
+.alert{padding:10px 13px;border-radius:9px;font-size:12px;font-weight:600;margin-bottom:12px;display:none;}
+.alert-err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;}
+.alert-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;}
+
+/* SECTION TABS */
+.stabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:18px;overflow-x:auto;}
+.stab{padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--t2);background:none;border:none;font-family:inherit;white-space:nowrap;transition:.15s;}
+.stab.active{background:var(--primary);color:white;}
+.stab-content{display:none;}
+.stab-content.active{display:block;}
+
+/* MODAL */
+.mbak{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
+.mbak.open{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:var(--rl);width:460px;max-width:94vw;box-shadow:0 24px 60px rgba(0,0,0,.22);transform:translateY(12px);transition:.2s;}
+.mbak.open .modal{transform:none;}
+.mh{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.mh h3{font-size:13.5px;font-weight:700;}
+.mx{background:none;border:none;cursor:pointer;font-size:17px;color:var(--t3);}
+.mb{padding:18px;}
+.mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:white;padding:10px 16px;border-radius:10px;font-size:12.5px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,.2);z-index:9999;transform:translateY(60px);opacity:0;transition:.25s;display:flex;align-items:center;gap:8px;}
+.toast.show{transform:none;opacity:1;}
+.tdot{width:7px;height:7px;border-radius:50%;}
+
+/* EMPTY */
+.empty{text-align:center;padding:32px;color:var(--t3);}
+.empty-ic{font-size:30px;margin-bottom:8px;}
+.empty-t{font-size:12px;}
+
+/* PAGE SECTIONS */
+.section-page{display:none;}
+.section-page.active{display:block;}
+
+@media(max-width:800px){.aside{transform:translateX(-220px);}.main-area{margin-left:0;}}
+</style>
+</head>
+<body>
+
+<div id="loadPage" style="display:flex;"><div class="spin"></div></div>
+
+<div id="loginPage" style="display:none;">
+  <div class="lb">
+    <div class="lh">
+      <div class="lh-ic">EK</div>
+      <h2>Panel Admin EduKit</h2>
+      <p>Hanya untuk pemilik platform</p>
+    </div>
+    <div class="lbd">
+      <div class="fg"><label>E-mel Admin</label><input id="aeml" class="fc" type="email" placeholder="admin@edukit.my" autocomplete="email"></div>
+      <div class="fg"><label>Kata Laluan</label><input id="apw" class="fc" type="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="lbtn" onclick="doLogin()">Masuk →</button>
+      <div class="lerr" id="lerr"></div>
+    </div>
+    <div class="lfoot">EduKit Admin Panel v1.0</div>
+  </div>
+</div>
+
+<div id="adminPage">
+  <!-- SIDEBAR -->
+  <aside class="aside">
+    <div class="aside-brand">
+      <div class="aside-logo">
+        <div class="aside-ic">EK</div>
+        <div><div class="aside-name">Edu<span>Kit</span></div><div class="aside-admin">Panel Admin</div></div>
+      </div>
+    </div>
+    <nav class="aside-nav">
+      <div class="anav-label">Utama</div>
+      <div class="anav-item active" onclick="goSection('dashboard',this)"><div class="anav-ic">📊</div>Dashboard</div>
+      <div class="anav-label">Pengurusan</div>
+      <div class="anav-item" onclick="goSection('pelanggan',this)"><div class="anav-ic">👥</div>Pelanggan</div>
+      <div class="anav-item" onclick="goSection('produk',this)"><div class="anav-ic">📦</div>Produk & Apps</div>
+      <div class="anav-item" onclick="goSection('hadiah',this)"><div class="anav-ic">🎁</div>Hadiah & Bonus</div>
+      <div class="anav-label">Kandungan</div>
+      <div class="anav-item" onclick="goSection('panduan',this)"><div class="anav-ic">🎬</div>Panduan Video</div>
+      <div class="anav-item" onclick="goSection('notif',this)"><div class="anav-ic">📢</div>Notifikasi & Emel</div>
+      <div class="anav-label">Lanjutan</div>
+      <div class="anav-item" onclick="goSection('promo',this)"><div class="anav-ic">🏷️</div>Kod Promosi</div>
+      <div class="anav-item" onclick="goSection('maklumbalas',this)"><div class="anav-ic">💬</div>Maklum Balas</div>
+      <div class="anav-item" onclick="goSection('tetapan',this)"><div class="anav-ic">⚙️</div>Tetapan</div>
+    </nav>
+    <div class="aside-foot">
+      <div class="aside-user">
+        <div class="aside-av" id="asAv">A</div>
+        <div><div class="aside-uname" id="asName">Admin</div><div class="aside-ueml" id="asEml">—</div></div>
+      </div>
+      <button style="margin-top:10px;width:100%;padding:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.6);font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;" onclick="doLogout()">Log Keluar</button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+
+    <!-- DASHBOARD -->
+    <div class="section-page active" id="sec-dashboard">
+      <div class="page-t">Dashboard <div class="page-sub">Gambaran keseluruhan platform EduKit</div></div>
+      <div class="stat-grid">
+        <div class="stat blue"><div class="stat-l">Jumlah Pelanggan</div><div class="stat-v" id="stTotal">—</div><div class="stat-s">Semua masa</div></div>
+        <div class="stat green"><div class="stat-l">Aktif Bulan Ini</div><div class="stat-v" id="stMonth">—</div><div class="stat-s">30 hari lepas</div></div>
+        <div class="stat gold"><div class="stat-l">Jumlah Hasil</div><div class="stat-v" id="stRevenue">—</div><div class="stat-s">RM</div></div>
+        <div class="stat red"><div class="stat-l">Maklum Balas Baharu</div><div class="stat-v" id="stFeedback">—</div><div class="stat-s">Belum dibaca</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+        <div class="card"><div class="card-t">📈 Pelanggan Baharu (30 hari)</div><canvas id="chrtNew" height="160"></canvas></div>
+        <div class="card"><div class="card-t">🥧 Agihan Pakej</div><canvas id="chrtPkg" height="160"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-t">⏱️ Pelanggan Terkini</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Nama</th><th>E-mel</th><th>Pakej</th><th>Tarikh Daftar</th><th>Status</th></tr></thead>
+          <tbody id="tblRecent"><tr><td colspan="5"><div class="empty"><div class="empty-t">Memuatkan...</div></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PELANGGAN -->
+    <div class="section-page" id="sec-pelanggan">
+      <div class="page-t">Pelanggan <div class="page-sub">Urus semua pelanggan EduKit</div></div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <input id="srchPelanggan" class="fc" style="width:260px;" placeholder="Cari nama atau e-mel...">
+          <select id="fltrPkg" class="fc" style="width:180px;" onchange="loadPelanggan()">
+            <option value="">Semua Pakej</option>
+            <option value="guru">Pakej Guru</option>
+            <option value="pentadbir">Pakej Pentadbir</option>
+            <option value="gabungan">Pakej Gabungan</option>
+          </select>
+          <button class="btn btn-p" onclick="om('addPelangganMod')">+ Tambah Pelanggan</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Nama</th><th>E-mel</th><th>Pakej</th><th>Kata Laluan</th><th>Tarikh</th><th>Status</th><th>Tindakan</th></tr></thead>
+          <tbody id="tblPelanggan"><tr><td colspan="7"><div class="empty"><div class="empty-ic">⏳</div><div class="empty-t">Memuatkan...</div></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PRODUK -->
+    <div class="section-page" id="sec-produk">
+      <div class="page-t">Produk & Apps <div class="page-sub">Urus senarai apps dalam setiap pakej</div></div>
+      <div class="stabs">
+        <button class="stab active" onclick="switchStab('pakej-guru',this)">📚 Pakej Guru</button>
+        <button class="stab" onclick="switchStab('pakej-pentadbir',this)">🏫 Pakej Pentadbir</button>
+        <button class="stab" onclick="switchStab('tambah-app',this)">+ Tambah App Baharu</button>
+      </div>
+      <div class="stab-content active" id="stab-pakej-guru">
+        <div class="card"><div class="card-t">Apps Pakej Guru</div><div id="appListGuru">Memuatkan...</div></div>
+      </div>
+      <div class="stab-content" id="stab-pakej-pentadbir">
+        <div class="card"><div class="card-t">Apps Pakej Pentadbir</div><div id="appListPentadbir">Memuatkan...</div></div>
+      </div>
+      <div class="stab-content" id="stab-tambah-app">
+        <div class="card" style="max-width:520px;">
+          <div class="card-t">+ Tambah App Baharu</div>
+          <div class="form-grid">
+            <div class="fg"><label>Nama App</label><input id="naName" class="fc" placeholder="Nama app"></div>
+            <div class="fg"><label>Ikon (emoji)</label><input id="naIc" class="fc" placeholder="📋" maxlength="2"></div>
+          </div>
+          <div class="fg"><label>Huraian Ringkas</label><input id="naDesc" class="fc" placeholder="Huraian ringkas app ini"></div>
+          <div class="form-grid">
+            <div class="fg"><label>URL App (Netlify)</label><input id="naUrl" class="fc" placeholder="https://nama-app.netlify.app"></div>
+            <div class="fg"><label>Pakej</label>
+              <select id="naPkg" class="fc"><option value="guru">Pakej Guru</option><option value="pentadbir">Pakej Pentadbir</option></select>
+            </div>
+          </div>
+          <button class="btn btn-p" onclick="addApp()">+ Tambah App</button>
+          <div class="alert alert-err" id="naErr"></div>
+          <div class="alert alert-ok" id="naOk"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HADIAH -->
+    <div class="section-page" id="sec-hadiah">
+      <div class="page-t">Hadiah & Bonus <div class="page-sub">Bagi apps tambahan kepada pelanggan tertentu</div></div>
+      <div class="card" style="max-width:540px;margin-bottom:16px;">
+        <div class="card-t">🎁 Bagi Hadiah kepada Pelanggan</div>
+        <div style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.6;">Pilih pelanggan dan apps yang ingin anda berikan sebagai hadiah atau bonus. Pelanggan akan dapat akses apps tersebut walaupun bukan dalam pakej mereka.</div>
+        <div class="fg"><label>Pelanggan</label><select id="hPelanggan" class="fc"><option value="">— Pilih Pelanggan —</option></select></div>
+        <div class="fg"><label>Apps Hadiah</label>
+          <div id="hAppsList" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;"></div>
+        </div>
+        <div class="fg"><label>Nota (optional)</label><input id="hNote" class="fc" placeholder="Cth: Bonus pembelian awal"></div>
+        <button class="btn btn-gold" onclick="beriHadiah()">🎁 Beri Hadiah</button>
+        <div class="alert alert-err" id="hErr"></div>
+        <div class="alert alert-ok" id="hOk"></div>
+      </div>
+      <div class="card">
+        <div class="card-t">Rekod Hadiah Diberi</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Pelanggan</th><th>Apps Hadiah</th><th>Nota</th><th>Tarikh</th></tr></thead>
+          <tbody id="tblHadiah"><tr><td colspan="4"><div class="empty"><div class="empty-t">Tiada rekod hadiah.</div></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PANDUAN VIDEO -->
+    <div class="section-page" id="sec-panduan">
+      <div class="page-t">Panduan Video & Teks <div class="page-sub">Tambah panduan untuk setiap apps</div></div>
+      <div class="card" style="max-width:560px;margin-bottom:16px;">
+        <div class="card-t">+ Tambah Panduan Baharu</div>
+        <div class="form-grid">
+          <div class="fg"><label>Nama App / Topik</label><input id="pgName" class="fc" placeholder="Sistem Agihan Tugas"></div>
+          <div class="fg"><label>Pakej</label>
+            <select id="pgPkg" class="fc"><option value="guru">Pakej Guru</option><option value="pentadbir">Pakej Pentadbir</option><option value="gabungan">Semua</option></select>
+          </div>
+        </div>
+        <div class="fg"><label>Link Video YouTube</label><input id="pgYt" class="fc" placeholder="https://youtube.com/watch?v=..."></div>
+        <div class="fg"><label>Huraian / Arahan Bertulis</label><textarea id="pgDesc" class="fc" placeholder="Cara menggunakan apps ini..."></textarea></div>
+        <button class="btn btn-p" onclick="addGuide()">+ Tambah Panduan</button>
+        <div class="alert alert-err" id="pgErr"></div>
+        <div class="alert alert-ok" id="pgOk"></div>
+      </div>
+      <div class="card">
+        <div class="card-t">Senarai Panduan</div>
+        <div id="guideList"><div class="empty"><div class="empty-t">Memuatkan...</div></div></div>
+      </div>
+    </div>
+
+    <!-- NOTIFIKASI & EMEL -->
+    <div class="section-page" id="sec-notif">
+      <div class="page-t">Notifikasi & Emel Broadcast <div class="page-sub">Hantar emel kepada pelanggan</div></div>
+      <div class="card" style="max-width:560px;">
+        <div class="card-t">📢 Hantar Emel Broadcast</div>
+        <div class="fg"><label>Penerima</label>
+          <select id="notifTo" class="fc">
+            <option value="all">Semua Pelanggan</option>
+            <option value="guru">Pelanggan Pakej Guru sahaja</option>
+            <option value="pentadbir">Pelanggan Pakej Pentadbir sahaja</option>
+            <option value="gabungan">Pelanggan Pakej Gabungan sahaja</option>
+          </select>
+        </div>
+        <div class="fg"><label>Tajuk Emel</label><input id="notifSubj" class="fc" placeholder="Cth: Kemaskini terbaru EduKit"></div>
+        <div class="fg"><label>Kandungan Mesej</label><textarea id="notifMsg" class="fc" placeholder="Tulis mesej anda..."></textarea></div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;font-size:11.5px;color:#92400e;margin-bottom:12px;">⚠️ Pastikan anda mempunyai Resend API Key dalam Supabase Secrets sebelum menghantar emel.</div>
+        <button class="btn btn-p" onclick="sendBroadcast()">📢 Hantar Emel</button>
+        <div class="alert alert-err" id="notifErr"></div>
+        <div class="alert alert-ok" id="notifOk"></div>
+      </div>
+    </div>
+
+    <!-- KOD PROMOSI -->
+    <div class="section-page" id="sec-promo">
+      <div class="page-t">Kod Promosi <div class="page-sub">Jana dan urus kod diskaun</div></div>
+      <div class="card" style="max-width:480px;margin-bottom:16px;">
+        <div class="card-t">+ Jana Kod Promosi Baharu</div>
+        <div class="form-grid">
+          <div class="fg"><label>Kod Promosi</label><input id="promoCode" class="fc" placeholder="cth: GURU2025"></div>
+          <div class="fg"><label>Diskaun (%)</label><input id="promoPct" class="fc" type="number" min="1" max="100" placeholder="20"></div>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label>Had Penggunaan</label><input id="promoMax" class="fc" type="number" min="1" placeholder="50"></div>
+          <div class="fg"><label>Tarikh Tamat</label><input id="promoExp" class="fc" type="date"></div>
+        </div>
+        <button class="btn btn-gold" onclick="addPromo()">Jana Kod Promosi</button>
+        <div class="alert alert-err" id="promoErr"></div>
+        <div class="alert alert-ok" id="promoOk"></div>
+      </div>
+      <div class="card">
+        <div class="card-t">Senarai Kod Promosi</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Kod</th><th>Diskaun</th><th>Guna/Had</th><th>Tamat</th><th>Status</th><th>Tindakan</th></tr></thead>
+          <tbody id="tblPromo"><tr><td colspan="6"><div class="empty"><div class="empty-t">Tiada kod promosi.</div></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- MAKLUM BALAS -->
+    <div class="section-page" id="sec-maklumbalas">
+      <div class="page-t">Maklum Balas <div class="page-sub">Cadangan dan laporan masalah daripada pelanggan</div></div>
+      <div class="card">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Pengirim</th><th>Jenis</th><th>Mesej</th><th>Tarikh</th><th>Status</th><th>Tindakan</th></tr></thead>
+          <tbody id="tblFeedback"><tr><td colspan="6"><div class="empty"><div class="empty-ic">💬</div><div class="empty-t">Memuatkan maklum balas...</div></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- TETAPAN -->
+    <div class="section-page" id="sec-tetapan">
+      <div class="page-t">Tetapan Platform <div class="page-sub">Konfigurasi asas EduKit</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="card">
+          <div class="card-t">🔑 Tukar Kata Laluan Admin</div>
+          <div class="fg"><label>Kata Laluan Baharu</label><input id="apt1" class="fc" type="password" placeholder="Min 8 aksara"></div>
+          <div class="fg"><label>Sahkan</label><input id="apt2" class="fc" type="password" placeholder="Ulang kata laluan"></div>
+          <button class="btn btn-p" onclick="chgAdminPw()">Kemaskini</button>
+          <div class="alert alert-err" id="apwErr" style="margin-top:8px;"></div>
+          <div class="alert alert-ok" id="apwOk" style="margin-top:8px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-t">📊 Maklumat Platform</div>
+          <div style="font-size:12.5px;line-height:2;color:var(--t2);">
+            <div>Versi: <strong>EduKit v1.0</strong></div>
+            <div>Pakej tersedia: <strong>3 pakej</strong></div>
+            <div>Apps tersedia: <strong>16 apps</strong></div>
+            <div>Database: <strong>Supabase</strong></div>
+            <div>Hosting: <strong>Netlify</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: TAMBAH PELANGGAN -->
+<div class="mbak" id="addPelangganMod">
+  <div class="modal">
+    <div class="mh"><h3>+ Tambah Pelanggan Baharu</h3><button class="mx" onclick="cm('addPelangganMod')">✕</button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg"><label>E-mel</label><input id="apEml" class="fc" type="email" placeholder="cikgu@sekolah.edu.my"></div>
+        <div class="fg"><label>Nama Penuh</label><input id="apName" class="fc" placeholder="Nama penuh"></div>
+      </div>
+      <div class="fg"><label>Pakej</label>
+        <select id="apPkg" class="fc"><option value="guru">Pakej Guru</option><option value="pentadbir">Pakej Pentadbir</option><option value="gabungan">Pakej Gabungan</option></select>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;font-size:11.5px;color:#1e40af;margin-top:8px;">Sistem akan auto cipta akaun dengan kata laluan lalai <strong>admin123</strong> dan hantar emel kepada pelanggan.</div>
+      <div class="alert alert-err" id="apErr" style="margin-top:8px;"></div>
+    </div>
+    <div class="mf"><button class="btn btn-o" onclick="cm('addPelangganMod')">Batal</button><button class="btn btn-p" onclick="addPelanggan()">+ Tambah & Hantar Emel</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT PELANGGAN -->
+<div class="mbak" id="editPelangganMod">
+  <div class="modal">
+    <div class="mh"><h3>✏ Edit Pelanggan</h3><button class="mx" onclick="cm('editPelangganMod')">✕</button></div>
+    <div class="mb">
+      <div class="fg"><label>Nama Penuh</label><input id="epName" class="fc"></div>
+      <div class="fg"><label>Pakej</label>
+        <select id="epPkg" class="fc"><option value="guru">Pakej Guru</option><option value="pentadbir">Pakej Pentadbir</option><option value="gabungan">Pakej Gabungan</option></select>
+      </div>
+      <div class="fg"><label>Reset Kata Laluan (kosong = tidak tukar)</label><input id="epPw" class="fc" type="password" placeholder="Kata laluan baharu"></div>
+    </div>
+    <div class="mf"><button class="btn btn-o" onclick="cm('editPelangganMod')">Batal</button><button class="btn btn-p" onclick="svEditPelanggan()">Simpan</button></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="tst"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
+
+<script>
+/* ================================================================
+   SUPABASE CONFIG
+   ================================================================ */
+const SB_URL = 'https://aowzftmdriukxbltjtpm.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvd3pmdG1kcml1a3hibHRqdHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzAxOTQsImV4cCI6MjA5NDQ0NjE5NH0.17lKaGC-9jx1cDORx2btwfmzDYon3s3CN2dei2BM-Ac'
+const { createClient } = supabase
+const sb = createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true } })
+
+let curAdmin = null, editingId = null
+
+/* ================================================================
+   BOOT
+   ================================================================ */
+window.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await sb.auth.getSession()
+  if (session) {
+    const { data: prof } = await sb.from('profiles').select('*').eq('id', session.user.id).single()
+    if (prof?.role !== 'admin') { await sb.auth.signOut(); showPage('loginPage'); return }
+    curAdmin = { ...session.user, ...prof }
+    showPage('adminPage')
+    initAdmin()
+  } else showPage('loginPage')
+})
+
+function initAdmin() {
+  document.getElementById('asName').textContent = curAdmin.fullname || 'Admin'
+  document.getElementById('asEml').textContent  = curAdmin.email || '—'
+  document.getElementById('asAv').textContent   = (curAdmin.fullname || 'A')[0].toUpperCase()
+  loadDashboard()
+}
+
+/* ================================================================
+   AUTH
+   ================================================================ */
+async function doLogin() {
+  const email = document.getElementById('aeml').value.trim()
+  const pw    = document.getElementById('apw').value
+  const err   = document.getElementById('lerr')
+  if (!email||!pw){showErr(err,'Sila isi semua maklumat');return}
+  err.style.display='none'
+  const { error } = await sb.auth.signInWithPassword({ email, password: pw })
+  if (error){showErr(err,'Emel atau kata laluan tidak betul.');return}
+  const { data: { session } } = await sb.auth.getSession()
+  const { data: prof } = await sb.from('profiles').select('*').eq('id', session.user.id).single()
+  if (prof?.role !== 'admin') {
+    await sb.auth.signOut()
+    showErr(err,'Anda tiada akses admin.')
+    return
+  }
+  curAdmin = { ...session.user, ...prof }
+  showPage('adminPage')
+  initAdmin()
+}
+
+async function doLogout() {
+  await sb.auth.signOut()
+  showPage('loginPage')
+}
+
+/* ================================================================
+   DASHBOARD
+   ================================================================ */
+async function loadDashboard() {
+  const { data: users }    = await sb.from('profiles').select('*').neq('role','admin')
+  const { data: purchases }= await sb.from('purchases').select('*').eq('status','active')
+  const { data: feedback } = await sb.from('feedback').select('*').eq('read', false)
+
+  document.getElementById('stTotal').textContent   = users?.length || 0
+  document.getElementById('stRevenue').textContent = purchases ? purchases.reduce((s,p)=>s+(p.amount||0),0)/100 : 0
+  document.getElementById('stFeedback').textContent= feedback?.length || 0
+
+  const now = new Date(), month30 = new Date(now - 30*24*60*60*1000)
+  const recent = users?.filter(u=>new Date(u.created_at)>month30) || []
+  document.getElementById('stMonth').textContent = recent.length
+
+  // Jadual terkini
+  const recSlice = (users||[]).slice(0,8)
+  document.getElementById('tblRecent').innerHTML = recSlice.map(u =>
+    `<tr><td><div class="td-name">${u.fullname||'—'}</div></td><td><div class="td-sub">${u.email}</div></td><td>${pkgPill(u.package_id)}</td><td><div class="td-sub">${fmtDate(u.created_at)}</div></td><td><span class="pill pill-aktif">Aktif</span></td></tr>`
+  ).join('') || `<tr><td colspan="5"><div class="empty"><div class="empty-t">Tiada pelanggan lagi.</div></div></td></tr>`
+
+  // Chart: pelanggan baharu
+  const days = Array.from({length:7},(_,i)=>{ const d=new Date(now);d.setDate(d.getDate()-6+i);return d })
+  const dayCounts = days.map(d => (users||[]).filter(u=>{ const cd=new Date(u.created_at);return cd.toDateString()===d.toDateString() }).length)
+  new Chart(document.getElementById('chrtNew'), {
+    type:'line',
+    data:{ labels:days.map(d=>d.toLocaleDateString('ms-MY',{day:'2-digit',month:'short'})), datasets:[{data:dayCounts,borderColor:'#1a56db',backgroundColor:'rgba(26,86,219,.08)',borderWidth:2,fill:true,tension:.4}] },
+    options:{ plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true,ticks:{stepSize:1}}, x:{grid:{display:false}} } }
+  })
+
+  // Chart: pakej
+  const pkgCounts = { guru:0, pentadbir:0, gabungan:0 }
+  ;(users||[]).forEach(u=>{ if(pkgCounts[u.package_id]!==undefined) pkgCounts[u.package_id]++ })
+  new Chart(document.getElementById('chrtPkg'), {
+    type:'doughnut',
+    data:{ labels:['Pakej Guru','Pakej Pentadbir','Pakej Gabungan'], datasets:[{data:Object.values(pkgCounts),backgroundColor:['#3b82f6','#8b5cf6','#f59e0b'],borderWidth:0}] },
+    options:{ plugins:{legend:{position:'bottom',labels:{font:{size:11}}}} }
+  })
+
+  loadHadiahPelangganList()
+}
+
+/* ================================================================
+   PELANGGAN
+   ================================================================ */
+async function loadPelanggan() {
+  const srch = document.getElementById('srchPelanggan').value.toLowerCase()
+  const fltr = document.getElementById('fltrPkg').value
+  let q = sb.from('profiles').select('*').neq('role','admin').order('created_at', { ascending: false })
+  if (fltr) q = q.eq('package_id', fltr)
+  const { data } = await q
+  const filtered = (data||[]).filter(u => !srch || u.fullname?.toLowerCase().includes(srch) || u.email?.toLowerCase().includes(srch))
+  document.getElementById('tblPelanggan').innerHTML = filtered.map(u =>
+    `<tr>
+      <td><div class="td-name">${u.fullname||'—'}</div></td>
+      <td><div class="td-sub">${u.email}</div></td>
+      <td>${pkgPill(u.package_id)}</td>
+      <td><span style="font-family:monospace;font-size:11px;background:#f1f5f9;padding:2px 7px;border-radius:5px;">${u.default_pw||'(ditukar)'}</span></td>
+      <td><div class="td-sub">${fmtDate(u.created_at)}</div></td>
+      <td><span class="pill pill-aktif">Aktif</span></td>
+      <td>
+        <button class="abtn blue" onclick="openEditPelanggan('${u.id}','${(u.fullname||'').replace(/'/g,"\\'")}','${u.package_id||'guru'}')">✏ Edit</button>
+        <button class="abtn red" onclick="cfDelPelanggan('${u.id}','${u.email}')">🗑</button>
+      </td>
+    </tr>`
+  ).join('') || `<tr><td colspan="7"><div class="empty"><div class="empty-ic">👥</div><div class="empty-t">Tiada pelanggan ditemui.</div></div></td></tr>`
+}
+
+document.addEventListener('input', e => { if (e.target.id === 'srchPelanggan') loadPelanggan() })
+
+async function addPelanggan() {
+  const email = document.getElementById('apEml').value.trim()
+  const name  = document.getElementById('apName').value.trim()
+  const pkg   = document.getElementById('apPkg').value
+  const err   = document.getElementById('apErr')
+  err.style.display='none'
+  if (!email||!name){ showEl(err,'Sila isi semua maklumat'); return }
+  const defPw = 'admin123'
+  const { data: newU, error } = await sb.auth.admin.createUser({ email, password: defPw, email_confirm: true, user_metadata:{ fullname: name } })
+  if (error){ showEl(err,'Gagal: '+error.message); return }
+  await sb.from('profiles').update({ fullname: name, package_id: pkg, must_change_password: true, default_pw: defPw }).eq('id', newU.user.id)
+  cm('addPelangganMod')
+  document.getElementById('apEml').value=''; document.getElementById('apName').value=''
+  toast('Pelanggan berjaya ditambah!')
+  loadPelanggan()
+}
+
+function openEditPelanggan(id, name, pkg) {
+  editingId = id
+  document.getElementById('epName').value = name
+  document.getElementById('epPkg').value  = pkg
+  document.getElementById('epPw').value   = ''
+  om('editPelangganMod')
+}
+
+async function svEditPelanggan() {
+  if (!editingId) return
+  const name = document.getElementById('epName').value.trim()
+  const pkg  = document.getElementById('epPkg').value
+  const pw   = document.getElementById('epPw').value
+  await sb.from('profiles').update({ fullname: name, package_id: pkg }).eq('id', editingId)
+  if (pw && pw.length >= 8) await sb.auth.admin.updateUserById(editingId, { password: pw })
+  cm('editPelangganMod')
+  toast('Pelanggan dikemaskini!')
+  loadPelanggan()
+}
+
+async function cfDelPelanggan(id, email) {
+  if (!confirm(`Padam pelanggan ${email}? Tindakan ini tidak boleh dibatalkan.`)) return
+  await sb.from('profiles').delete().eq('id', id)
+  toast('Pelanggan dipadam'); loadPelanggan()
+}
+
+/* ================================================================
+   PRODUK & APPS
+   ================================================================ */
+async function loadApps() {
+  const { data } = await sb.from('apps').select('*').order('package_id').order('created_at')
+  const guru     = (data||[]).filter(a=>a.package_id==='guru')
+  const pentadbir= (data||[]).filter(a=>a.package_id==='pentadbir')
+  renderAppList('appListGuru', guru)
+  renderAppList('appListPentadbir', pentadbir)
+}
+
+function renderAppList(elId, apps) {
+  document.getElementById(elId).innerHTML = apps.map(a =>
+    `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="width:36px;height:36px;border-radius:9px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">${a.icon||'📋'}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;">${a.name}</div>
+        <div style="font-size:11px;color:var(--t3);">${a.url||'—'}</div>
+      </div>
+      <button class="abtn red" onclick="delApp('${a.id}')">🗑 Padam</button>
+    </div>`
+  ).join('') || `<div class="empty"><div class="empty-t">Tiada apps lagi. Tambah dari tab "+ Tambah App Baharu".</div></div>`
+}
+
+async function addApp() {
+  const name = document.getElementById('naName').value.trim()
+  const ic   = document.getElementById('naIc').value.trim() || '📋'
+  const desc = document.getElementById('naDesc').value.trim()
+  const url  = document.getElementById('naUrl').value.trim()
+  const pkg  = document.getElementById('naPkg').value
+  const err  = document.getElementById('naErr'), ok = document.getElementById('naOk')
+  err.style.display='none'; ok.style.display='none'
+  if (!name||!url){ showEl(err,'Sila isi nama dan URL'); return }
+  const { error } = await sb.from('apps').insert({ name, icon: ic, description: desc, url, package_id: pkg })
+  if (error){ showEl(err,'Gagal: '+error.message); return }
+  ok.textContent = '✓ App berjaya ditambah!'; ok.style.display='block'
+  document.getElementById('naName').value=''; document.getElementById('naUrl').value=''
+  toast('App berjaya ditambah!'); loadApps()
+}
+
+async function delApp(id) {
+  if (!confirm('Padam app ini?')) return
+  await sb.from('apps').delete().eq('id', id)
+  toast('App dipadam'); loadApps()
+}
+
+/* ================================================================
+   HADIAH
+   ================================================================ */
+async function loadHadiahPelangganList() {
+  const { data } = await sb.from('profiles').select('id,fullname,email').neq('role','admin')
+  const sel = document.getElementById('hPelanggan')
+  sel.innerHTML = '<option value="">— Pilih Pelanggan —</option>' + (data||[]).map(u =>
+    `<option value="${u.id}">${u.fullname||u.email}</option>`).join('')
+
+  const { data: allApps } = await sb.from('apps').select('*')
+  document.getElementById('hAppsList').innerHTML = (allApps||[]).map(a =>
+    `<label style="display:flex;align-items:center;gap:7px;font-size:12px;background:#f8fafd;border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;">
+      <input type="checkbox" value="${a.id}"> ${a.icon||'📋'} ${a.name}
+    </label>`).join('')
+
+  // Rekod hadiah
+  const { data: gifts } = await sb.from('gifts').select('*,profiles(fullname,email)').order('created_at',{ascending:false})
+  document.getElementById('tblHadiah').innerHTML = (gifts||[]).map(g =>
+    `<tr><td><div class="td-name">${g.profiles?.fullname||g.profiles?.email||'—'}</div></td><td><div class="td-sub">${g.app_names||'—'}</div></td><td><div class="td-sub">${g.note||'—'}</div></td><td><div class="td-sub">${fmtDate(g.created_at)}</div></td></tr>`
+  ).join('') || `<tr><td colspan="4"><div class="empty"><div class="empty-t">Tiada rekod hadiah.</div></div></td></tr>`
+}
+
+async function beriHadiah() {
+  const pid = document.getElementById('hPelanggan').value
+  const note= document.getElementById('hNote').value.trim()
+  const err = document.getElementById('hErr'), ok = document.getElementById('hOk')
+  err.style.display='none'; ok.style.display='none'
+  if (!pid){ showEl(err,'Pilih pelanggan'); return }
+  const checked = [...document.querySelectorAll('#hAppsList input:checked')].map(c => c.value)
+  if (!checked.length){ showEl(err,'Pilih sekurang-kurangnya satu app'); return }
+  const { data: apps } = await sb.from('apps').select('name').in('id', checked)
+  const appNames = (apps||[]).map(a=>a.name).join(', ')
+  await sb.from('gifts').insert({ user_id: pid, app_ids: checked, app_names: appNames, note, gifted_by: curAdmin.id })
+  await sb.from('gift_apps').upsert(checked.map(aid=>({ user_id: pid, app_id: aid })))
+  ok.textContent = `✓ Hadiah berjaya diberi: ${appNames}`; ok.style.display='block'
+  document.getElementById('hNote').value = ''
+  document.querySelectorAll('#hAppsList input').forEach(c=>c.checked=false)
+  toast('Hadiah berjaya diberi!'); loadHadiahPelangganList()
+}
+
+/* ================================================================
+   PANDUAN
+   ================================================================ */
+async function addGuide() {
+  const name = document.getElementById('pgName').value.trim()
+  const pkg  = document.getElementById('pgPkg').value
+  const yt   = document.getElementById('pgYt').value.trim()
+  const desc = document.getElementById('pgDesc').value.trim()
+  const err  = document.getElementById('pgErr'), ok = document.getElementById('pgOk')
+  err.style.display='none'; ok.style.display='none'
+  if (!name||!yt){ showEl(err,'Sila isi nama dan link YouTube'); return }
+  const { error } = await sb.from('guides').insert({ name, package_id: pkg, youtube_url: yt, description: desc })
+  if (error){ showEl(err,'Gagal: '+error.message); return }
+  ok.textContent='✓ Panduan berjaya ditambah!'; ok.style.display='block'
+  document.getElementById('pgName').value=''; document.getElementById('pgYt').value=''; document.getElementById('pgDesc').value=''
+  toast('Panduan ditambah!'); loadGuides()
+}
+
+async function loadGuides() {
+  const { data } = await sb.from('guides').select('*').order('created_at',{ascending:false})
+  const pkgColors = { guru:'#dbeafe;color:#1e40af', pentadbir:'#f3e8ff;color:#6b21a8', gabungan:'#fef3c7;color:#92400e' }
+  document.getElementById('guideList').innerHTML = (data||[]).map(g =>
+    `<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="width:48px;height:34px;background:#0f172a;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:white;">▶</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;">${g.name}</div>
+        <div style="font-size:10.5px;font-weight:600;background:#${pkgColors[g.package_id]||'e2e8f4;color:#64748b'};padding:2px 7px;border-radius:9px;display:inline-block;margin:3px 0;">${g.package_id}</div>
+        <div style="font-size:11.5px;color:var(--t2);">${g.youtube_url}</div>
+      </div>
+      <button class="abtn red" onclick="delGuide('${g.id}')">🗑</button>
+    </div>`
+  ).join('') || `<div class="empty"><div class="empty-t">Tiada panduan lagi.</div></div>`
+}
+
+async function delGuide(id) {
+  if (!confirm('Padam panduan ini?')) return
+  await sb.from('guides').delete().eq('id', id)
+  toast('Panduan dipadam'); loadGuides()
+}
+
+/* ================================================================
+   KOD PROMOSI
+   ================================================================ */
+async function addPromo() {
+  const code = document.getElementById('promoCode').value.trim().toUpperCase()
+  const pct  = parseInt(document.getElementById('promoPct').value)
+  const max  = parseInt(document.getElementById('promoMax').value)
+  const exp  = document.getElementById('promoExp').value
+  const err  = document.getElementById('promoErr'), ok = document.getElementById('promoOk')
+  err.style.display='none'; ok.style.display='none'
+  if (!code||!pct){ showEl(err,'Sila isi kod dan diskaun'); return }
+  const { error } = await sb.from('promo_codes').insert({ code, discount_pct: pct, max_uses: max||null, expires_at: exp||null, used_count: 0 })
+  if (error){ showEl(err,'Gagal (mungkin kod sudah ada): '+error.message); return }
+  ok.textContent='✓ Kod promosi berjaya dijana!'; ok.style.display='block'
+  document.getElementById('promoCode').value=''; document.getElementById('promoPct').value=''
+  toast('Kod promosi dijana!'); loadPromo()
+}
+
+async function loadPromo() {
+  const { data } = await sb.from('promo_codes').select('*').order('created_at',{ascending:false})
+  const now = new Date()
+  document.getElementById('tblPromo').innerHTML = (data||[]).map(p => {
+    const expired = p.expires_at && new Date(p.expires_at) < now
+    const maxed   = p.max_uses && p.used_count >= p.max_uses
+    const status  = expired ? 'Tamat' : maxed ? 'Habis' : 'Aktif'
+    const scls    = expired||maxed ? 'pill-tamat' : 'pill-aktif'
+    return `<tr>
+      <td><span style="font-family:monospace;font-size:12.5px;font-weight:700;background:#f1f5f9;padding:3px 10px;border-radius:6px;">${p.code}</span></td>
+      <td><span style="font-weight:700;color:var(--success);">${p.discount_pct}%</span></td>
+      <td>${p.used_count||0} / ${p.max_uses||'∞'}</td>
+      <td><div class="td-sub">${p.expires_at ? fmtDate(p.expires_at) : 'Tiada had'}</div></td>
+      <td><span class="pill ${scls}">${status}</span></td>
+      <td><button class="abtn red" onclick="delPromo('${p.id}')">🗑</button></td>
+    </tr>`
+  }).join('') || `<tr><td colspan="6"><div class="empty"><div class="empty-t">Tiada kod promosi.</div></div></td></tr>`
+}
+
+async function delPromo(id) {
+  if (!confirm('Padam kod promosi ini?')) return
+  await sb.from('promo_codes').delete().eq('id', id)
+  toast('Kod dipadam'); loadPromo()
+}
+
+/* ================================================================
+   MAKLUM BALAS
+   ================================================================ */
+async function loadFeedback() {
+  const { data } = await sb.from('feedback').select('*,profiles(fullname,email)').order('created_at',{ascending:false})
+  document.getElementById('tblFeedback').innerHTML = (data||[]).map(f =>
+    `<tr>
+      <td><div class="td-name">${f.profiles?.fullname||'—'}</div><div class="td-sub">${f.profiles?.email||'—'}</div></td>
+      <td><span class="pill pill-guru" style="${f.type?.includes('masalah')?'background:#fef2f2;color:#dc2626':''}">${f.type||'—'}</span></td>
+      <td style="max-width:200px;"><div style="font-size:12px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${f.message}">${f.message||'—'}</div></td>
+      <td><div class="td-sub">${fmtDate(f.created_at)}</div></td>
+      <td><span class="pill ${f.read?'pill-aktif':'pill-none'}">${f.read?'Dibaca':'Baharu'}</span></td>
+      <td><button class="abtn blue" onclick="markFeedback('${f.id}',${!f.read})">✓</button><button class="abtn red" onclick="delFeedback('${f.id}')">🗑</button></td>
+    </tr>`
+  ).join('') || `<tr><td colspan="6"><div class="empty"><div class="empty-ic">💬</div><div class="empty-t">Tiada maklum balas lagi.</div></div></td></tr>`
+}
+
+async function markFeedback(id, read) {
+  await sb.from('feedback').update({ read }).eq('id', id)
+  toast(read ? 'Ditanda dibaca' : 'Ditanda belum dibaca'); loadFeedback()
+}
+
+async function delFeedback(id) {
+  if (!confirm('Padam maklum balas ini?')) return
+  await sb.from('feedback').delete().eq('id', id)
+  toast('Dipadam'); loadFeedback()
+}
+
+/* ================================================================
+   BROADCAST EMAIL — panggil Supabase Edge Function
+   ================================================================ */
+async function sendBroadcast() {
+  const to   = document.getElementById('notifTo').value
+  const subj = document.getElementById('notifSubj').value.trim()
+  const msg  = document.getElementById('notifMsg').value.trim()
+  const err  = document.getElementById('notifErr'), ok = document.getElementById('notifOk')
+  err.style.display='none'; ok.style.display='none'
+  if (!subj||!msg){ showEl(err,'Sila isi tajuk dan mesej'); return }
+
+  const { data, error } = await sb.functions.invoke('send-broadcast', { body: { to, subject: subj, message: msg } })
+  if (error){ showEl(err,'Gagal: '+error.message); return }
+  ok.textContent=`✓ Emel berjaya dihantar kepada ${data?.count||0} pelanggan!`; ok.style.display='block'
+  toast('Broadcast berjaya dihantar!')
+}
+
+/* ================================================================
+   TUKAR KATA LALUAN ADMIN
+   ================================================================ */
+async function chgAdminPw() {
+  const p1=document.getElementById('apt1').value, p2=document.getElementById('apt2').value
+  const err=document.getElementById('apwErr'), ok=document.getElementById('apwOk')
+  err.style.display='none'; ok.style.display='none'
+  if (p1.length<8){ showEl(err,'Min 8 aksara'); return }
+  if (p1!==p2){ showEl(err,'Tidak sepadan'); return }
+  const { error } = await sb.auth.updateUser({ password: p1 })
+  if (error){ showEl(err,'Gagal: '+error.message); return }
+  ok.textContent='✓ Kata laluan admin berjaya ditukar!'; ok.style.display='block'
+  toast('Kata laluan dikemaskini!')
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+function goSection(id, el) {
+  document.querySelectorAll('.section-page').forEach(s => s.classList.remove('active'))
+  document.querySelectorAll('.anav-item').forEach(n => n.classList.remove('active'))
+  document.getElementById('sec-'+id).classList.add('active')
+  el.classList.add('active')
+  if (id==='pelanggan')    loadPelanggan()
+  if (id==='produk')       loadApps()
+  if (id==='hadiah')       loadHadiahPelangganList()
+  if (id==='panduan')      loadGuides()
+  if (id==='promo')        loadPromo()
+  if (id==='maklumbalas')  loadFeedback()
+}
+
+function switchStab(id, el) {
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'))
+  document.querySelectorAll('.stab-content').forEach(t=>t.classList.remove('active'))
+  el.classList.add('active')
+  document.getElementById('stab-'+id).classList.add('active')
+}
+
+/* ================================================================
+   HELPERS
+   ================================================================ */
+function pkgPill(pkg) {
+  const map = { guru:'<span class="pill pill-guru">Pakej Guru</span>', pentadbir:'<span class="pill pill-pentadbir">Pakej Pentadbir</span>', gabungan:'<span class="pill pill-gabungan">Pakej Gabungan</span>' }
+  return map[pkg] || '<span class="pill pill-none">Tiada Pakej</span>'
+}
+function fmtDate(d) { return d ? new Date(d).toLocaleDateString('ms-MY',{day:'2-digit',month:'short',year:'numeric'}) : '—' }
+function showPage(id) { ['loadPage','loginPage','adminPage'].forEach(p=>{ const el=document.getElementById(p); if(!el)return; el.style.display=p===id?(p==='adminPage'?'flex':'flex'):'none'; if(p==='adminPage'&&id==='adminPage')el.style.display='block' }) }
+function om(id){ document.getElementById(id).classList.add('open') }
+function cm(id){ document.getElementById(id).classList.remove('open') }
+document.addEventListener('click',e=>{ ['addPelangganMod','editPelangganMod'].forEach(id=>{ const el=document.getElementById(id); if(el&&e.target===el)cm(id) }) })
+function showErr(el,msg){ el.textContent=msg; el.style.display='block' }
+function showEl(el,msg){ el.textContent=msg; el.style.display='block' }
+function toast(msg,ok=true){ const t=document.getElementById('tst'),d=document.getElementById('tdot'); document.getElementById('tmsg').textContent=msg; t.style.background=ok?'#1e293b':'#7f1d1d'; d.style.background=ok?'#4ade80':'#f87171'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000) }
+</script>
+</body>
+</html>

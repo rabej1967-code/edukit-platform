@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo — SK@S Pencerapan | EduKit Pakej Pentadbir</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --navy:#0f2044;--navy2:#1a3360;--teal:#0ea5a0;--teal2:#0dd4cd;
+  --gold:#f5a623;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+  --bg:#f0f4f8;--card:#fff;--border:#dde5f0;--text:#1e293b;
+  --muted:#64748b;--light:#f8fafc;--sw:260px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* DEMO BAR */
+.demo-bar{background:linear-gradient(90deg,#0f2044,#0ea5a0);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:200}
+.demo-bar p{font-size:12.5px;font-weight:700;color:white}
+.demo-bar span{font-size:11px;color:rgba(255,255,255,.7)}
+.demo-cta{padding:7px 18px;background:#f59e0b;border:none;border-radius:20px;font-size:12px;font-weight:800;color:#0f172a;cursor:pointer;font-family:var(--font);white-space:nowrap;flex-shrink:0}
+.demo-cta:hover{background:#e68a00}
+
+/* APP LAYOUT */
+#app{display:flex;min-height:calc(100vh - 44px)}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:90}
+.ov.open{display:block}
+
+/* SIDEBAR (sama dengan app sebenar) */
+.sb{width:var(--sw);background:var(--navy);min-height:calc(100vh - 44px);position:fixed;top:44px;left:0;z-index:100;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .28s}
+.sb.open{transform:translateX(0)}
+@media(min-width:880px){.sb{transform:translateX(0)} #app .mn{margin-left:var(--sw)} .ov{display:none!important}}
+.sb-top{padding:14px 13px 11px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:9px}
+.sb-logo{width:34px;height:34px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.72rem;color:#fff;flex-shrink:0}
+.sb-nm{color:#fff;font-size:.84rem;font-weight:700;line-height:1.2}
+.sb-sub{color:rgba(255,255,255,.38);font-size:.63rem}
+.sb-x{margin-left:auto;width:25px;height:25px;background:rgba(255,255,255,.1);border:none;border-radius:6px;color:rgba(255,255,255,.65);cursor:pointer;font-size:.88rem}
+.sb-usr{margin:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.u-av{width:29px;height:29px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;color:#fff;flex-shrink:0}
+.u-nm{font-size:.76rem;font-weight:600;color:#fff}
+.u-rl{font-size:.61rem;color:rgba(255,255,255,.42);margin-top:1px}
+.sb-nav{flex:1;padding:6px}
+.nlbl{color:rgba(255,255,255,.26);font-size:.59rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:9px 8px 3px}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;color:rgba(255,255,255,.58);cursor:pointer;font-size:.79rem;font-weight:500;margin-bottom:1px;transition:background .15s}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.active{background:var(--teal);color:#fff}
+.sb-ft{padding:9px 12px;border-top:1px solid rgba(255,255,255,.1);margin-top:auto}
+.lo{width:100%;padding:7px;background:rgba(239,68,68,.15);color:#fca5a5;border:none;border-radius:6px;font-family:var(--font);font-size:.74rem;font-weight:600;cursor:pointer}
+.lo:hover{background:var(--red);color:#fff}
+
+/* MAIN */
+.mn{min-height:100vh}
+.tb{background:var(--card);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:44px;z-index:50;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-l{display:flex;align-items:center;gap:10px}
+.mb{width:34px;height:34px;background:var(--light);border:1px solid var(--border);border-radius:7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0}
+.mb span{display:block;width:16px;height:2px;background:var(--navy);border-radius:2px}
+.tb-t{font-size:.92rem;font-weight:700;color:var(--navy)}
+.tb-s{font-size:.68rem;color:var(--muted);margin-top:1px}
+.limit-badge{padding:3px 9px;border-radius:20px;font-size:.66rem;font-weight:700;white-space:nowrap}
+.lb-ok{background:#dcfce7;color:#15803d}
+.lb-warn{background:#fee2e2;color:#dc2626}
+
+.pg{padding:14px;display:none}
+.pg.active{display:block}
+.btn{padding:7px 13px;border-radius:7px;border:none;cursor:pointer;font-family:var(--font);font-size:.79rem;font-weight:600;display:inline-flex;align-items:center;gap:5px;transition:all .13s}
+.bp{background:var(--teal);color:#fff}.bp:hover{background:#0c9490}
+.bs{background:var(--light);color:var(--text);border:1px solid var(--border)}.bs:hover{background:var(--border)}
+.bd{background:#fee2e2;color:var(--red)}.bd:hover{background:var(--red);color:#fff}
+.bg2{background:#dcfce7;color:#15803d}.bg2:hover{background:var(--green);color:#fff}
+.bsm{padding:4px 9px;font-size:.71rem}
+.sr{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:520px){.sr{grid-template-columns:repeat(4,1fr)}}
+.sc{background:var(--card);border-radius:10px;padding:13px 14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:4px solid var(--teal)}
+.sc.go{border-top-color:var(--gold)}.sc.gr{border-top-color:var(--green)}.sc.re{border-top-color:var(--red)}
+.sc-n{font-size:1.65rem;font-weight:800;color:var(--navy);line-height:1}
+.sc-l{font-size:.64rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.sc-s{font-size:.63rem;color:var(--teal);margin-top:1px}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:7px}
+.st{font-size:.9rem;font-weight:700;color:var(--navy)}
+.cg2{display:grid;grid-template-columns:1fr;gap:11px;margin-bottom:14px}
+@media(min-width:540px){.cg2{grid-template-columns:1fr 1fr}}
+.cc{background:var(--card);border-radius:10px;padding:13px 14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.ct{font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.tc{background:var(--card);border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:13px}
+.ts{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.si{flex:1;min-width:130px;padding:7px 11px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.79rem;outline:none}
+.si:focus{border-color:var(--teal)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.77rem}
+thead th{background:var(--light);padding:8px 11px;text-align:left;font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);white-space:nowrap}
+tbody td{padding:9px 11px;border-bottom:1px solid var(--border)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--light)}
+.av{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.68rem;color:#fff;flex-shrink:0}
+.nc{display:flex;align-items:center;gap:7px}
+.badge{display:inline-flex;padding:2px 7px;border-radius:20px;font-size:.64rem;font-weight:700}
+.bgn{background:#dcfce7;color:#15803d}.ban{background:#fef3c7;color:#92400e}
+.bbn{background:#dbeafe;color:#1e40af}.btn2{background:#ccfbf1;color:#0f766e}
+.bxn{background:#f1f5f9;color:var(--muted)}
+.sbw{display:flex;align-items:center;gap:5px;min-width:90px}
+.sbb{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.sbf{height:100%;border-radius:3px}
+.sbt{font-size:.72rem;font-weight:700;min-width:36px;text-align:right}
+
+/* CERAP MODAL */
+.mo{position:fixed;inset:0;background:rgba(15,32,68,.55);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+@media(min-width:540px){.mo{align-items:center;padding:14px}}
+.mo.open{display:flex}
+.md{background:var(--card);border-radius:14px 14px 0 0;width:100%;max-width:700px;max-height:92vh;overflow-y:auto;box-shadow:0 -8px 28px rgba(0,0,0,.2)}
+@media(min-width:540px){.md{border-radius:14px}}
+.dh{width:36px;height:4px;background:var(--border);border-radius:2px;margin:7px auto 0}
+.mh{padding:13px 17px 11px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:1}
+.mt{font-size:.9rem;font-weight:700;color:var(--navy)}
+.mx{width:25px;height:25px;border:none;background:var(--light);border-radius:6px;cursor:pointer;font-size:.88rem}
+.mbod{padding:15px 17px}
+.mft{padding:11px 17px 15px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.fr{display:grid;grid-template-columns:1fr;gap:11px;margin-bottom:11px}
+@media(min-width:440px){.fr{grid-template-columns:1fr 1fr}}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fl{font-size:.73rem;font-weight:600}.fl span{color:var(--red)}
+.fc{padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font);font-size:.83rem;outline:none;color:var(--text);width:100%}
+.fc:focus{border-color:var(--teal)}
+select.fc{background:#fff}
+.asp{background:var(--light);border-radius:9px;padding:11px;margin-bottom:10px;border-left:4px solid var(--teal)}
+.aspt{font-size:.76rem;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.aspc{background:var(--teal);color:#fff;border-radius:4px;padding:1px 6px;font-size:.64rem}
+.sil{display:flex;flex-direction:column;gap:7px}
+.sii{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sic{font-family:monospace;font-size:.63rem;color:var(--muted);min-width:66px;flex-shrink:0}
+.sid{flex:1;font-size:.74rem;line-height:1.3;min-width:100px}
+.rg{display:flex;gap:3px;flex-shrink:0}
+.rb{width:28px;height:28px;border-radius:6px;border:2px solid var(--border);background:#fff;cursor:pointer;font-size:.77rem;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.rb.s1{border-color:var(--red);background:var(--red);color:#fff}
+.rb.s2{border-color:var(--amber);background:var(--amber);color:#fff}
+.rb.s3{border-color:#3b82f6;background:#3b82f6;color:#fff}
+.rb.s4{border-color:var(--green);background:var(--green);color:#fff}
+.ssbox{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:9px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;flex-wrap:wrap;gap:8px}
+.ssbig{font-size:1.85rem;font-weight:800;color:var(--teal2)}
+.lgnd{display:flex;gap:7px;flex-wrap:wrap;font-size:.67rem}
+.lgi{display:flex;align-items:center;gap:3px}
+.lgd{width:7px;height:7px;border-radius:50%}
+.ccl{display:flex;flex-direction:column;gap:9px}
+.ccard{background:var(--card);border-radius:9px;padding:12px 14px;box-shadow:0 2px 7px rgba(0,0,0,.06);border-left:4px solid var(--teal)}
+.cctop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ccm{font-size:.69rem;color:var(--muted);margin-top:3px;display:flex;gap:7px;flex-wrap:wrap}
+.ccs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:9px;padding-top:9px;border-top:1px solid var(--border)}
+@media(min-width:440px){.ccs{grid-template-columns:repeat(8,1fr)}}
+.ms{text-align:center}
+.ms .mc2{font-size:.56rem;color:var(--muted);font-family:monospace}
+.ms .mv{font-size:.82rem;font-weight:800;margin-top:1px}
+.empty{padding:36px 14px;text-align:center;color:var(--muted)}
+.empty .ei{font-size:2rem;margin-bottom:7px}
+.empty h3{font-size:.86rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.tbar{position:fixed;bottom:14px;right:14px;z-index:300;display:flex;flex-direction:column;gap:6px}
+.tst{background:var(--navy);color:#fff;padding:8px 13px;border-radius:8px;font-size:.74rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.tst.ok{background:#15803d}.tst.err{background:var(--red)}
+
+/* LIMIT OVERLAY */
+#limitOverlay{position:fixed;inset:0;background:rgba(10,22,40,.85);z-index:9999;display:none;align-items:center;justify-content:center}
+#limitOverlay.show{display:flex}
+.lo-box{background:white;border-radius:20px;width:440px;max-width:93vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3)}
+.lo-head{background:linear-gradient(135deg,#0f2044,#0ea5a0);padding:28px;text-align:center}
+.lo-head h2{font-size:22px;font-weight:800;color:white;margin-bottom:6px}
+.lo-head p{font-size:13px;color:rgba(255,255,255,.8)}
+.lo-body{padding:22px 28px}
+.lo-body p{font-size:14px;color:#475569;line-height:1.7;margin-bottom:14px}
+.lo-body ul{list-style:none}
+.lo-body ul li{font-size:13px;color:#0f172a;padding:5px 0;display:flex;align-items:center;gap:8px}
+.lo-body ul li::before{content:'✓';color:#0ea5a0;font-weight:700;flex-shrink:0}
+.lo-foot{padding:14px 28px 22px;display:flex;flex-direction:column;gap:8px}
+.lo-main{width:100%;padding:14px;background:#0ea5a0;border:none;border-radius:12px;font-size:15px;font-weight:800;color:white;cursor:pointer;font-family:var(--font)}
+.lo-main:hover{background:#0c9490}
+.lo-back{background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;font-family:var(--font);text-align:center}
+</style>
+</head>
+<body>
+<Chart.register>
+
+<!-- DEMO BAR -->
+<div class="demo-bar">
+  <div>
+    <p>🔍 DEMO — SK@S Standard 4 Pencerapan (Pakej Pentadbir EduKit)</p>
+    <span>Had demo: 10 guru. Versi penuh: guru tanpa had + laporan PDF rasmi + multi-pengguna.</span>
+  </div>
+  <button class="demo-cta" onclick="location.href='index.html#pricing'">Dapatkan Akses Penuh →</button>
+</div>
+
+<div id="app">
+  <!-- OVERLAY (mobile) -->
+  <div class="ov" id="ov" onclick="closeSb()"></div>
+
+  <!-- SIDEBAR -->
+  <nav class="sb" id="sb">
+    <div class="sb-top">
+      <div class="sb-logo">SK@S</div>
+      <div><div class="sb-nm">SK@S Standard 4</div><div class="sb-sub">DEMO — Pakej Pentadbir</div></div>
+      <button class="sb-x" onclick="closeSb()">✕</button>
+    </div>
+    <div class="sb-usr">
+      <div class="u-av" style="background:#0ea5a0">PE</div>
+      <div><div class="u-nm">Pengetua (Demo)</div><div class="u-rl">Pentadbir</div></div>
+    </div>
+    <div class="sb-nav">
+      <div class="nlbl">Menu</div>
+      <div class="ni active" onclick="goPage('dash')">📊 Dashboard</div>
+      <div class="ni" onclick="goPage('guru')">👨‍🏫 Senarai Guru</div>
+      <div class="ni" onclick="goPage('cerap')">🔍 Rekod Cerapan</div>
+      <div class="nlbl">Demo</div>
+      <div class="ni" onclick="demoOnly('Laporan PDF')">📄 Jana Laporan PDF</div>
+      <div class="ni" onclick="demoOnly('Eksport JSON')">💾 Eksport Data</div>
+    </div>
+    <div class="sb-ft">
+      <div style="font-size:.65rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:6px">
+        Had demo: <span id="sbLimitTxt">0/10</span> guru
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="mn">
+    <!-- TOPBAR -->
+    <div class="tb">
+      <div class="tb-l">
+        <div class="mb" onclick="openSb()"><span></span><span></span><span></span></div>
+        <div><div class="tb-t" id="tb-title">Dashboard</div><div class="tb-s">SK@S Standard 4 — DEMO</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="limit-badge lb-ok" id="limitBadge">0 / 10 Guru</span>
+        <button class="btn bp bsm" onclick="openCerap()">+ Cerapan Baharu</button>
+      </div>
+    </div>
+
+    <!-- PAGE: DASHBOARD -->
+    <div class="pg active" id="pg-dash">
+      <div class="sr">
+        <div class="sc"><div class="sc-n" id="st-guru">0</div><div class="sc-l">Jumlah Guru</div><div class="sc-s">Didaftarkan</div></div>
+        <div class="sc go"><div class="sc-n" id="st-cerap">0</div><div class="sc-l">Jumlah Cerapan</div><div class="sc-s">Semua rekod</div></div>
+        <div class="sc gr"><div class="sc-n" id="st-avg">—</div><div class="sc-l">Purata Keseluruhan</div><div class="sc-s">%</div></div>
+        <div class="sc re"><div class="sc-n" id="st-cem">0</div><div class="sc-l">Cemerlang</div><div class="sc-s">≥ 90%</div></div>
+      </div>
+      <div class="cg2">
+        <div class="cc"><div class="ct">📊 Taburan Tahap</div><canvas id="chPie" height="180"></canvas></div>
+        <div class="cc"><div class="ct">📈 Purata Per Aspek</div><canvas id="chBar" height="180"></canvas></div>
+      </div>
+      <div class="cc" id="rankList"><div class="ct">🏆 Ranking Guru</div><div class="empty"><div class="ei">🔍</div><h3>Belum ada cerapan</h3><p style="font-size:.74rem">Klik "+ Cerapan Baharu" untuk mulakan</p></div></div>
+    </div>
+
+    <!-- PAGE: SENARAI GURU -->
+    <div class="pg" id="pg-guru">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:.9rem;font-weight:700;color:var(--navy)">Senarai Guru</div>
+        <button class="btn bp bsm" id="btnAddGuru" onclick="openAddGuru()">+ Tambah Guru</button>
+      </div>
+      <div class="tc">
+        <div class="tw"><table>
+          <thead><tr><th>Guru</th><th>Panitia / Mata Pelajaran</th><th>Gred Jawatan</th><th>Bil. Cerapan</th><th>Purata</th><th>Tahap</th><th></th></tr></thead>
+          <tbody id="guruTbl"><tr><td colspan="7"><div class="empty"><div class="ei">👨‍🏫</div><h3>Tiada guru didaftarkan</h3><p style="font-size:.74rem">Klik "+ Tambah Guru" untuk mula</p></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PAGE: REKOD CERAPAN -->
+    <div class="pg" id="pg-cerap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:.9rem;font-weight:700;color:var(--navy)">Rekod Cerapan</div>
+        <button class="btn bp bsm" onclick="openCerap()">+ Cerapan Baharu</button>
+      </div>
+      <div class="tc">
+        <div class="ts"><input class="si" id="srchC" placeholder="Cari guru..." oninput="renderCerapTbl()"></div>
+        <div class="tw"><table>
+          <thead><tr><th>Guru</th><th>Mata Pelajaran</th><th>Tarikh</th><th>Pencerap</th><th>Skor</th><th>%</th><th>Tahap</th><th></th></tr></thead>
+          <tbody id="cerapTbl"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+  </div><!-- end .mn -->
+</div><!-- end #app -->
+
+<!-- MODAL: TAMBAH GURU -->
+<div class="mo" id="moGuru">
+  <div class="md" style="max-width:420px">
+    <div class="dh"></div>
+    <div class="mh"><span class="mt">Tambah Guru Baharu</span><button class="mx" onclick="closeMo('moGuru')">✕</button></div>
+    <div class="mbod">
+      <div class="fr">
+        <div class="fg"><label class="fl">Nama Penuh <span>*</span></label><input class="fc" id="g-nm" placeholder="Pn. Norazlin Zakaria"></div>
+        <div class="fg"><label class="fl">Panitia / Bidang <span>*</span></label><input class="fc" id="g-pan" placeholder="Bahasa Melayu"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Gred Jawatan</label>
+          <select class="fc" id="g-gred">
+            <option>DG41</option><option>DG44</option><option>DG48</option><option>DG52</option><option>DG54</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">No. Kad Pengenalan</label><input class="fc" id="g-nkp" placeholder="900101-01-1234"></div>
+      </div>
+      <div id="guruErr" style="font-size:.74rem;color:var(--red);margin-top:4px;display:none"></div>
+    </div>
+    <div class="mft">
+      <button class="btn bs" onclick="closeMo('moGuru')">Batal</button>
+      <button class="btn bp" onclick="addGuru()">Tambah Guru</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REKOD CERAPAN -->
+<div class="mo" id="moCerap">
+  <div class="md">
+    <div class="dh"></div>
+    <div class="mh">
+      <span class="mt">Rekod Pencerapan SK@S Standard 4</span>
+      <button class="mx" onclick="closeMo('moCerap')">✕</button>
+    </div>
+    <div class="mbod">
+      <div class="fr">
+        <div class="fg"><label class="fl">Guru Dicerap <span>*</span></label>
+          <select class="fc" id="c-guru"><option value="">— Pilih Guru —</option></select>
+        </div>
+        <div class="fg"><label class="fl">Mata Pelajaran</label><input class="fc" id="c-mp" placeholder="Matematik"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Tarikh Cerapan</label><input class="fc" type="date" id="c-tar"></div>
+        <div class="fg"><label class="fl">Pegawai Pencerap</label><input class="fc" id="c-pen" placeholder="Nama pencerap"></div>
+      </div>
+      <div style="font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        Penilaian SK@S Standard 4 — Skala: 1=Lemah, 2=Memuaskan, 3=Baik, 4=Cemerlang
+      </div>
+      <div id="rubrikContainer"></div>
+      <div class="ssbox">
+        <div><div style="font-size:.7rem;color:rgba(255,255,255,.6)">JUMLAH SKOR</div><div class="ssbig" id="totScore">0 / 0</div></div>
+        <div style="text-align:right"><div style="font-size:.7rem;color:rgba(255,255,255,.6)">PERATUS</div><div class="ssbig" id="totPct">0%</div></div>
+        <div><div style="font-size:.7rem;color:rgba(255,255,255,.6)">TAHAP</div><div id="totTahap" style="font-size:1rem;font-weight:800;color:var(--teal2)">—</div></div>
+      </div>
+      <div id="cerapErr" style="font-size:.74rem;color:var(--red);margin-top:4px;display:none"></div>
+    </div>
+    <div class="mft">
+      <button class="btn bs" onclick="closeMo('moCerap')">Batal</button>
+      <button class="btn bp" onclick="demoOnly('Cetak Borang PDF')">🖨 Cetak PDF (Demo)</button>
+      <button class="btn bg2" onclick="saveCerap()">Simpan Cerapan</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIMIT OVERLAY -->
+<div id="limitOverlay">
+  <div class="lo-box">
+    <div class="lo-head">
+      <h2>🔍 Had Demo Dicapai!</h2>
+      <p>Anda telah mendaftarkan 10 guru (had demo)</p>
+    </div>
+    <div class="lo-body">
+      <p>Anda baru sahaja mencuba SK@S Pencerapan! Dalam versi penuh:</p>
+      <ul>
+        <li>Daftar guru tanpa had bilangan</li>
+        <li>Jana borang pencerapan PDF rasmi SKPMg2</li>
+        <li>Laporan tahunan penuh dengan ranking guru</li>
+        <li>Multi-pengguna: pentadbir, GPK, ketua panitia</li>
+        <li>Rekod sejarah cerapan setiap guru</li>
+        <li>Eksport / Import data JSON</li>
+      </ul>
+    </div>
+    <div class="lo-foot">
+      <button class="lo-main" onclick="location.href='index.html#pricing'">Dapatkan Pakej Pentadbir — RM 95 →</button>
+      <button class="lo-back" onclick="document.getElementById('limitOverlay').classList.remove('show')">Teruskan demo (had 10 guru)</button>
+    </div>
+  </div>
+</div>
+
+<div class="tbar" id="tbar"></div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+// ── RUBRIK SEBENAR SK@S STANDARD 4 ─────────────────────────
+var A=[
+  {a:'4.1',l:'Perancang',t:'4.1.1 Guru Rancang PdPc',s:[
+    {c:'4.1.1(i)',  d:'Ada RPH mengandungi objektif boleh diukur & aktiviti PdPc sesuai'},
+    {c:'4.1.1(ii)', d:'Menentukan kaedah pentaksiran dalam PdPc'},
+    {c:'4.1.1(iii)',d:'Menyediakan ABM / BBM / BBB / TMK'}]},
+  {a:'4.2a',l:'Pengawal',t:'4.2.1 Guru Kawal Proses Pembelajaran',s:[
+    {c:'4.2.1(i)',  d:'Mengelola isi pelajaran / skop pembelajaran yang dirancang'},
+    {c:'4.2.1(ii)', d:'Mengelola masa PdPc selaras dengan aktiviti pembelajaran'},
+    {c:'4.2.1(iii)',d:'Memberi peluang kepada penyertaan aktif murid'}]},
+  {a:'4.2b',l:'',t:'4.2.2 Guru Kelola Suasana PdPc',s:[
+    {c:'4.2.2(i)',  d:'Mengawasi komunikasi murid dalam PdPc'},
+    {c:'4.2.2(ii)', d:'Mengawasi perlakuan murid dalam PdPc'},
+    {c:'4.2.2(iii)',d:'Menyusun atur kedudukan murid'},
+    {c:'4.2.2(iv)', d:'Mewujudkan persekitaran pembelajaran yang menyeronokkan'}]},
+  {a:'4.3',l:'Pembimbing',t:'4.3.1 Guru Membimbing',s:[
+    {c:'4.3.1(i)',  d:'Memberi tunjuk ajar / panduan menguasai pelajaran / konsep / fakta'},
+    {c:'4.3.1(ii)', d:'Memberi tunjuk ajar / panduan menguasai kemahiran'},
+    {c:'4.3.1(iii)',d:'Memandu murid membuat keputusan & menyelesaikan masalah'},
+    {c:'4.3.1(iv)', d:'Memandu murid menggunakan sumber pendidikan'},
+    {c:'4.3.1(v)',  d:'Menggabung / merentas / mengaitkan isi pelajaran dengan tajuk lain'}]},
+  {a:'4.4a',l:'Pendorong',t:'4.4.1 Guru Dorong Minda Murid',s:[
+    {c:'4.4.1(i)',   d:'Merangsang murid berkomunikasi'},
+    {c:'4.4.1(ii)',  d:'Merangsang murid berkolaboratif'},
+    {c:'4.4.1(iii)', d:'Soalan ke arah pemikiran kritis dan kreatif'},
+    {c:'4.4.1(iv)',  d:'Soalan / situasi ke arah membuat keputusan'},
+    {c:'4.4.1(v)',   d:'Mewujudkan peluang murid memimpin'},
+    {c:'4.4.1(vi)',  d:'Menggalakkan murid mengemukakan soalan'},
+    {c:'4.4.1(vii)', d:'Menggalakkan murid belajar secara kendiri'}]},
+  {a:'4.4b',l:'',t:'4.4.2 Guru Dorong Emosi Murid',s:[
+    {c:'4.4.2(i)',  d:'Memberi pujian / galakan terhadap perlakuan positif'},
+    {c:'4.4.2(ii)', d:'Memberi penghargaan terhadap hasil kerja / idea bernas'},
+    {c:'4.4.2(iii)',d:'Memberi keyakinan dalam menyoal & merespon'},
+    {c:'4.4.2(iv)', d:'Prihatin keperluan murid'}]},
+  {a:'4.5',l:'Penilai',t:'4.5.1 Guru Laksanakan Pentaksiran',s:[
+    {c:'4.5.1(i)',  d:'Menggunakan pelbagai kaedah pentaksiran PdPc'},
+    {c:'4.5.1(ii)', d:'Melakukan aktiviti pemulihan / pengayaan PdPc'},
+    {c:'4.5.1(iii)',d:'Memberi latihan / tugasan pelajaran'},
+    {c:'4.5.1(iv)', d:'Membuat refleksi PdPc'},
+    {c:'4.5.1(v)',  d:'Menyemak / menilai hasil kerja / latihan / tugasan'}]},
+  {a:'4.6',l:'Pelajar Aktif',t:'4.6.1 Murid Libatkan Diri dalam PdPc',s:[
+    {c:'4.6.1(i)',   d:'Memberi respon berkaitan isi pelajaran'},
+    {c:'4.6.1(ii)',  d:'Berkomunikasi semasa aktiviti pembelajaran'},
+    {c:'4.6.1(iii)', d:'Melaksanakan aktiviti secara kolaboratif'},
+    {c:'4.6.1(iv)',  d:'Memberi respon ke arah pemikiran kritis & kreatif'},
+    {c:'4.6.1(v)',   d:'Mengemukakan soalan berkaitan isi pelajaran'},
+    {c:'4.6.1(vi)',  d:'Mengaitkan isi pelajaran dengan kehidupan / isu lokal / global'},
+    {c:'4.6.1(vii)', d:'Membuat keputusan / menyelesaikan masalah'}]}
+];
+var AG=[
+  {id:'4.1',lbl:'4.1 Perancang',  col:'#0ea5a0'},
+  {id:'4.2',lbl:'4.2 Pengawal',   col:'#3b82f6'},
+  {id:'4.3',lbl:'4.3 Pembimbing', col:'#8b5cf6'},
+  {id:'4.4',lbl:'4.4 Pendorong',  col:'#f59e0b'},
+  {id:'4.5',lbl:'4.5 Penilai',    col:'#ef4444'},
+  {id:'4.6',lbl:'4.6 Pelajar Aktif',col:'#22c55e'}
+];
+var MAX=(function(){var t=0;for(var i=0;i<A.length;i++)t+=A[i].s.length*4;return t;}());
+var DEMO_MAX=10;
+
+// ── STATE ──────────────────────────────────────────────────
+var D={gurus:[],ceraps:[]};
+var SC={};  // skor semasa dalam modal
+var CH={};
+
+// ── DEMO DATA ─────────────────────────────────────────────
+function initDemo(){
+  D.gurus=[
+    {id:'g1',nm:'Pn. Norazlin Zakaria', pan:'Bahasa Melayu',gred:'DG44',nkp:''},
+    {id:'g2',nm:'En. Ahmad Fadzillah',  pan:'Matematik',     gred:'DG48',nkp:''},
+    {id:'g3',nm:'Cik Siti Hajar Yusof', pan:'Bahasa Inggeris',gred:'DG41',nkp:''},
+  ];
+  var mksc=function(vals){var s={};var i=0;A.forEach(function(asp){asp.s.forEach(function(si){s[si.c]=vals[i]||0;i++;});});return s;};
+  D.ceraps=[
+    {id:'c1',gid:'g1',mp:'Bahasa Melayu', tar:'2025-03-10',pen:'Pengetua Hj. Azlan',sc:mksc([4,3,4,3,3,4,3,2,3,4,3,3,4,3,3,3,2,3,2,3,3,3,2,3,3,3,4,3,3,2,2,3,3,2,3,3,3]),tot:0,pct:0},
+    {id:'c2',gid:'g2',mp:'Matematik',     tar:'2025-03-15',pen:'GPK Pn. Rohaida',   sc:mksc([3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,2,3,2,3,2,3,2,3,3,2,3,3,3,2,2,3,3,2,3,3,3]),tot:0,pct:0},
+    {id:'c3',gid:'g3',mp:'Bahasa Inggeris',tar:'2025-04-02',pen:'Pengetua Hj. Azlan',sc:mksc([4,4,4,4,4,4,4,3,4,4,4,4,4,4,4,3,3,4,3,4,3,4,3,4,4,3,4,4,4,3,3,4,4,3,4,4,4]),tot:0,pct:0},
+  ];
+  D.ceraps.forEach(function(c){var t=0;for(var k in c.sc)t+=(parseInt(c.sc[k])||0);c.tot=t;c.pct=parseFloat((t/MAX*100).toFixed(1));});
+}
+
+// ── UTILS ─────────────────────────────────────────────────
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function gg(id){for(var i=0;i<D.gurus.length;i++)if(D.gurus[i].id===id)return D.gurus[i];return null;}
+function gcs(gid){return D.ceraps.filter(function(c){return c.gid===gid;});}
+function gavg(gid){var cs=gcs(gid).filter(function(c){return c.tot>0;});return cs.length?cs.reduce(function(s,c){return s+c.pct;},0)/cs.length:0;}
+function fd(d){if(!d)return'—';return new Date(d).toLocaleDateString('ms-MY',{day:'2-digit',month:'short',year:'numeric'});}
+function tahap(p){return p>=90?'Cemerlang':p>=75?'Baik':p>=50?'Memuaskan':p>0?'Perlu Bimbingan':'—';}
+function tcol(p){return p>=90?'#15803d':p>=75?'#0f766e':p>=50?'#1e40af':'#92400e';}
+function bdg(pct){
+  if(pct>=90)return'<span class="badge bgn">Cemerlang</span>';
+  if(pct>=75)return'<span class="badge btn2">Baik</span>';
+  if(pct>=50)return'<span class="badge bbn">Memuaskan</span>';
+  if(pct>0) return'<span class="badge ban">Perlu Bimbingan</span>';
+  return'<span class="badge bxn">Belum Dicerap</span>';
+}
+function sbar(pct){
+  var c=pct>=90?'#22c55e':pct>=75?'#0ea5a0':pct>=50?'#3b82f6':pct>=25?'#f59e0b':'#ef4444';
+  return'<div class="sbw"><div class="sbb"><div class="sbf" style="width:'+Math.min(pct,100)+'%;background:'+c+'"></div></div><span class="sbt" style="color:'+c+'">'+pct.toFixed(1)+'%</span></div>';
+}
+function avc(n){var cs=['#0ea5a0','#3b82f6','#8b5cf6','#f59e0b','#ef4444','#22c55e','#f97316','#ec4899'];var h=0;for(var i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return cs[Math.abs(h)%cs.length];}
+function ini(n){var p=n.split(' ');return((p[0]||'')[0]||'').toUpperCase()+((p[1]||p[0]||'')[0]||'').toUpperCase();}
+
+// ── NAVIGATION ─────────────────────────────────────────────
+function goPage(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('pg-'+id).classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active');});
+  var titles={dash:'Dashboard',guru:'Senarai Guru',cerap:'Rekod Cerapan'};
+  document.getElementById('tb-title').textContent=titles[id]||'';
+  if(id==='dash')renderDash();
+  else if(id==='guru')renderGuruTbl();
+  else if(id==='cerap')renderCerapTbl();
+  closeSb();
+}
+function openSb(){document.getElementById('sb').classList.add('open');document.getElementById('ov').classList.add('open');}
+function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('ov').classList.remove('open');}
+function openMo(id){document.getElementById(id).classList.add('open');}
+function closeMo(id){document.getElementById(id).classList.remove('open');}
+
+// ── LIMIT UI ──────────────────────────────────────────────
+function updateLimitUI(){
+  var n=D.gurus.length;
+  var pill=document.getElementById('limitBadge');
+  pill.textContent=n+' / '+DEMO_MAX+' Guru';
+  pill.className='limit-badge '+(n>=DEMO_MAX?'lb-warn':'lb-ok');
+  document.getElementById('sbLimitTxt').textContent=n+'/'+DEMO_MAX;
+  var btnG=document.getElementById('btnAddGuru');
+  if(btnG)btnG.disabled=(n>=DEMO_MAX);
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────
+function renderDash(){
+  var n=D.gurus.length, nc=D.ceraps.length;
+  var avgs=D.ceraps.filter(function(c){return c.tot>0;}).map(function(c){return c.pct;});
+  var avg=avgs.length?avgs.reduce(function(a,b){return a+b;},0)/avgs.length:0;
+  var cem=D.ceraps.filter(function(c){return c.pct>=90;}).length;
+  document.getElementById('st-guru').textContent=n;
+  document.getElementById('st-cerap').textContent=nc;
+  document.getElementById('st-avg').textContent=avgs.length?avg.toFixed(1)+'%':'—';
+  document.getElementById('st-cem').textContent=cem;
+
+  // Pie chart — taburan tahap
+  var tcount={Cemerlang:0,Baik:0,Memuaskan:0,'Perlu Bimbingan':0};
+  D.ceraps.forEach(function(c){
+    if(c.pct>=90)tcount.Cemerlang++;
+    else if(c.pct>=75)tcount.Baik++;
+    else if(c.pct>=50)tcount.Memuaskan++;
+    else if(c.pct>0)tcount['Perlu Bimbingan']++;
+  });
+  var tLabels=Object.keys(tcount).filter(function(k){return tcount[k]>0;});
+  var tVals=tLabels.map(function(k){return tcount[k];});
+  var tColors=['#22c55e','#0ea5a0','#3b82f6','#f59e0b'];
+  if(CH.pie){CH.pie.destroy();}
+  if(tVals.length){
+    CH.pie=new Chart(document.getElementById('chPie'),{
+      type:'pie',data:{labels:tLabels,datasets:[{data:tVals,backgroundColor:tColors.slice(0,tLabels.length),borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:9}},datalabels:{color:'#fff',font:{weight:'bold',size:11},formatter:function(v,ctx){var tt=tVals.reduce(function(a,b){return a+b;},0);return tt?v+'\n('+Math.round(v/tt*100)+'%)':'';}}}  }
+    });
+  }
+
+  // Bar chart — purata per aspek
+  var agLabels=AG.map(function(g){return g.lbl;});
+  var agVals=AG.map(function(g){
+    var codes=[];
+    A.forEach(function(asp){if(g.id==='4.2'?['4.2a','4.2b'].includes(asp.a):asp.a===g.id||asp.a.startsWith(g.id+'a')||asp.a.startsWith(g.id+'b')){asp.s.forEach(function(si){codes.push(si.c);});}});
+    if(g.id==='4.2'){codes=[];['4.2a','4.2b'].forEach(function(aid){A.forEach(function(asp){if(asp.a===aid)asp.s.forEach(function(si){codes.push(si.c);});});});}
+    if(g.id==='4.4'){codes=[];['4.4a','4.4b'].forEach(function(aid){A.forEach(function(asp){if(asp.a===aid)asp.s.forEach(function(si){codes.push(si.c);});});});}
+    var vals=[];
+    D.ceraps.forEach(function(c){codes.forEach(function(code){var v=parseInt(c.sc[code])||0;if(v>0)vals.push(v);});});
+    return vals.length?parseFloat((vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(2)):0;
+  });
+  if(CH.bar){CH.bar.destroy();}
+  CH.bar=new Chart(document.getElementById('chBar'),{
+    type:'bar',
+    data:{labels:agLabels,datasets:[{data:agVals,backgroundColor:AG.map(function(g){return g.col+'cc';}),borderColor:AG.map(function(g){return g.col;}),borderWidth:2,borderRadius:7}]},
+    options:{responsive:true,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',formatter:function(v){return v>0?v.toFixed(2):'';},font:{size:11,weight:'bold'},color:'#1e293b',offset:2}},scales:{y:{beginAtZero:true,max:4,ticks:{font:{size:9},stepSize:1},grid:{color:'#eee'}},x:{ticks:{font:{size:8},maxRotation:30}}}}
+  });
+
+  // Ranking
+  var ranked=D.gurus.map(function(g){return{g:g,avg:gavg(g.id),nc:gcs(g.id).length};}).filter(function(r){return r.nc>0;}).sort(function(a,b){return b.avg-a.avg;});
+  var rkEl=document.getElementById('rankList');
+  if(!ranked.length){
+    rkEl.innerHTML='<div class="ct">🏆 Ranking Guru</div><div class="empty"><div class="ei">🔍</div><h3>Belum ada cerapan</h3><p style="font-size:.74rem">Klik "+ Cerapan Baharu" untuk mulakan</p></div>';
+  } else {
+    rkEl.innerHTML='<div class="ct">🏆 Ranking Guru</div><div class="ccl">'+ranked.map(function(r,i){
+      return'<div class="ccard"><div class="cctop">'+
+             '<div class="nc"><div class="av" style="background:'+avc(r.g.nm)+'">'+ini(r.g.nm)+'</div>'+
+             '<div><div style="font-size:.82rem;font-weight:700">'+(i+1)+'. '+r.g.nm+'</div>'+
+             '<div class="ccm"><span>'+r.g.pan+'</span><span>'+r.g.gred+'</span><span>'+r.nc+' cerapan</span></div></div></div>'+
+             '<div style="text-align:right">'+bdg(r.avg)+'<div style="font-size:.7rem;color:'+tcol(r.avg)+';font-weight:700;margin-top:4px">'+r.avg.toFixed(1)+'%</div></div></div>'+
+             sbar(r.avg)+
+             '</div>';
+    }).join('')+'</div>';
+  }
+}
+
+// ── SENARAI GURU ───────────────────────────────────────────
+function renderGuruTbl(){
+  var rows=D.gurus.map(function(g,i){
+    var a=gavg(g.id), nc=gcs(g.id).length;
+    return'<tr>'+
+      '<td><div class="nc"><div class="av" style="background:'+avc(g.nm)+'">'+ini(g.nm)+'</div>'+
+      '<div><div style="font-size:.82rem;font-weight:600">'+g.nm+'</div></div></div></td>'+
+      '<td>'+g.pan+'</td><td>'+g.gred+'</td><td>'+nc+'</td>'+
+      '<td>'+sbar(a)+'</td>'+
+      '<td>'+bdg(a)+'</td>'+
+      '<td><button class="btn bd bsm" onclick="delGuru(\''+g.id+'\')">Padam</button></td>'+
+      '</tr>';
+  }).join('');
+  document.getElementById('guruTbl').innerHTML=rows||
+    '<tr><td colspan="7"><div class="empty"><div class="ei">👨‍🏫</div><h3>Tiada guru</h3><p style="font-size:.74rem">Klik "+ Tambah Guru"</p></div></td></tr>';
+}
+
+// ── REKOD CERAPAN ──────────────────────────────────────────
+function renderCerapTbl(){
+  var srch=(document.getElementById('srchC').value||'').toLowerCase();
+  var rows=D.ceraps.filter(function(c){
+    var g=gg(c.gid);
+    return!srch||(g&&g.nm.toLowerCase().includes(srch));
+  }).sort(function(a,b){return b.tar.localeCompare(a.tar);}).map(function(c){
+    var g=gg(c.gid);
+    return'<tr>'+
+      '<td><div class="nc"><div class="av" style="background:'+avc(g?g.nm:'?')+'">'+ini(g?g.nm:'?')+'</div>'+
+      '<div style="font-size:.82rem;font-weight:600">'+(g?g.nm:'—')+'</div></div></td>'+
+      '<td>'+(c.mp||'—')+'</td>'+
+      '<td>'+fd(c.tar)+'</td>'+
+      '<td style="font-size:.74rem;color:var(--muted)">'+(c.pen||'—')+'</td>'+
+      '<td style="font-weight:700">'+c.tot+' / '+MAX+'</td>'+
+      '<td>'+sbar(c.pct)+'</td>'+
+      '<td>'+bdg(c.pct)+'</td>'+
+      '<td><button class="btn bd bsm" onclick="delCerap(\''+c.id+'\')">Padam</button></td>'+
+      '</tr>';
+  }).join('');
+  document.getElementById('cerapTbl').innerHTML=rows||
+    '<tr><td colspan="8"><div class="empty"><div class="ei">🔍</div><h3>Tiada rekod cerapan</h3></div></td></tr>';
+}
+
+// ── TAMBAH GURU ────────────────────────────────────────────
+function openAddGuru(){
+  if(D.gurus.length>=DEMO_MAX){document.getElementById('limitOverlay').classList.add('show');return;}
+  document.getElementById('g-nm').value='';
+  document.getElementById('g-pan').value='';
+  document.getElementById('guruErr').style.display='none';
+  openMo('moGuru');
+}
+
+function addGuru(){
+  var nm=document.getElementById('g-nm').value.trim();
+  var pan=document.getElementById('g-pan').value.trim();
+  var err=document.getElementById('guruErr');
+  if(!nm||!pan){err.textContent='Sila isi nama dan panitia.';err.style.display='block';return;}
+  if(D.gurus.length>=DEMO_MAX){document.getElementById('limitOverlay').classList.add('show');closeMo('moGuru');return;}
+  D.gurus.push({id:uid(),nm:nm,pan:pan,gred:document.getElementById('g-gred').value,nkp:document.getElementById('g-nkp').value});
+  closeMo('moGuru');
+  updateLimitUI();
+  renderGuruTbl();
+  toast('Guru "'+nm+'" berjaya ditambah','ok');
+}
+
+function delGuru(id){
+  if(!confirm('Padam guru ini? Semua rekod cerapan guru ini juga akan dipadam.'))return;
+  D.gurus=D.gurus.filter(function(g){return g.id!==id;});
+  D.ceraps=D.ceraps.filter(function(c){return c.gid!==id;});
+  updateLimitUI(); renderGuruTbl(); renderDash();
+  toast('Guru dipadam','ok');
+}
+
+// ── REKOD CERAPAN ──────────────────────────────────────────
+function openCerap(){
+  if(!D.gurus.length){alert('Sila tambah guru dahulu sebelum merekod cerapan.');goPage('guru');return;}
+  // Populate guru dropdown
+  var sel=document.getElementById('c-guru');
+  sel.innerHTML='<option value="">— Pilih Guru —</option>'+
+    D.gurus.map(function(g){return'<option value="'+g.id+'">'+g.nm+' ('+g.pan+')</option>';}).join('');
+  document.getElementById('c-mp').value='';
+  document.getElementById('c-tar').value=new Date().toISOString().split('T')[0];
+  document.getElementById('c-pen').value='';
+  document.getElementById('cerapErr').style.display='none';
+  // Build rubrik
+  SC={};
+  var html='';
+  A.forEach(function(asp){
+    html+='<div class="asp">'+
+      '<div class="aspt"><span class="aspc">'+asp.a+'</span>'+asp.t+(asp.l?' — <em>'+asp.l+'</em>':'')+'</div>'+
+      '<div class="sil">'+asp.s.map(function(si){
+        return'<div class="sii">'+
+          '<span class="sic">'+si.c+'</span>'+
+          '<span class="sid">'+si.d+'</span>'+
+          '<div class="rg">'+[1,2,3,4].map(function(n){
+            return'<button class="rb" id="rb_'+si.c.replace(/[().]/g,'_')+'_'+n+'" onclick="setRb(\''+si.c+'\','+n+',this)">'+n+'</button>';
+          }).join('')+'</div>'+
+          '</div>';
+      }).join('')+
+      '</div></div>';
+  });
+  document.getElementById('rubrikContainer').innerHTML=html;
+  updateScoreDisplay();
+  openMo('moCerap');
+}
+
+function setRb(code,val,btn){
+  SC[code]=SC[code]===val?0:val;
+  // Update button styles
+  var safeCode=code.replace(/[().]/g,'_');
+  for(var n=1;n<=4;n++){
+    var b=document.getElementById('rb_'+safeCode+'_'+n);
+    if(b){b.className='rb'+(SC[code]===n?' s'+n:'');}
+  }
+  updateScoreDisplay();
+}
+
+function updateScoreDisplay(){
+  var tot=0; for(var k in SC) tot+=(parseInt(SC[k])||0);
+  var pct=MAX?tot/MAX*100:0;
+  document.getElementById('totScore').textContent=tot+' / '+MAX;
+  document.getElementById('totPct').textContent=pct.toFixed(1)+'%';
+  document.getElementById('totTahap').textContent=tahap(pct);
+  document.getElementById('totTahap').style.color=pct>=90?'#0dd4cd':pct>=75?'#22c55e':pct>=50?'#60a5fa':'#f59e0b';
+}
+
+function saveCerap(){
+  var gid=document.getElementById('c-guru').value;
+  var tar=document.getElementById('c-tar').value;
+  var err=document.getElementById('cerapErr');
+  if(!gid){err.textContent='Sila pilih guru.';err.style.display='block';return;}
+  var tot=0; for(var k in SC) tot+=(parseInt(SC[k])||0);
+  if(tot===0){err.textContent='Sila isi sekurang-kurangnya satu skor cerapan.';err.style.display='block';return;}
+  var pct=parseFloat((tot/MAX*100).toFixed(1));
+  var sc=JSON.parse(JSON.stringify(SC));
+  D.ceraps.push({id:uid(),gid,mp:document.getElementById('c-mp').value,tar:tar||new Date().toISOString().split('T')[0],pen:document.getElementById('c-pen').value,sc,tot,pct});
+  closeMo('moCerap');
+  renderDash(); renderCerapTbl();
+  toast('Cerapan berjaya disimpan! Skor: '+tot+'/'+MAX+' ('+pct+'%)','ok');
+}
+
+function delCerap(id){
+  if(!confirm('Padam rekod cerapan ini?'))return;
+  D.ceraps=D.ceraps.filter(function(c){return c.id!==id;});
+  renderCerapTbl(); renderDash();
+  toast('Cerapan dipadam','ok');
+}
+
+// ── HELPERS ────────────────────────────────────────────────
+function demoOnly(feat){
+  alert('Fungsi "'+feat+'" hanya tersedia dalam versi penuh.\n\nDapatkan Pakej Pentadbir di EduKit untuk akses penuh!');
+}
+
+function toast(msg,type){
+  var b=document.getElementById('tbar');
+  var el=document.createElement('div');
+  el.className='tst'+(type?' '+type:'');
+  el.textContent=msg; b.appendChild(el);
+  setTimeout(function(){el.style.opacity='0';el.style.transition='opacity .4s';setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},400);},2800);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+initDemo();
+updateLimitUI();
+renderDash();
+</script>
+</body>
+</html>
