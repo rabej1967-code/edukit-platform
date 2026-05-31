@@ -703,12 +703,7 @@ function getVideosByPakej(pakej) {
 /* ================================================================
    STRIPE — gantikan dengan Payment Links anda
    ================================================================ */
-const STRIPE={
-  1:'https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400',
-  2:'https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402',
-  3:'https://buy.stripe.com/5kQdR8doZbSG7reg777g403',
-  ks:'https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'
-}
+const STRIPE={1:'https://buy.stripe.com/GANTI_PAKEJ_GURU',2:'https://buy.stripe.com/GANTI_PAKEJ_PENTADBIR',3:'https://buy.stripe.com/GANTI_PAKEJ_GABUNGAN',ks:'https://buy.stripe.com/GANTI_KIDS_SPARK_RM3'}
 
 /* ================================================================
    YOUTUBE — gantikan ID dengan video YouTube anda
@@ -798,7 +793,8 @@ function bayarKidsSpark() {
 }
 
 function buyPkg(n,nm,pr){selPkg=n;document.getElementById('obPkgNm').textContent=nm+' — '+pr;document.getElementById('obModal').classList.add('open');document.body.style.overflow='hidden';startTimer(600)}
-function closeOB(ts){document.getElementById('obModal').classList.remove('open');document.body.style.overflow='';clearInterval(timerInt);if(ts&&selPkg)window.open(STRIPE[selPkg],'_blank')}
+function closeOB(ts){document.getElementById('obModal').classList.remove('open');document.body.style.overflow='';clearInterval(timerInt);if(selPkg)window.open(STRIPE[selPkg],'_blank')}
+function acceptOB(){clearInterval(timerInt);document.getElementById('obModal').classList.remove('open');document.body.style.overflow='';window.open(STRIPE.ks,'_blank')}(timerInt);if(ts&&selPkg)window.open(STRIPE[selPkg],'_blank')}
 function acceptOB(){clearInterval(timerInt);document.getElementById('obModal').classList.remove('open');document.body.style.overflow='';if(selPkg)window.open(STRIPE[selPkg],'_blank');setTimeout(()=>window.open(STRIPE.ks,'_blank'),800)}
 function startTimer(s){clearInterval(timerInt);let r=s;const t=()=>{const m=Math.floor(r/60),sc=r%60;document.getElementById('obTimer').textContent=m+':'+String(sc).padStart(2,'0');if(r--<=0){clearInterval(timerInt);closeOB(false)}};t();timerInt=setInterval(t,1000)}
 document.getElementById('obModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeOB(false)})
