@@ -618,9 +618,6 @@ footer a{color:rgba(255,255,255,.4);}
 </div>
 
 <script>
-/* ================================================================
-   STRIPE PAYMENT LINKS
-   ================================================================ */
 const STRIPE = {
   1: 'https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400',
   2: 'https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402',
@@ -628,32 +625,29 @@ const STRIPE = {
   ks: 'https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'
 }
 
-/* ================================================================
-   YOUTUBE VIDEO IDs
-   ================================================================ */
 const YOUTUBE = {
   1: 'https://www.youtube.com/embed/GANTI_ID_VIDEO_PAKEJ_GURU?autoplay=1&rel=0&modestbranding=1',
   2: 'https://www.youtube.com/embed/GANTI_ID_VIDEO_PAKEJ_PENTADBIR?autoplay=1&rel=0&modestbranding=1'
 }
 
 const EDUKIT_VIDEOS = {
-  eduassign:  { nama:'GuruKits',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📋', ringkasan:'Agih dan pantau beban tugas guru mengikut bidang dan jana laporan PDF.',                              ytId:'GANTI_ID_EDUASSIGN_PRO' },
-  spin:       { nama:'SPIn Analytics',             pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📈', ringkasan:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.',             ytId:'GANTI_ID_SPIN_ANALYTICS' },
-  spinpro:    { nama:'Dashboard SPIn Pro',         pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📊', ringkasan:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.',                   ytId:'GANTI_ID_DASHBOARD_SPIN_PRO' },
-  gantt:      { nama:'GanttPro',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📅', ringkasan:'Carta Gantt digital untuk perancangan projek dan program sekolah.',                                 ytId:'GANTI_ID_GANTT_PRO' },
-  kokum:      { nama:'KokurikulumTrack',           pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🏅', ringkasan:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.',                                ytId:'GANTI_ID_KOKURIKULUM_TRACK' },
-  moodradar:  { nama:'Mood Radar Pro',             pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🌡️', ringkasan:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.',                                    ytId:'GANTI_ID_MOOD_RADAR_PRO' },
-  orgchart:   { nama:'OrgChart Pro',               pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🗂️', ringkasan:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.',                          ytId:'GANTI_ID_ORGCHART_PRO' },
-  rph:        { nama:'RPH Fleksi KSSR Pro',        pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📝', ringkasan:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.',                 ytId:'GANTI_ID_RPH_FLEKSI' },
-  senarai:    { nama:'Senarai Semak Ultimate',     pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'✅', ringkasan:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.',                   ytId:'GANTI_ID_SENARAI_SEMAK' },
-  gamekelas:  { nama:'GameKelas',                  pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🎮', ringkasan:'Cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.',                          ytId:'GANTI_ID_GAME_KELAS' },
-  edudash:    { nama:'EduDash Pro',                pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏫', ringkasan:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.',                   ytId:'GANTI_ID_EDUDASH_PRO' },
-  headcount:  { nama:'H2 Headcount 2.0',           pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🎯', ringkasan:'Pemantauan progres pelajar OTR vs AR per kelas secara visual.',                                    ytId:'GANTI_ID_H2_HEADCOUNT' },
-  stafftrack: { nama:'StaffTrack Pro',             pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'👥', ringkasan:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.',                  ytId:'GANTI_ID_STAFFTRACK_PRO' },
-  kokum2:     { nama:'Rekod Kehadiran Kokurikulum',pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏅', ringkasan:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.',                              ytId:'GANTI_ID_REKOD_KOKURIKULUM' },
-  pencerapan: { nama:'SK@S — Pencerapan',          pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔍', ringkasan:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.',                  ytId:'GANTI_ID_SKAS_PENCERAPAN' },
-  guruganti:  { nama:'Sistem Guru Ganti Pro',      pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔄', ringkasan:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.',                         ytId:'GANTI_ID_GURU_GANTI' },
-  skpm:       { nama:'SKPM Pro',                   pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'⭐', ringkasan:'Kualiti pengurusan sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.',                       ytId:'GANTI_ID_SKPM_PRO' },
+  eduassign:  { nama:'GuruKits',                    pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📋', ringkasan:'Agih dan pantau beban tugas guru mengikut bidang dan jana laporan PDF.',                     ytId:'GANTI_ID_EDUASSIGN_PRO' },
+  spin:       { nama:'SPIn Analytics',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📈', ringkasan:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.',    ytId:'GANTI_ID_SPIN_ANALYTICS' },
+  spinpro:    { nama:'Dashboard SPIn Pro',          pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📊', ringkasan:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.',            ytId:'GANTI_ID_DASHBOARD_SPIN_PRO' },
+  gantt:      { nama:'GanttPro',                    pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📅', ringkasan:'Carta Gantt digital untuk perancangan projek dan program sekolah.',                          ytId:'GANTI_ID_GANTT_PRO' },
+  kokum:      { nama:'KokurikulumTrack',            pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🏅', ringkasan:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.',                         ytId:'GANTI_ID_KOKURIKULUM_TRACK' },
+  moodradar:  { nama:'Mood Radar Pro',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🌡️', ringkasan:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.',                             ytId:'GANTI_ID_MOOD_RADAR_PRO' },
+  orgchart:   { nama:'OrgChart Pro',                pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🗂️', ringkasan:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.',                   ytId:'GANTI_ID_ORGCHART_PRO' },
+  rph:        { nama:'RPH Fleksi KSSR Pro',         pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📝', ringkasan:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.',           ytId:'GANTI_ID_RPH_FLEKSI' },
+  senarai:    { nama:'Senarai Semak Ultimate',      pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'✅', ringkasan:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.',             ytId:'GANTI_ID_SENARAI_SEMAK' },
+  gamekelas:  { nama:'GameKelas',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🎮', ringkasan:'Cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.',                    ytId:'GANTI_ID_GAME_KELAS' },
+  edudash:    { nama:'EduDash Pro',                 pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏫', ringkasan:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.',             ytId:'GANTI_ID_EDUDASH_PRO' },
+  headcount:  { nama:'H2 Headcount 2.0',            pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🎯', ringkasan:'Pemantauan progres pelajar OTR vs AR per kelas secara visual.',                             ytId:'GANTI_ID_H2_HEADCOUNT' },
+  stafftrack: { nama:'StaffTrack Pro',              pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'👥', ringkasan:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.',            ytId:'GANTI_ID_STAFFTRACK_PRO' },
+  kokum2:     { nama:'Rekod Kehadiran Kokurikulum', pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏅', ringkasan:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.',                        ytId:'GANTI_ID_REKOD_KOKURIKULUM' },
+  pencerapan: { nama:'SK@S — Pencerapan',           pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔍', ringkasan:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.',            ytId:'GANTI_ID_SKAS_PENCERAPAN' },
+  guruganti:  { nama:'Sistem Guru Ganti Pro',       pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔄', ringkasan:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.',                   ytId:'GANTI_ID_GURU_GANTI' },
+  skpm:       { nama:'SKPM Pro',                    pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'⭐', ringkasan:'Kualiti pengurusan sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.',                 ytId:'GANTI_ID_SKPM_PRO' },
 }
 
 Object.keys(EDUKIT_VIDEOS).forEach(k => {
@@ -696,7 +690,6 @@ let selPkg = null, timerInt = null
 
 function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}) }
 
-/* VIDEO */
 function switchVid(n) {
   document.getElementById('vtab1').className = 'vtab' + (n===1 ? ' ag' : '')
   document.getElementById('vtab2').className = 'vtab' + (n===2 ? ' ap' : '')
@@ -712,7 +705,6 @@ function loadVid(n) {
   const f = document.getElementById('vidFrame'); f.style.display='block'; f.src=YOUTUBE[n]
 }
 
-/* DEMO */
 function switchDemo(n) {
   document.getElementById('dtab1').className = 'dtab' + (n===1 ? ' ag' : '')
   document.getElementById('dtab2').className = 'dtab' + (n===2 ? ' ap' : '')
@@ -730,7 +722,6 @@ function switchDemo(n) {
   }
 }
 
-/* APPS GRID */
 function switchPkgTab(n) {
   ;[1,2,3].forEach(i => { document.getElementById('ptab'+i).className='ptab2' })
   document.getElementById('ptab'+n).classList.add('a'+n)
@@ -740,10 +731,10 @@ function switchPkgTab(n) {
 switchPkgTab(1)
 
 /* ================================================================
-   ORDER BUMP — BETUL
+   ORDER BUMP
    ================================================================ */
 function bayarKidsSpark() {
-  window.open(STRIPE.ks, '_blank')
+  window.location.href = STRIPE.ks
 }
 
 function buyPkg(n, nm, pr) {
@@ -754,7 +745,8 @@ function buyPkg(n, nm, pr) {
   startTimer(600)
 }
 
-// Butang X dan "Tidak" — buka Stripe PAKEJ yang dipilih
+// closeOB(true)  = tutup modal DAN pergi Stripe pakej
+// closeOB(false) = tutup modal sahaja (timer habis)
 function closeOB(goStripe) {
   document.getElementById('obModal').classList.remove('open')
   document.body.style.overflow = ''
@@ -764,13 +756,12 @@ function closeOB(goStripe) {
   }
 }
 
-// Butang "YA! Tambah Kids Spark" — buka Stripe KIDS SPARK
+// Butang YA — buka Kids Spark DAHULU, kemudian pakej
 function acceptOB() {
   clearInterval(timerInt)
   document.getElementById('obModal').classList.remove('open')
   document.body.style.overflow = ''
-  window.open(STRIPE.ks, '_blank')
-  setTimeout(() => { window.open(STRIPE[selPkg], '_blank') }, 800)
+  window.location.href = STRIPE.ks
 }
 
 function startTimer(s) {
@@ -785,7 +776,7 @@ function startTimer(s) {
 }
 
 document.getElementById('obModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeOB(false)
+  if (e.target === e.currentTarget) closeOB(true)
 })
 
 /* SHARE */
