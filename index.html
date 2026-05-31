@@ -760,7 +760,7 @@ function closeOB(goStripe) {
   document.body.style.overflow = ''
   clearInterval(timerInt)
   if (goStripe && selPkg) {
-    window.open(STRIPE[selPkg], '_blank')
+    window.location.href = STRIPE[selPkg]
   }
 }
 
