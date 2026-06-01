@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tahniah! Pembelian Berjaya — EduKit</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--p:#1a56db;--pd:#1447c0;--pl:#e8f0fe;--gold:#f59e0b;--text:#0f172a;--t2:#475569;--t3:#94a3b8;--bg:#f8faff;--surf:#fff;--bdr:#e2e8f4;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+.nav{background:rgba(255,255,255,.97);border-bottom:1px solid var(--bdr);padding:0 16px;height:58px;display:flex;align-items:center;justify-content:center;}
+.nbrand{display:flex;align-items:center;gap:9px;}
+.nlogo{width:34px;height:34px;background:var(--p);border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px;}
+.nname{font-size:18px;font-weight:800;}.nname span{color:var(--p);}
+
+/* HERO TAHNIAH */
+.hero-ty{background:linear-gradient(135deg,#0a1628,#1a56db);padding:48px 16px;text-align:center;}
+.ty-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);border-radius:30px;padding:8px 18px;font-size:13px;font-weight:700;color:#4ade80;margin-bottom:20px;}
+.ty-ic{font-size:56px;margin-bottom:16px;animation:bounce .8s ease;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-ty h1{font-size:clamp(1.6rem,5vw,2.8rem);font-weight:900;color:white;margin-bottom:12px;line-height:1.2;}
+.hero-ty h1 em{font-style:normal;color:#f59e0b;}
+.hero-ty p{font-size:15px;color:rgba(255,255,255,.7);max-width:480px;margin:0 auto 24px;}
+.email-note{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 20px;display:inline-flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);}
+.email-note-ic{font-size:20px;}
+
+/* STEPS */
+.steps-wrap{background:white;padding:32px 16px;border-bottom:1px solid var(--bdr);}
+.steps-in{max-width:600px;margin:0 auto;}
+.steps-t{font-size:13px;font-weight:700;color:var(--t2);text-align:center;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;}
+.steps{display:flex;gap:0;justify-content:center;flex-wrap:wrap;}
+.step{display:flex;align-items:center;gap:8px;padding:10px 16px;background:#f0fdf4;border-radius:30px;font-size:13px;font-weight:600;color:#15803d;margin:4px;}
+.step-n{width:24px;height:24px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;flex-shrink:0;}
+
+/* OFFER SECTION */
+.offer-wrap{background:linear-gradient(135deg,#0a1628,#0f2d7a);padding:56px 16px;}
+.offer-in{max-width:680px;margin:0 auto;}
+.offer-flag{background:linear-gradient(90deg,#f59e0b,#ef4444);border-radius:30px;padding:6px 18px;font-size:11px;font-weight:800;color:white;letter-spacing:1px;text-transform:uppercase;display:inline-block;margin-bottom:20px;}
+.offer-in h2{font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;color:white;margin-bottom:16px;line-height:1.3;}
+.offer-in h2 em{font-style:normal;color:#f59e0b;}
+.story-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:20px 22px;margin-bottom:28px;}
+.story-box p{font-size:15px;color:rgba(255,255,255,.82);line-height:1.85;font-style:italic;}
+.story-box p strong{color:#f59e0b;font-style:normal;}
+
+/* BENEFIT CARDS */
+.benefit-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
+.benefit{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;transition:.2s;}
+.benefit:hover{background:rgba(255,255,255,.11);}
+.benefit-ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.benefit-ic.g1{background:rgba(245,158,11,.2);}
+.benefit-ic.g2{background:rgba(74,222,128,.15);}
+.benefit-ic.g3{background:rgba(139,92,246,.2);}
+.benefit-ic.g4{background:rgba(239,68,68,.15);}
+.benefit-t{font-size:15px;font-weight:800;color:white;margin-bottom:4px;}
+.benefit-d{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;}
+.benefit-d strong{color:#f59e0b;}
+
+/* QUOTE */
+.quote-box{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:18px 20px;margin-bottom:28px;text-align:center;}
+.quote-box p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.8;font-style:italic;}
+.quote-box strong{color:#f59e0b;font-style:normal;font-size:15px;}
+
+/* PRICE BOX */
+.price-box{background:rgba(255,255,255,.08);border:2px solid rgba(245,158,11,.4);border-radius:18px;padding:22px 24px;margin-bottom:20px;text-align:center;}
+.price-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;}
+.price-row{display:flex;align-items:flex-end;justify-content:center;gap:4px;margin-bottom:6px;}
+.price-sym{font-size:18px;font-weight:700;color:#f59e0b;margin-bottom:6px;}
+.price-val{font-size:56px;font-weight:900;color:#f59e0b;line-height:1;}
+.price-per{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:8px;}
+.price-note{font-size:12px;color:rgba(255,255,255,.45);}
+
+/* CTA BUTTONS */
+.cta-yes{width:100%;padding:18px;background:linear-gradient(90deg,#f59e0b,#ef4444);border:none;border-radius:14px;font-size:16px;font-weight:900;color:white;cursor:pointer;font-family:inherit;min-height:58px;margin-bottom:12px;transition:.15s;box-shadow:0 8px 32px rgba(245,158,11,.3);}
+.cta-yes:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(245,158,11,.4);}
+.cta-no{width:100%;padding:13px;background:none;border:1px solid rgba(255,255,255,.15);border-radius:12px;font-size:13px;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;font-family:inherit;min-height:46px;transition:.15s;}
+.cta-no:hover{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.25);}
+.cta-note{font-size:11.5px;color:rgba(255,255,255,.35);text-align:center;margin-top:10px;line-height:1.6;}
+
+/* FOOTER */
+footer{background:#0a1628;padding:24px 16px;text-align:center;}
+footer p{font-size:12px;color:rgba(255,255,255,.3);line-height:1.8;}
+footer a{color:rgba(255,255,255,.4);}
+
+/* CONFETTI ANIMATION */
+.confetti-wrap{position:fixed;top:0;left:0;width:100%;pointer-events:none;z-index:9999;}
+.confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="confetti-wrap" id="confetti"></div>
+
+<nav class="nav">
+  <div class="nbrand">
+    <div class="nlogo">EK</div>
+    <div class="nname">Edu<span>Kit</span></div>
+  </div>
+</nav>
+
+<!-- HERO TAHNIAH -->
+<div class="hero-ty">
+  <div class="ty-badge">✅ Pembayaran Berjaya</div>
+  <div class="ty-ic">🎉</div>
+  <h1>Tahniah! Anda Kini<br>Sebahagian Daripada<br><em>Keluarga EduKit!</em></h1>
+  <p>Pakej anda sedang disediakan. Semak emel anda untuk maklumat log masuk dalam masa beberapa minit.</p>
+  <div class="email-note">
+    <div class="email-note-ic">📧</div>
+    <div>Emel log masuk sedang dihantar ke peti masuk anda</div>
+  </div>
+</div>
+
+<!-- STEPS -->
+<div class="steps-wrap">
+  <div class="steps-in">
+    <div class="steps-t">Langkah Seterusnya</div>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div>Semak emel anda</div>
+      <div class="step"><div class="step-n">2</div>Klik pautan log masuk</div>
+      <div class="step"><div class="step-n">3</div>Tukar kata laluan</div>
+      <div class="step"><div class="step-n">4</div>Mula guna apps!</div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFER EKSKLUSIF -->
+<div class="offer-wrap">
+  <div class="offer-in">
+
+    <div class="offer-flag">🔐 Tawaran Eksklusif — Hanya Untuk Pembeli EduKit</div>
+
+    <h2>Tunggu! Ada Satu Lagi<br>Hadiah Istimewa<br>Untuk <em>Anda Sahaja...</em></h2>
+
+    <div class="story-box">
+      <p>Bayangkan ini — anak-anak anda <strong>belajar sambil bermain</strong> setiap hari di rumah. Murid tadika anda <strong>teruja masuk kelas</strong> setiap pagi. Dan anda, sebagai pendidik yang bijak, <strong>tidak perlu beli apps baru lagi — selama-lamanya.</strong> Semua ini hanya dengan harga <strong>secawan teh tarik</strong> sebulan.</p>
+    </div>
+
+    <div class="benefit-grid">
+      <div class="benefit">
+        <div class="benefit-ic g1">🎮</div>
+        <div>
+          <div class="benefit-t">KidSpark — Pembelajaran Sambil Bermain</div>
+          <div class="benefit-d">Platform interaktif khas untuk kanak-kanak Malaysia. Sesuai untuk <strong>anak sendiri di rumah</strong>, murid tadika, atau kelas KEMAS. Lebih 100 aktiviti menarik, selamat, dan mengikut kurikulum kebangsaan.</div>
+        </div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-ic g2">🚀</div>
+        <div>
+          <div class="benefit-t">Semua Apps EduKit Baru — Automatik & Percuma</div>
+          <div class="benefit-d">Setiap kali kami lancarkan app baru EduKit, ia <strong>terus masuk ke akaun anda secara automatik</strong>. Tiada bayaran tambahan. Tiada perlu beli semula. <strong>Percuma selama-lamanya.</strong></div>
+        </div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-ic g3">🔓</div>
+        <div>
+          <div class="benefit-t">Akses Awal Sebelum Orang Lain</div>
+          <div class="benefit-d">Anda antara yang <strong>pertama mencuba</strong> setiap kemaskini dan app terbaru EduKit — sebelum ia diumumkan kepada umum.</div>
+        </div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-ic g4">❌</div>
+        <div>
+          <div class="benefit-t">Tiada Kontrak — Batal Bila-bila Masa</div>
+          <div class="benefit-d">Tiada komitmen jangka panjang. <strong>Batal pada bila-bila masa</strong> tanpa soal jawab. Anda yang pegang kawalan sepenuhnya.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-box">
+      <p>Secawan kopi harganya <strong>RM 7</strong>. Tapi dengan <strong>RM 3 sebulan</strong> — anak anda belajar, murid anda teruja, dan anda dapat semua apps baru EduKit <strong>percuma selama-lamanya.</strong></p>
+    </div>
+
+    <div class="price-box">
+      <div class="price-lbl">Kadar Sewaan Bulanan</div>
+      <div class="price-row">
+        <div class="price-sym">RM</div>
+        <div class="price-val">3</div>
+        <div class="price-per">/ bulan</div>
+      </div>
+      <div class="price-note">Auto potong setiap bulan • Batal bila-bila masa • Tiada kontrak</div>
+    </div>
+
+    <button class="cta-yes" onclick="window.location.href='https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'">
+      🚀 Ya! Saya Nak KidSpark + Apps Baru Percuma →
+    </button>
+    <button class="cta-no" onclick="document.getElementById('skipSection').style.display='block';this.style.display='none'">
+      Tidak, saya lepaskan tawaran istimewa ini
+    </button>
+    <div class="cta-note">Tawaran ini hanya tersedia di halaman ini sahaja.<br>Selepas anda keluar, ia tidak akan muncul lagi.</div>
+
+    <div id="skipSection" style="display:none;margin-top:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:12px;">Tiada masalah! Anda masih boleh log masuk dan mula guna apps anda sekarang.</div>
+      <a href="dashboard.html" style="display:inline-block;padding:12px 28px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:30px;font-size:13px;font-weight:700;color:white;text-decoration:none;">Pergi ke Dashboard →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 EduKit — Platform Digital untuk Warga Pendidik Malaysia<br>
+  <a href="dashboard.html">Log Masuk ke Dashboard</a> &nbsp;|&nbsp; <a href="#">Hubungi Kami</a></p>
+</footer>
+
+<script>
+// Confetti animation
+function launchConfetti() {
+  const colors = ['#f59e0b','#1a56db','#4ade80','#f472b6','#a78bfa','#34d399']
+  const wrap = document.getElementById('confetti')
+  for (let i = 0; i < 80; i++) {
+    const el = document.createElement('div')
+    el.className = 'confetti-piece'
+    el.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;
+      height:${6+Math.random()*8}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      animation-duration:${2+Math.random()*3}s;
+      animation-delay:${Math.random()*1.5}s;
+    `
+    wrap.appendChild(el)
+  }
+  setTimeout(() => wrap.innerHTML = '', 6000)
+}
+launchConfetti()
+</script>
+</body>
+</html>
