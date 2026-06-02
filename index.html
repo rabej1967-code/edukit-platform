@@ -1,168 +1,777 @@
-import { createClient } from "jsr:@supabase/supabase-js@2";
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EduKit — 17 Apps Digital untuk Guru &amp; Pentadbir Sekolah Malaysia</title>
+<meta name="description" content="17 apps eksklusif untuk guru dan pentadbir sekolah Malaysia. Dari agihan tugas hingga SKPM kualiti sekolah. Pakej dari RM 95 sahaja!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://apps.cikgukita.com/">
+<meta property="og:title" content="EduKit — 17 Apps Digital untuk Guru &amp; Pentadbir Malaysia">
+<meta property="og:description" content="Jimatkan masa kerja anda! 17 apps eksklusif — SPIn Analytics, SK@S Pencerapan, EduDash Pro &amp; banyak lagi. Pakej Guru &amp; Pentadbir hanya RM 95. Akses seumur hidup!">
+<meta property="og:image" content="https://apps.cikgukita.com/og-image.jpg">
+<meta property="og:locale" content="ms_MY">
+<meta property="og:site_name" content="EduKit">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1a56db">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--p:#1a56db;--pd:#1447c0;--pl:#e8f0fe;--gold:#f59e0b;--ok:#16a34a;--red:#ef4444;--text:#0f172a;--t2:#475569;--t3:#94a3b8;--bg:#f8faff;--surf:#fff;--bdr:#e2e8f4;--r:12px;--rl:20px;--sh:0 1px 3px rgba(0,0,0,.06),0 8px 32px rgba(26,86,219,.08);--shl:0 16px 48px rgba(0,0,0,.12);}
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+.nav{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.nbrand{display:flex;align-items:center;gap:9px;}
+.nlogo{width:34px;height:34px;background:var(--p);border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px;flex-shrink:0;}
+.nname{font-size:18px;font-weight:800;}.nname span{color:var(--p);}
+.nright{display:flex;align-items:center;gap:8px;}
+.n-login{padding:8px 16px;border:1.5px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;background:none;font-family:inherit;min-height:40px;}
+.n-login:hover{border-color:var(--p);color:var(--p);}
+.n-buy{padding:8px 18px;background:var(--p);border:none;border-radius:30px;font-size:13px;font-weight:700;color:white;cursor:pointer;font-family:inherit;min-height:40px;}
+.n-buy:hover{background:var(--pd);}
+.hero{background:linear-gradient(145deg,#0a1628 0%,#0f2d7a 45%,#1a56db 75%,#0ea5e9 100%);padding:56px 16px 60px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,255,255,.04),transparent 60%);}
+.hero>*{position:relative;}
+.hbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:6px 14px;font-size:12px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:18px;}
+.hbadge span{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(1.75rem,6vw,3.4rem);font-weight:900;color:white;line-height:1.15;margin-bottom:16px;}
+.hero h1 em{font-style:normal;color:#f59e0b;}
+.hero-sub{font-size:clamp(.95rem,3vw,1.15rem);color:rgba(255,255,255,.72);max-width:540px;margin:0 auto 28px;padding:0 4px;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;}
+.bhm{padding:14px 28px;background:#f59e0b;border:none;border-radius:40px;font-size:15px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:48px;}
+.bhm:hover{background:#e68a00;}
+.bhs{padding:14px 28px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);border-radius:40px;font-size:15px;font-weight:700;color:white;cursor:pointer;font-family:inherit;min-height:48px;}
+.bhs:hover{background:rgba(255,255,255,.18);}
+.hstats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;}
+.hst{text-align:center;}.hst-v{font-size:clamp(1.4rem,4vw,2rem);font-weight:900;color:white;}.hst-l{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.ticker-wrap{background:#0a1628;padding:11px 0;overflow:hidden;}
+.ticker{display:flex;animation:tick 40s linear infinite;width:max-content;}
+.ticker:hover{animation-play-state:paused;}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick-item{display:flex;align-items:center;gap:7px;padding:0 24px;white-space:nowrap;font-size:12px;color:rgba(255,255,255,.7);}
+.tick-dot{width:5px;height:5px;background:#4ade80;border-radius:50%;flex-shrink:0;}
+.sec{padding:56px 16px;}.sec-in{max-width:1080px;margin:0 auto;}
+.sec-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--p);margin-bottom:8px;text-align:center;}
+.sec-t{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;text-align:center;margin-bottom:10px;line-height:1.25;}
+.sec-s{font-size:15px;color:var(--t2);text-align:center;max-width:540px;margin:0 auto 40px;padding:0 4px;}
+.divider{height:1px;background:var(--bdr);max-width:1080px;margin:0 auto;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:13px;}
+.fc-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:18px 14px;box-shadow:var(--sh);text-align:center;}
+.fc-card:hover{transform:translateY(-2px);box-shadow:var(--shl);}
+.fc-ic{width:46px;height:46px;border-radius:13px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:21px;margin:0 auto 11px;}
+.fc-t{font-size:13px;font-weight:700;margin-bottom:5px;}.fc-d{font-size:12px;color:var(--t2);line-height:1.55;}
+.vid-section{background:white;padding:56px 16px;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);}
+.vid-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:18px;flex-wrap:wrap;}
+.vtab{padding:10px 22px;border:2px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:44px;transition:.2s;}
+.vtab.ag{border-color:var(--p);background:var(--pl);color:var(--p);}
+.vtab.ap{border-color:#7c3aed;background:#f5f3ff;color:#5b21b6;}
+.vid-wrap{border-radius:16px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.14);max-width:800px;margin:0 auto 16px;aspect-ratio:16/9;background:#0f172a;position:relative;}
+.vid-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:20px;text-align:center;}
+.vid-ph.g{background:linear-gradient(135deg,#0a1628,#1a3a8f);}
+.vid-ph.p{background:linear-gradient(135deg,#0f2044,#0ea5a0);}
+.play-btn{width:64px;height:64px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;transition:.2s;}
+.vid-ph:hover .play-btn{transform:scale(1.1);background:white;}
+.vid-ph-t{font-size:15px;font-weight:700;color:white;margin-bottom:6px;}
+.vid-ph-s{font-size:12px;color:rgba(255,255,255,.6);max-width:400px;}
+.vid-frame{width:100%;height:100%;border:none;display:none;}
+.vid-cap{text-align:center;font-size:13px;color:var(--t2);max-width:600px;margin:0 auto;}
+.demo-section{padding:56px 16px;}
+.demo-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
+.dtab{padding:10px 22px;border:2px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:44px;transition:.2s;}
+.dtab.ag{border-color:var(--p);background:var(--pl);color:var(--p);}
+.dtab.ap{border-color:#7c3aed;background:#f5f3ff;color:#5b21b6;}
+.demo-info{border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;}
+.demo-fw{border-radius:14px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.14);border:1px solid var(--bdr);position:relative;}
+.demo-lbl{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,.8);color:white;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;z-index:10;white-space:nowrap;}
+.demo-frame{width:100%;height:500px;border:none;display:block;}
+@media(max-width:600px){.demo-frame{height:420px;}}
+.apps-showcase{background:white;padding:56px 16px;border-top:1px solid var(--bdr);}
+.pkg-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+.ptab2{padding:9px 18px;border:1.5px solid var(--bdr);border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:42px;transition:.2s;}
+.ptab2.a1{border-color:var(--p);background:var(--p);color:white;}
+.ptab2.a2{border-color:#7c3aed;background:#7c3aed;color:white;}
+.ptab2.a3{border-color:#f59e0b;background:#f59e0b;color:#0f172a;}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
+.app-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:15px 13px;transition:.2s;}
+.app-card:hover{background:white;box-shadow:var(--shl);transform:translateY(-2px);}
+.app-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:9px;}
+.app-nm{font-size:13px;font-weight:700;margin-bottom:4px;}.app-ds{font-size:11.5px;color:var(--t2);line-height:1.5;}
+/* PRICING */
+.pricing-wrap{background:linear-gradient(180deg,#f8faff,white);padding:56px 16px;}
+.pricing-in{max-width:1060px;margin:0 auto;}
+.pkg-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:32px;}
+@media(min-width:768px){.pkg-grid{grid-template-columns:repeat(3,1fr);}}
+.pkg{background:var(--surf);border:1.5px solid var(--bdr);border-radius:22px;overflow:hidden;position:relative;transition:.2s;}
+.pkg:hover{box-shadow:var(--shl);}
+.pkg.feat{border-color:var(--p);box-shadow:0 0 0 4px rgba(26,86,219,.09);}
+.pkg.gab{border-color:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.09);}
+.pbadge{position:absolute;top:13px;right:13px;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;}
+.phead{padding:20px 20px 14px;}.ptier{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--p);margin-bottom:5px;}
+.pnm{font-size:20px;font-weight:800;margin-bottom:3px;}.ptag{font-size:12px;color:var(--t2);}
+.pprice{padding:0 20px 14px;border-bottom:1px solid var(--bdr);}
+.strikrow{display:flex;align-items:center;gap:7px;margin-top:9px;margin-bottom:3px;}
+.strik{font-size:14px;color:var(--t3);text-decoration:line-through;}
+.savepill{background:#fef2f2;color:#dc2626;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.prrow{display:flex;align-items:flex-end;gap:3px;}
+.prsym{font-size:15px;font-weight:700;margin-bottom:4px;}.prval{font-size:42px;font-weight:900;line-height:1;}.prnote{font-size:11px;color:var(--t3);margin-bottom:4px;}
+.papps{padding:13px 20px;}.pappst{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:9px;}
+.arow{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--bdr);}.arow:last-child{border-bottom:none;}
+.aic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.anm{font-size:12.5px;font-weight:700;}.ads{font-size:11px;color:var(--t3);margin-top:1px;line-height:1.4;}
+.pfoot{padding:13px 20px 20px;}
+/* 2 BUTANG PER PAKEJ */
+.pbtn{width:100%;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px;transition:.15s;}
+.pbtn.blue{background:var(--p);color:white;}.pbtn.blue:hover{background:var(--pd);}
+.pbtn.gold{background:#f59e0b;color:#0f172a;}.pbtn.gold:hover{background:#e68a00;}
+.pbtn.ks{background:linear-gradient(90deg,#312e81,#4338ca);color:white;margin-top:8px;font-size:12.5px;}
+.pbtn.ks:hover{background:linear-gradient(90deg,#1e1b4b,#312e81);}
+.ks-tag{font-size:10px;color:var(--t3);text-align:center;margin-top:6px;line-height:1.5;}
+.pguar{display:flex;align-items:center;gap:5px;justify-content:center;margin-top:8px;font-size:11.5px;color:var(--t3);}
+/* KIDS SPARK SECTION */
+.ks-wrap{background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);padding:56px 16px;}
+.ks-in{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:28px;}
+@media(min-width:768px){.ks-in{grid-template-columns:1fr 1fr;align-items:center;}}
+.ks-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a5b4fc;margin-bottom:9px;}
+.ks-in h2{font-size:clamp(1.5rem,4vw,2rem);font-weight:800;color:white;margin-bottom:12px;line-height:1.2;}
+.ks-in h2 em{font-style:normal;color:#f59e0b;}
+.ks-in p{font-size:14px;color:rgba(255,255,255,.72);line-height:1.75;margin-bottom:18px;}
+.ks-feats{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.ks-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.85);}
+.ks-fic{width:24px;height:24px;border-radius:6px;background:rgba(165,180,252,.15);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.ks-price{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 16px;display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;}
+.ks-rm{font-size:24px;font-weight:900;color:#f59e0b;}.ks-note{font-size:11.5px;color:rgba(255,255,255,.6);}
+.ks-btn{padding:12px 24px;background:#f59e0b;border:none;border-radius:30px;font-size:13.5px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:46px;}
+.ks-btn:hover{background:#e68a00;}
+.ks-fw{width:100%;border-radius:14px;overflow:hidden;position:relative;aspect-ratio:16/9;}
+.ks-iframe{width:100%;height:100%;border:none;display:block;border-radius:14px;pointer-events:none;}
+.ks-blur{position:absolute;inset:0;backdrop-filter:blur(10px);background:rgba(30,27,75,.55);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:20px;text-align:center;}
+.ks-blur-ic{font-size:36px;margin-bottom:9px;}.ks-blur-t{font-size:15px;font-weight:800;color:white;margin-bottom:5px;}
+.ks-blur-s{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:14px;}
+/* WARN BOX */
+.warn-box{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:flex-start;gap:10px;}
+.warn-box-ic{font-size:18px;flex-shrink:0;margin-top:1px;}
+.warn-box-t{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.6;}
+.testi-wrap{background:var(--p);padding:56px 16px;}.testi-in{max-width:1060px;margin:0 auto;}
+.tgrid{display:grid;grid-template-columns:1fr;gap:13px;margin-top:28px;}
+@media(min-width:600px){.tgrid{grid-template-columns:repeat(3,1fr);}}
+.tc{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:var(--rl);padding:18px;}
+.tc-stars{color:#fbbf24;font-size:13px;margin-bottom:8px;}.tc-text{font-size:13px;color:rgba(255,255,255,.83);line-height:1.7;margin-bottom:12px;}
+.tc-user{display:flex;align-items:center;gap:9px;}
+.tc-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.tc-nm{font-size:12.5px;font-weight:700;color:white;}.tc-loc{font-size:11px;color:rgba(255,255,255,.48);}
+.share-wrap{background:#f0f4ff;padding:28px 16px;text-align:center;border-top:1px solid var(--bdr);}
+.share-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.share-sub{font-size:12.5px;color:var(--t2);margin-bottom:14px;}
+.share-btns{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
+.sbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:none;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:44px;transition:.15s;}
+.sbtn-fb{background:#1877f2;color:white;}.sbtn-wa{background:#25d366;color:white;}.sbtn-cp{background:var(--text);color:white;}
+.faq-wrap{max-width:680px;margin:0 auto;padding:56px 16px;}
+.faq-item{border-bottom:1px solid var(--bdr);padding:15px 0;}
+.faq-q{font-size:14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.faq-q::after{content:"+";font-size:20px;color:var(--t3);flex-shrink:0;}
+.faq-item.open .faq-q::after{content:"−";color:var(--p);}
+.faq-a{font-size:13.5px;color:var(--t2);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;}
+.faq-item.open .faq-a{max-height:240px;padding-top:10px;}
+.cta-wrap{background:linear-gradient(135deg,#0f2d7a,#1a56db);padding:60px 16px;text-align:center;}
+.cta-wrap h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;color:white;margin-bottom:12px;}
+.cta-wrap p{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:26px;}
+.cta-btn{display:inline-block;padding:15px 40px;background:#f59e0b;border:none;border-radius:40px;font-size:15px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:50px;}
+footer{background:#0a1628;padding:28px 16px;text-align:center;}
+footer p{font-size:12px;color:rgba(255,255,255,.3);line-height:1.8;}
+footer a{color:rgba(255,255,255,.4);}
+.spp{position:fixed;bottom:16px;left:16px;background:white;border:1px solid var(--bdr);border-radius:14px;padding:11px 13px;box-shadow:0 8px 32px rgba(0,0,0,.14);z-index:999;display:flex;align-items:center;gap:10px;max-width:280px;transform:translateX(-320px);transition:transform .5s cubic-bezier(.34,1.56,.64,1);}
+.spp.show{transform:translateX(0);}
+.spp-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.spp-nm{font-size:12px;font-weight:700;color:var(--text);}.spp-inf{font-size:11px;color:var(--t2);}.spp-tm{font-size:10px;color:var(--t3);margin-top:1px;}
+.spp-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;position:absolute;top:10px;right:10px;}
+.toast-el{position:fixed;bottom:16px;right:16px;background:#1e293b;color:white;padding:10px 14px;border-radius:10px;font-size:12.5px;font-weight:600;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.2);animation:tIn .2s ease;}
+@keyframes tIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.vid17-section{background:white;padding:56px 16px;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);}
+.vid17-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+.v17tab{padding:10px 22px;border:2px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:44px;transition:.2s;}
+.v17tab.active{border-color:var(--p);background:var(--pl);color:var(--p);}
+.v17tab.p2.active{border-color:#7c3aed;background:#f5f3ff;color:#5b21b6;}
+.vid17-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;}
+.v17card{background:var(--bg);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;cursor:pointer;transition:.2s;position:relative;}
+.v17card:hover{transform:translateY(-3px);box-shadow:var(--shl);border-color:var(--p);}
+.v17card:hover .v17-play{opacity:1;}
+.v17-thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#0a1628,#1a3a8f);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.v17-thumb.p2{background:linear-gradient(135deg,#0f2044,#0ea5a0);}
+.v17-thumb-img{width:100%;height:100%;object-fit:cover;display:none;}
+.v17-ikon{font-size:24px;position:relative;z-index:1;}
+.v17-play{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s;z-index:2;}
+.v17-play-btn{width:36px;height:36px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.v17-badge{position:absolute;top:6px;right:6px;background:rgba(245,158,11,.9);color:#0f172a;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;z-index:3;}
+.v17-body{padding:10px 11px 12px;}
+.v17-nm{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3;}
+.v17-ds{font-size:11px;color:var(--t2);line-height:1.5;}
+.vid-modal-bak{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8000;display:none;align-items:flex-end;justify-content:center;}
+@media(min-width:600px){.vid-modal-bak{align-items:center;padding:16px;}}
+.vid-modal-bak.open{display:flex;}
+.vid-modal-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;}
+@media(min-width:600px){.vid-modal-box{border-radius:20px;}}
+.vid-modal-head{padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1;}
+.vid-modal-info{display:flex;align-items:center;gap:10px;}
+.vid-modal-ic{width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.vid-modal-nm{font-size:14px;font-weight:700;color:var(--text);}
+.vid-modal-pkg{font-size:11px;color:var(--t2);}
+.vid-modal-close{width:28px;height:28px;background:#f1f5f9;border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.vid-modal-frame-wrap{width:100%;aspect-ratio:16/9;background:#0a1628;position:relative;}
+.vid-modal-frame{width:100%;height:100%;border:none;display:none;}
+.vid-modal-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+.vm-ph-ic{font-size:40px;margin-bottom:12px;}
+.vm-ph-t{font-size:16px;font-weight:700;color:white;margin-bottom:6px;}
+.vm-ph-s{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;max-width:320px;}
+.vid-modal-ds{padding:14px 16px;font-size:13px;color:var(--t2);line-height:1.65;border-bottom:1px solid var(--bdr);}
+.vid-modal-foot{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.vid-modal-cta{padding:10px 22px;background:var(--p);color:white;border:none;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:42px;}
+</style>
+</head>
+<body>
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_SERVICE_KEY = Deno.env.get("SERVICE_ROLE_KEY")!;
+<nav class="nav">
+  <div class="nbrand">
+    <div class="nlogo">EK</div>
+    <div class="nname">Edu<span>Kit</span></div>
+  </div>
+  <div class="nright">
+    <button class="n-login" onclick="location.href='dashboard.html'">Log Masuk</button>
+    <button class="n-buy" onclick="goTo('pricing')">Beli</button>
+  </div>
+</nav>
 
-function generatePassword(length = 10): string {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-  let pw = "";
-  for (let i = 0; i < length; i++) {
-    pw += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return pw;
-}
+<section class="hero">
+  <div class="hbadge"><span></span> Platform #1 untuk Warga Pendidik Malaysia</div>
+  <h1>17 Apps Digital untuk<br><em>Guru &amp; Pentadbir</em><br>Sekolah Malaysia</h1>
+  <p class="hero-sub">Dari agihan tugas guru hingga SKPM kualiti sekolah — semua dalam satu platform eksklusif.</p>
+  <div class="hero-btns">
+    <button class="bhm" onclick="goTo('pricing')">Lihat Pakej &amp; Harga →</button>
+    <button class="bhs" onclick="goTo('demo')">Cuba Demo Percuma</button>
+  </div>
+  <div class="hstats">
+    <div class="hst"><div class="hst-v">500+</div><div class="hst-l">Pengguna Aktif</div></div>
+    <div class="hst"><div class="hst-v">17</div><div class="hst-l">Apps Eksklusif</div></div>
+    <div class="hst"><div class="hst-v">4.9★</div><div class="hst-l">Rating</div></div>
+    <div class="hst"><div class="hst-v">100%</div><div class="hst-l">Seumur Hidup</div></div>
+  </div>
+</section>
 
-function getPakej(amount: number): string {
-  if (amount === 9500) return "Pakej Guru";
-  if (amount === 16500) return "Pakej Guru + Pentadbir";
-  if (amount === 300) return "KidSpark Sewaan Bulanan";
-  return "Pakej Pentadbir";
-}
+<div class="ticker-wrap"><div class="ticker" id="tickerEl"></div></div>
 
-async function sendWelcomeEmail(email: string, password: string, pakej: string) {
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "EduKit <noreply@cikgukita.com>",
-        to: [email],
-        subject: "🎉 Selamat Datang ke EduKit — Maklumat Log Masuk Anda",
-        html: `
-          <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#f8faff;padding:32px 16px;">
-            <div style="background:linear-gradient(135deg,#0f2d7a,#1a56db);border-radius:16px;padding:28px;text-align:center;margin-bottom:24px;">
-              <div style="font-size:40px;margin-bottom:12px;">🎉</div>
-              <h1 style="color:white;font-size:22px;margin:0 0 8px;">Tahniah! Pembelian Berjaya</h1>
-              <p style="color:rgba(255,255,255,.75);font-size:14px;margin:0;">Anda kini sebahagian daripada keluarga EduKit</p>
-            </div>
-            <div style="background:white;border-radius:12px;padding:24px;margin-bottom:16px;border:1px solid #e2e8f4;">
-              <h2 style="font-size:16px;color:#0f172a;margin:0 0 16px;">📦 Pakej Anda: <strong style="color:#1a56db;">${pakej}</strong></h2>
-              <div style="background:#f0f4ff;border-radius:10px;padding:16px;margin-bottom:16px;">
-                <p style="font-size:13px;color:#475569;margin:0 0 12px;font-weight:600;">MAKLUMAT LOG MASUK:</p>
-                <p style="margin:0 0 8px;font-size:14px;color:#0f172a;">📧 <strong>E-mel:</strong> ${email}</p>
-                <p style="margin:0;font-size:14px;color:#0f172a;">🔑 <strong>Kata Laluan:</strong> <span style="font-family:monospace;background:#e8f0fe;padding:3px 8px;border-radius:5px;font-size:15px;">${password}</span></p>
-              </div>
-              <div style="text-align:center;margin-bottom:16px;">
-                <a href="https://apps.cikgukita.com/dashboard.html" style="display:inline-block;background:#1a56db;color:white;padding:13px 32px;border-radius:30px;font-size:14px;font-weight:700;text-decoration:none;">🚀 Log Masuk Sekarang →</a>
-              </div>
-              <p style="font-size:12px;color:#94a3b8;text-align:center;margin:0;">Sila tukar kata laluan selepas log masuk pertama</p>
-            </div>
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-              <p style="font-size:13px;color:#92400e;margin:0;">⚠️ <strong>Penting:</strong> Simpan maklumat log masuk ini di tempat yang selamat.</p>
-            </div>
-            <p style="font-size:12px;color:#94a3b8;text-align:center;margin:0;">© 2025 EduKit — Platform Digital untuk Warga Pendidik Malaysia</p>
+<section class="sec">
+  <div class="sec-in">
+    <div class="sec-lbl">Mengapa EduKit?</div>
+    <h2 class="sec-t">Direka khas untuk warga pendidik Malaysia</h2>
+    <p class="sec-s">Mudah digunakan dari mana-mana device. Data anda selamat dan peribadi sepenuhnya.</p>
+    <div class="feat-grid">
+      <div class="fc-card"><div class="fc-ic">⚡</div><div class="fc-t">Akses Serta-merta</div><div class="fc-d">Bayar, terus dapat login. Tiada perlu tunggu approval.</div></div>
+      <div class="fc-card"><div class="fc-ic">📱</div><div class="fc-t">Phone &amp; Tablet</div><div class="fc-d">Dioptimumkan untuk semua saiz skrin — phone, tablet &amp; laptop.</div></div>
+      <div class="fc-card"><div class="fc-ic">🔒</div><div class="fc-t">Data Peribadi</div><div class="fc-d">Diasingkan sepenuhnya. Data anda tidak boleh dilihat orang lain.</div></div>
+      <div class="fc-card"><div class="fc-ic">🔄</div><div class="fc-t">Kemaskini Percuma</div><div class="fc-d">Langgan RM3/bulan — semua apps baru masuk automatik.</div></div>
+      <div class="fc-card"><div class="fc-ic">📋</div><div class="fc-t">Jana PDF</div><div class="fc-d">Laporan &amp; dokumen rasmi dijana automatik dalam saat.</div></div>
+      <div class="fc-card"><div class="fc-ic">🎓</div><div class="fc-t">Panduan Video</div><div class="fc-d">Tutorial lengkap untuk setiap apps. Mudah dipelajari.</div></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section class="vid-section" id="video">
+  <div class="sec-in">
+    <div class="sec-lbl">Tonton Demo</div>
+    <h2 class="sec-t">Lihat Sendiri Cara Kerjanya</h2>
+    <p class="sec-s">Tonton video demo dan tengok bagaimana EduKit memudahkan kerja anda setiap hari.</p>
+    <div class="vid-tabs">
+      <button class="vtab ag" id="vtab1" onclick="switchVid(1)">📚 Demo Pakej Guru</button>
+      <button class="vtab" id="vtab2" onclick="switchVid(2)">🏫 Demo Pakej Pentadbir</button>
+    </div>
+    <div class="vid-wrap">
+      <div class="vid-ph g" id="vph1" onclick="loadVid(1)">
+        <div class="play-btn">▶</div>
+        <div class="vid-ph-t">Video Demo — Pakej Guru</div>
+        <div class="vid-ph-s">Klik untuk tonton demo SPIn Analytics, GameKelas, RPH Fleksi KSSR &amp; lain-lain</div>
+      </div>
+      <div class="vid-ph p" id="vph2" onclick="loadVid(2)" style="display:none">
+        <div class="play-btn">▶</div>
+        <div class="vid-ph-t">Video Demo — Pakej Pentadbir</div>
+        <div class="vid-ph-s">Klik untuk tonton demo SK@S Pencerapan, EduDash Pro, SKPM Pro &amp; lain-lain</div>
+      </div>
+      <iframe id="vidFrame" class="vid-frame" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <p class="vid-cap" id="vidCap">Demo Pakej Guru — tonton cara guru menggunakan SPIn Analytics untuk pantau prestasi pelajar dan jana laporan dalam saat.</p>
+  </div>
+</section>
+
+<section class="demo-section" id="demo">
+  <div class="sec-in">
+    <div class="sec-lbl">Cuba Sendiri — Percuma</div>
+    <h2 class="sec-t">Demo Langsung Dalam Browser</h2>
+    <p class="sec-s">Guna terus tanpa log masuk. Demo terhad 10 rekod — versi penuh tiada had langsung.</p>
+    <div class="demo-tabs">
+      <button class="dtab ag" id="dtab1" onclick="switchDemo(1)">📊 SPIn Analytics — Pakej Guru</button>
+      <button class="dtab" id="dtab2" onclick="switchDemo(2)">🔍 SK@S Pencerapan — Pakej Pentadbir</button>
+    </div>
+    <div class="demo-info" id="demoInfo" style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;">
+      <strong>📊 Demo SPIn Analytics (Pakej Guru)</strong> — Daftar pelajar, masuk markah, tengok carta trend &amp; analisis. Maksimum 10 pelajar.
+    </div>
+    <div class="demo-fw">
+      <div class="demo-lbl" id="demoLbl">🎯 Demo Langsung</div>
+      <iframe id="demoFrame" class="demo-frame" src="demo-spdin.html" title="Demo SPIn Analytics" loading="lazy"></iframe>
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="bhm" style="font-size:14px;padding:12px 26px;" onclick="goTo('pricing')">Suka apa yang anda lihat? Dapatkan Akses Penuh →</button>
+    </div>
+  </div>
+</section>
+
+<section class="vid17-section" id="video-apps">
+  <div class="sec-in">
+    <div class="sec-lbl">Video Tutorial</div>
+    <h2 class="sec-t">Video Demo Setiap App</h2>
+    <p class="sec-s">Klik mana-mana app untuk tonton video tutorial. Video akan dimuat naik tidak lama lagi.</p>
+    <div class="vid17-tabs">
+      <button class="v17tab active" id="v17t1" onclick="v17Switch(1)">📚 Pakej Guru (10)</button>
+      <button class="v17tab" id="v17t2" onclick="v17Switch(2)">🏫 Pakej Pentadbir (8)</button>
+    </div>
+    <div id="vid17Grid" class="vid17-grid"></div>
+  </div>
+</section>
+
+<div class="vid-modal-bak" id="vidModal">
+  <div class="vid-modal-box">
+    <div class="vid-modal-head">
+      <div class="vid-modal-info">
+        <div class="vid-modal-ic" id="vmIc">📋</div>
+        <div>
+          <div class="vid-modal-nm" id="vmNm">App Name</div>
+          <div class="vid-modal-pkg" id="vmPkg">Pakej Guru</div>
+        </div>
+      </div>
+      <button class="vid-modal-close" onclick="closeVidModal()">✕</button>
+    </div>
+    <div class="vid-modal-frame-wrap">
+      <iframe id="vmFrame" class="vid-modal-frame" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="vid-modal-ph" id="vmPh">
+        <div class="vm-ph-ic">🎬</div>
+        <div class="vm-ph-t" id="vmPhT">Video Akan Datang</div>
+        <div class="vm-ph-s" id="vmPhS">Tutorial untuk app ini sedang disediakan. Nantikan!</div>
+      </div>
+    </div>
+    <div class="vid-modal-ds" id="vmDs">Penerangan app</div>
+    <div class="vid-modal-foot">
+      <button class="vid-modal-cta" onclick="goTo('pricing')">Dapatkan Akses Penuh →</button>
+    </div>
+  </div>
+</div>
+
+<section class="apps-showcase" id="apps">
+  <div class="sec-in">
+    <div class="sec-lbl">Semua Apps</div>
+    <h2 class="sec-t">17 Apps Eksklusif — Dengan Penerangan Lengkap</h2>
+    <p class="sec-s">Klik setiap pakej untuk lihat apps dan penerangannya.</p>
+    <div class="pkg-tabs">
+      <button class="ptab2 a1" id="ptab1" onclick="switchPkgTab(1)">📚 Pakej Guru (10)</button>
+      <button class="ptab2" id="ptab2" onclick="switchPkgTab(2)">🏫 Pakej Pentadbir (8)</button>
+      <button class="ptab2" id="ptab3" onclick="switchPkgTab(3)">💎 Semua 17 Apps</button>
+    </div>
+    <div id="appsGrid" class="apps-grid"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-wrap" id="pricing">
+  <div class="pricing-in">
+    <div class="sec-lbl">Pilih Pakej</div>
+    <h2 class="sec-t">Pelaburan Sekali, Guna Seumur Hidup</h2>
+    <p class="sec-s">Semua pakej termasuk akses seumur hidup. Tambah langgan RM 3/bulan untuk apps baru &amp; Kids Spark!</p>
+    <div class="pkg-grid">
+
+      <!-- PAKEJ GURU -->
+      <div class="pkg">
+        <div class="phead"><div class="ptier">Pakej 1</div><div class="pnm">Pakej Guru</div><div class="ptag">10 apps untuk guru yang ingin jimat masa</div></div>
+        <div class="pprice"><div class="strikrow"><div class="strik">RM 456</div><div class="savepill">Jimat 79%</div></div><div class="prrow"><div class="prsym">RM</div><div class="prval">95</div><div class="prnote">/ seumur hidup</div></div></div>
+        <div class="papps"><div class="pappst">10 Apps Termasuk</div>
+          <div class="arow"><div class="aic" style="background:#e8f0fe">📋</div><div><div class="anm">GuruKits</div><div class="ads">Agih tugas guru, pantau beban kerja mengikut bidang</div></div></div>
+          <div class="arow"><div class="aic" style="background:#dbeafe">📈</div><div><div class="anm">SPIn Analytics</div><div class="ads">Analitik prestasi pelajar OTR vs AR, carta kemajuan</div></div></div>
+          <div class="arow"><div class="aic" style="background:#eff6ff">📊</div><div><div class="anm">Dashboard SPIn Pro</div><div class="ads">Dashboard visual prestasi pelajar yang komprehensif</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fef3c7">📅</div><div><div class="anm">GanttPro</div><div class="ads">Carta Gantt digital untuk perancangan projek sekolah</div></div></div>
+          <div class="arow"><div class="aic" style="background:#f0fdf4">🏅</div><div><div class="anm">KokurikulumTrack</div><div class="ads">Rekod kehadiran kokurikulum — persatuan, sukan, beruniform</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fdf4ff">🌡️</div><div><div class="anm">Mood Radar Pro</div><div class="ads">Kesan mood &amp; emosi pelajar dalam kelas dengan QR code</div></div></div>
+          <div class="arow"><div class="aic" style="background:#f0fdf4">🗂️</div><div><div class="anm">OrgChart Pro</div><div class="ads">Jana carta organisasi digital sekolah, masjid atau JKK</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fff7ed">📝</div><div><div class="anm">RPH Fleksi KSSR Pro</div><div class="ads">Rancangan Pengajaran Harian — Standard Kandungan &amp; Objektif</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fef2f2">✅</div><div><div class="anm">Senarai Semak Ultimate</div><div class="ads">Senarai semak tugas sekolah — bidang, kategori, status</div></div></div>
+          <div class="arow"><div class="aic" style="background:#f5f3ff">🎮</div><div><div class="anm">GameKelas</div><div class="ads">Cipta game interaktif kelas — MCQ, betul/salah, kad kilat</div></div></div>
+        </div>
+        <div class="pfoot">
+          <button class="pbtn blue" onclick="window.location.href=STRIPE[1]">Beli Pakej Guru — RM 95 →</button>
+          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
+          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik &amp; percuma • Batal bila-bila masa</div>
+          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
+        </div>
+      </div>
+
+      <!-- PAKEJ PENTADBIR -->
+      <div class="pkg feat">
+        <div class="pbadge" style="background:#f59e0b;color:#0f172a;">⭐ POPULAR</div>
+        <div class="phead"><div class="ptier">Pakej 2</div><div class="pnm">Pakej Pentadbir</div><div class="ptag">8 apps untuk GPK, Pengetua &amp; pentadbir</div></div>
+        <div class="pprice"><div class="strikrow"><div class="strik">RM 488</div><div class="savepill">Jimat 81%</div></div><div class="prrow"><div class="prsym">RM</div><div class="prval">95</div><div class="prnote">/ seumur hidup</div></div></div>
+        <div class="papps"><div class="pappst">8 Apps Termasuk</div>
+          <div class="arow"><div class="aic" style="background:#e8f0fe">🏫</div><div><div class="anm">EduDash Pro</div><div class="ads">Dashboard sekolah lengkap — kehadiran, BMI, disiplin, PAJSK</div></div></div>
+          <div class="arow"><div class="aic" style="background:#dbeafe">🎯</div><div><div class="anm">H2 Headcount 2.0</div><div class="ads">Pemantauan progres pelajar OTR vs AR per kelas secara visual</div></div></div>
+          <div class="arow"><div class="aic" style="background:#f0fdf4">👥</div><div><div class="anm">StaffTrack Pro</div><div class="ads">Sistem kehadiran digital staf — import CSV, trend, laporan</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fef3c7">📋</div><div><div class="anm">GuruKits</div><div class="ads">Urus &amp; pantau agihan tugas semua guru dari satu panel</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fdf4ff">🏅</div><div><div class="anm">Rekod Kehadiran Kokurikulum</div><div class="ads">Pandangan pentadbir ke atas kehadiran kokurikulum sekolah</div></div></div>
+          <div class="arow"><div class="aic" style="background:#f5f3ff">🔍</div><div><div class="anm">SK@S — Pencerapan</div><div class="ads">Cerapan guru Standard 4 SKPMg2, jana borang PDF rasmi</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fff7ed">🔄</div><div><div class="anm">Sistem Guru Ganti Pro</div><div class="ads">Urus guru ganti, rekod ketidakhadiran, analisis bulanan</div></div></div>
+          <div class="arow"><div class="aic" style="background:#fef2f2">⭐</div><div><div class="anm">SKPM Pro</div><div class="ads">Kualiti pengurusan sekolah — IKS, Standard 1–5, laporan PDF</div></div></div>
+        </div>
+        <div class="pfoot">
+          <button class="pbtn blue" onclick="window.location.href=STRIPE[2]">Beli Pakej Pentadbir — RM 95 →</button>
+          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
+          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik &amp; percuma • Batal bila-bila masa</div>
+          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
+        </div>
+      </div>
+
+      <!-- PAKEJ GABUNGAN -->
+      <div class="pkg gab">
+        <div class="pbadge" style="background:#1a56db;color:white;">💎 TERBAIK</div>
+        <div class="phead"><div class="ptier" style="color:#f59e0b;">Pakej 3 — Gabungan</div><div class="pnm">Pakej Guru + Pentadbir</div><div class="ptag">Akses penuh 17 apps — jimat RM 25</div></div>
+        <div class="pprice"><div class="strikrow"><div class="strik">RM 944</div><div class="savepill">Jimat 83%</div></div><div class="prrow"><div class="prsym" style="color:#f59e0b;">RM</div><div class="prval" style="color:#f59e0b;">165</div><div class="prnote">/ seumur hidup</div></div></div>
+        <div class="papps"><div class="pappst">17 Apps Unik — Semua Pakej 1 + Pakej 2</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+            <div style="background:#e8f0fe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e40af;">📋 GuruKits</div>
+            <div style="background:#e8f0fe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e40af;">🏫 EduDash Pro</div>
+            <div style="background:#dbeafe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">📈 SPIn Analytics</div>
+            <div style="background:#dbeafe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">🎯 H2 Headcount 2.0</div>
+            <div style="background:#eff6ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">📊 Dashboard SPIn Pro</div>
+            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">👥 StaffTrack Pro</div>
+            <div style="background:#fef3c7;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#92400e;">📅 GanttPro</div>
+            <div style="background:#fdf4ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#581c87;">🏅 Rekod Kokurikulum</div>
+            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">🏅 KokurikulumTrack</div>
+            <div style="background:#f5f3ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#4c1d95;">🔍 SK@S Pencerapan</div>
+            <div style="background:#fdf4ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#581c87;">🌡️ Mood Radar Pro</div>
+            <div style="background:#fff7ed;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7c2d12;">🔄 Guru Ganti Pro</div>
+            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">🗂️ OrgChart Pro</div>
+            <div style="background:#fef2f2;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7f1d1d;">⭐ SKPM Pro</div>
+            <div style="background:#fff7ed;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7c2d12;">📝 RPH Fleksi KSSR</div>
+            <div style="background:#fef2f2;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7f1d1d;">✅ Senarai Semak</div>
+            <div style="background:#f5f3ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#4c1d95;grid-column:1/-1;">🎮 GameKelas</div>
           </div>
-        `,
-      }),
-    });
-    const json = await res.json();
-    console.log("Email result:", JSON.stringify(json));
-  } catch (e) {
-    console.error("Email error:", e);
+        </div>
+        <div class="pfoot">
+          <button class="pbtn gold" onclick="window.location.href=STRIPE[3]">Beli Semua 17 Apps — RM 165 →</button>
+          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
+          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik &amp; percuma • Batal bila-bila masa</div>
+          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- KIDS SPARK SECTION -->
+<section class="ks-wrap" id="kidspark">
+  <div class="ks-in">
+    <div>
+      <div class="ks-lbl">🔐 Kunci Akses Seumur Hidup</div>
+      <h2>Hanya <em>RM 3 Sebulan</em> —<br>Dapat Lebih Banyak!</h2>
+      <p>Langgan bulanan sekarang dan setiap app baru EduKit akan masuk ke akaun anda secara automatik dan percuma — selama-lamanya. Ditambah bonus akses <strong>Kids Spark</strong> untuk anak-anak. Hanya RM 3 Sebulan!</p>
+      <div class="warn-box">
+        <div class="warn-box-ic">⚠️</div>
+        <div class="warn-box-t">Tanpa langgan, apps baru EduKit akan dijual berasingan pada harga penuh bila ditambah pada masa hadapan.</div>
+      </div>
+      <div class="ks-feats">
+        <div class="ks-feat"><div class="ks-fic">🚀</div>Semua apps EduKit baru — auto masuk, <strong>percuma selama-lamanya</strong></div>
+        <div class="ks-feat"><div class="ks-fic">🎮</div>Akses penuh <strong>Kids Spark</strong> — pembelajaran fun untuk anak</div>
+        <div class="ks-feat"><div class="ks-fic">🔓</div>Akses awal apps baru sebelum orang lain</div>
+        <div class="ks-feat"><div class="ks-fic">🔑</div>Login unik khas — data anak selamat &amp; peribadi</div>
+        <div class="ks-feat"><div class="ks-fic">❌</div>Batal bila-bila masa — tiada kontrak, tiada komitmen</div>
+      </div>
+      <div class="ks-price">
+        <div><div class="ks-rm">RM 3</div></div>
+        <div><div class="ks-note">/ bulan sahaja</div><div class="ks-note">Auto potong • Batal bila-bila masa</div></div>
+      </div>
+      <button class="ks-btn" onclick="window.location.href=STRIPE.ks">🚀 Ya! Saya Nak Apps Baru Percuma →</button>
+      <div style="font-size:11.5px;color:rgba(255,255,255,.45);margin-top:8px;">Boleh langgan tanpa beli pakej terlebih dahulu</div>
+    </div>
+    <div>
+      <div class="ks-fw">
+        <iframe class="ks-iframe" src="https://kidspark.website/" title="Kids Spark" sandbox="allow-scripts allow-same-origin"></iframe>
+        <div class="ks-blur">
+          <div class="ks-blur-ic">🔒</div>
+          <div class="ks-blur-t">Kids Spark — Terkunci</div>
+          <div class="ks-blur-s">Langgan RM 3/bulan untuk akses penuh Kids Spark dan semua apps EduKit baru secara automatik</div>
+          <button style="padding:9px 20px;background:#f59e0b;border:none;border-radius:20px;font-size:12.5px;font-weight:700;color:#0f172a;cursor:pointer;font-family:inherit;min-height:40px;" onclick="window.location.href=STRIPE.ks">Aktifkan Sekarang →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testi-wrap">
+  <div class="testi-in">
+    <div class="sec-lbl" style="color:rgba(255,255,255,.6);">Kata Mereka</div>
+    <h2 class="sec-t" style="color:white;text-align:center;">500+ Guru &amp; Pentadbir Sudah Guna EduKit</h2>
+    <div class="tgrid">
+      <div class="tc"><div class="tc-stars">★★★★★</div><div class="tc-text">"GuruKits &amp; SPIn Analytics jimatkan masa saya berjam-jam setiap minggu. Sekarang boleh fokus lebih pada pengajaran."</div><div class="tc-user"><div class="tc-av">NZ</div><div><div class="tc-nm">Norazlin Zainudin</div><div class="tc-loc">Guru Kanan — Selangor</div></div></div></div>
+      <div class="tc"><div class="tc-stars">★★★★★</div><div class="tc-text">"SK@S Pencerapan dan SKPM Pro mudahkan saya sediakan dokumen kualiti sekolah. Laporan PDF terus jadi dalam minit!"</div><div class="tc-user"><div class="tc-av">AH</div><div><div class="tc-nm">Ahmad Hafiz Mohd</div><div class="tc-loc">GPK Pentadbiran — Perak</div></div></div></div>
+      <div class="tc"><div class="tc-stars">★★★★★</div><div class="tc-text">"Langgan RM3 bulan — apps baru terus masuk! Anak pun dah guna Kids Spark setiap hari. Berbaloi sangat!"</div><div class="tc-user"><div class="tc-av">SR</div><div><div class="tc-nm">Siti Rohani Abd. Aziz</div><div class="tc-loc">Pengetua — Johor</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="share-wrap">
+  <div class="share-title">📢 Kongsi kepada rakan-rakan guru</div>
+  <div class="share-sub">Bantu rakan guru tahu tentang EduKit. Klik untuk kongsi!</div>
+  <div class="share-btns">
+    <button class="sbtn sbtn-fb" onclick="shareFB()"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Kongsi di Facebook</button>
+    <button class="sbtn sbtn-wa" onclick="shareWA()"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Kongsi di WhatsApp</button>
+    <button class="sbtn sbtn-cp" onclick="copyLink()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Salin Pautan</button>
+  </div>
+</div>
+
+<section class="faq-wrap">
+  <div class="sec-lbl" style="text-align:center;">Soalan Lazim</div>
+  <h2 class="sec-t" style="margin-bottom:22px;">Ada soalan? Kami jawab.</h2>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Berapa lama boleh guna apps ini?</div><div class="faq-a">Akses seumur hidup! Bayar sekali, guna selama-lamanya. Langgan RM 3/bulan untuk dapat semua apps baru secara automatik dan percuma.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Apa yang dapat kalau langgan RM 3/bulan?</div><div class="faq-a">Anda dapat akses penuh Kids Spark untuk anak-anak DAN semua apps EduKit baru yang akan ditambah pada masa hadapan — masuk ke akaun anda secara automatik dan percuma selama-lamanya. Tanpa langgan, apps baru perlu dibeli berasingan.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Sewaan RM 3/bulan tu wajib ke?</div><div class="faq-a">Tidak wajib. Ia pilihan semata-mata. Tanpa langgan, anda tetap guna semua 17 apps yang dibeli. Cuma apps baru yang ditambah pada masa hadapan tidak akan masuk secara automatik.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh guna dari phone atau tablet?</div><div class="faq-a">Ya! Semua apps EduKit dioptimumkan untuk phone, tablet dan komputer. Guna dari mana-mana device tanpa perlu install apa-apa.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Data sekolah saya selamat ke?</div><div class="faq-a">Ya, 100% selamat. Kami guna teknologi Supabase dengan Row Level Security — data anda tidak boleh dilihat oleh pengguna lain langsung.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh upgrade pakej kemudian?</div><div class="faq-a">Boleh! Hubungi kami dan kami proses upgrade dengan caj perbezaan harga sahaja. Tidak perlu bayar penuh semula.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Ada jaminan wang balik?</div><div class="faq-a">Ya! Jaminan wang balik 7 hari penuh tanpa soal jika tidak berpuas hati dengan pembelian anda.</div></div>
+</section>
+
+<section class="cta-wrap">
+  <h2>Mula Jimat Masa Hari Ini</h2>
+  <p>Lebih 500 guru dan pentadbir sudah merasai manfaatnya. Jangan tunggu lagi.</p>
+  <button class="cta-btn" onclick="goTo('pricing')">Pilih Pakej Anda Sekarang →</button>
+</section>
+
+<footer>
+  <p>© 2025 EduKit — Platform Digital untuk Warga Pendidik Malaysia<br>
+  <a href="#">Dasar Privasi</a> &nbsp;|&nbsp; <a href="#">Hubungi Kami</a> &nbsp;|&nbsp; <a href="dashboard.html">Log Masuk</a></p>
+</footer>
+
+<div class="spp" id="spp">
+  <div class="spp-av" id="sppAv">AZ</div>
+  <div><div class="spp-nm" id="sppNm"></div><div class="spp-inf" id="sppInf"></div><div class="spp-tm" id="sppTm"></div></div>
+  <div class="spp-dot"></div>
+</div>
+
+<script>
+const STRIPE = {
+  1: 'https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400',
+  2: 'https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402',
+  3: 'https://buy.stripe.com/5kQdR8doZbSG7reg777g403',
+  ks: 'https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'
+}
+
+const YOUTUBE = {
+  1: 'https://www.youtube.com/embed/GANTI_ID_VIDEO_PAKEJ_GURU?autoplay=1&rel=0&modestbranding=1',
+  2: 'https://www.youtube.com/embed/GANTI_ID_VIDEO_PAKEJ_PENTADBIR?autoplay=1&rel=0&modestbranding=1'
+}
+
+const EDUKIT_VIDEOS = {
+  eduassign:  { nama:'GuruKits',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📋', ringkasan:'Agih dan pantau beban tugas guru mengikut bidang dan jana laporan PDF.',                  ytId:'GANTI_ID_EDUASSIGN_PRO' },
+  spin:       { nama:'SPIn Analytics',             pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📈', ringkasan:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.',  ytId:'GANTI_ID_SPIN_ANALYTICS' },
+  spinpro:    { nama:'Dashboard SPIn Pro',         pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📊', ringkasan:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.',         ytId:'GANTI_ID_DASHBOARD_SPIN_PRO' },
+  gantt:      { nama:'GanttPro',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📅', ringkasan:'Carta Gantt digital untuk perancangan projek dan program sekolah.',                       ytId:'GANTI_ID_GANTT_PRO' },
+  kokum:      { nama:'KokurikulumTrack',           pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🏅', ringkasan:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.',                      ytId:'GANTI_ID_KOKURIKULUM_TRACK' },
+  moodradar:  { nama:'Mood Radar Pro',             pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🌡️', ringkasan:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.',                          ytId:'GANTI_ID_MOOD_RADAR_PRO' },
+  orgchart:   { nama:'OrgChart Pro',               pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🗂️', ringkasan:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.',                ytId:'GANTI_ID_ORGCHART_PRO' },
+  rph:        { nama:'RPH Fleksi KSSR Pro',        pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📝', ringkasan:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.',       ytId:'GANTI_ID_RPH_FLEKSI' },
+  senarai:    { nama:'Senarai Semak Ultimate',     pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'✅', ringkasan:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.',         ytId:'GANTI_ID_SENARAI_SEMAK' },
+  gamekelas:  { nama:'GameKelas',                  pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🎮', ringkasan:'Cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.',                ytId:'GANTI_ID_GAME_KELAS' },
+  edudash:    { nama:'EduDash Pro',                pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏫', ringkasan:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.',         ytId:'GANTI_ID_EDUDASH_PRO' },
+  headcount:  { nama:'H2 Headcount 2.0',           pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🎯', ringkasan:'Pemantauan progres pelajar OTR vs AR per kelas secara visual.',                          ytId:'GANTI_ID_H2_HEADCOUNT' },
+  stafftrack: { nama:'StaffTrack Pro',             pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'👥', ringkasan:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.',        ytId:'GANTI_ID_STAFFTRACK_PRO' },
+  kokum2:     { nama:'Rekod Kehadiran Kokurikulum',pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏅', ringkasan:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.',                    ytId:'GANTI_ID_REKOD_KOKURIKULUM' },
+  pencerapan: { nama:'SK@S — Pencerapan',          pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔍', ringkasan:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.',        ytId:'GANTI_ID_SKAS_PENCERAPAN' },
+  guruganti:  { nama:'Sistem Guru Ganti Pro',      pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔄', ringkasan:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.',               ytId:'GANTI_ID_GURU_GANTI' },
+  skpm:       { nama:'SKPM Pro',                   pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'⭐', ringkasan:'Kualiti pengurusan sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.',             ytId:'GANTI_ID_SKPM_PRO' },
+}
+
+Object.keys(EDUKIT_VIDEOS).forEach(k => {
+  const v = EDUKIT_VIDEOS[k], id = v.ytId
+  v.hasVideo = !id.startsWith('GANTI_')
+  v.ytUrl = v.hasVideo ? 'https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1' : ''
+  v.thumbnail = v.hasVideo ? 'https://img.youtube.com/vi/'+id+'/mqdefault.jpg' : ''
+})
+
+function getVideosByPakej(pakej) {
+  return Object.entries(EDUKIT_VIDEOS).filter(([,v])=>v.pakej===pakej).map(([k,v])=>({key:k,...v}))
+}
+
+const APPS_DATA = {
+  guru: [
+    {nm:'GuruKits',ic:'📋',bg:'#e8f0fe',ds:'Agih tugas guru, pantau beban kerja mengikut bidang dan jana laporan PDF.'},
+    {nm:'SPIn Analytics',ic:'📈',bg:'#dbeafe',ds:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.'},
+    {nm:'Dashboard SPIn Pro',ic:'📊',bg:'#eff6ff',ds:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.'},
+    {nm:'GanttPro',ic:'📅',bg:'#fef3c7',ds:'Carta Gantt digital untuk perancangan projek dan program sekolah.'},
+    {nm:'KokurikulumTrack',ic:'🏅',bg:'#f0fdf4',ds:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.'},
+    {nm:'Mood Radar Pro',ic:'🌡️',bg:'#fdf4ff',ds:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.'},
+    {nm:'OrgChart Pro',ic:'🗂️',bg:'#f0fdf4',ds:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.'},
+    {nm:'RPH Fleksi KSSR Pro',ic:'📝',bg:'#fff7ed',ds:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.'},
+    {nm:'Senarai Semak Ultimate',ic:'✅',bg:'#fef2f2',ds:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.'},
+    {nm:'GameKelas',ic:'🎮',bg:'#f5f3ff',ds:'Platform cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.'},
+  ],
+  pentadbir: [
+    {nm:'EduDash Pro',ic:'🏫',bg:'#e8f0fe',ds:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.'},
+    {nm:'H2 Headcount 2.0',ic:'🎯',bg:'#dbeafe',ds:'Pemantauan progres pelajar OTR vs AR per kelas dengan carta visual.'},
+    {nm:'StaffTrack Pro',ic:'👥',bg:'#f0fdf4',ds:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.'},
+    {nm:'GuruKits',ic:'📋',bg:'#fef3c7',ds:'Urus dan pantau agihan tugas semua guru dari satu panel pentadbir.'},
+    {nm:'Rekod Kehadiran Kokurikulum',ic:'🏅',bg:'#fdf4ff',ds:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.'},
+    {nm:'SK@S — Pencerapan',ic:'🔍',bg:'#f5f3ff',ds:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.'},
+    {nm:'Sistem Guru Ganti Pro',ic:'🔄',bg:'#fff7ed',ds:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.'},
+    {nm:'SKPM Pro',ic:'⭐',bg:'#fef2f2',ds:'Sistem Kualiti Pengurusan Sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.'},
+  ]
+}
+
+function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}) }
+
+function switchVid(n) {
+  document.getElementById('vtab1').className = 'vtab' + (n===1 ? ' ag' : '')
+  document.getElementById('vtab2').className = 'vtab' + (n===2 ? ' ap' : '')
+  document.getElementById('vph1').style.display = n===1 ? 'flex' : 'none'
+  document.getElementById('vph2').style.display = n===2 ? 'flex' : 'none'
+  const f = document.getElementById('vidFrame'); f.style.display='none'; f.src=''
+  const caps = {1:'Demo Pakej Guru — tonton cara guru menggunakan SPIn Analytics untuk pantau prestasi pelajar dan jana laporan dalam saat.',2:'Demo Pakej Pentadbir — tonton cara pentadbir menggunakan SK@S Pencerapan, EduDash Pro dan SKPM Pro untuk pengurusan sekolah.'}
+  document.getElementById('vidCap').textContent = caps[n]
+}
+function loadVid(n) {
+  document.getElementById('vph1').style.display = 'none'
+  document.getElementById('vph2').style.display = 'none'
+  const f = document.getElementById('vidFrame'); f.style.display='block'; f.src=YOUTUBE[n]
+}
+
+function switchDemo(n) {
+  document.getElementById('dtab1').className = 'dtab' + (n===1 ? ' ag' : '')
+  document.getElementById('dtab2').className = 'dtab' + (n===2 ? ' ap' : '')
+  const di = document.getElementById('demoInfo')
+  if (n===1) {
+    document.getElementById('demoFrame').src = 'demo-spdin.html'
+    document.getElementById('demoLbl').textContent = '🎯 Demo Langsung — Pakej Guru'
+    di.innerHTML = '<strong>📊 Demo SPIn Analytics (Pakej Guru)</strong> — Daftar pelajar, masuk markah, tengok carta trend &amp; analisis. Maksimum 10 pelajar.'
+    di.style.cssText = 'background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;'
+  } else {
+    document.getElementById('demoFrame').src = 'demo-pencerapan.html'
+    document.getElementById('demoLbl').textContent = '🔍 Demo Langsung — Pakej Pentadbir'
+    di.innerHTML = '<strong>🔍 Demo SK@S Pencerapan (Pakej Pentadbir)</strong> — Tambah guru, rekod cerapan dengan rubrik Standard 4, lihat skor dan carta. Maksimum 10 guru.'
+    di.style.cssText = 'background:#f5f3ff;border:1px solid #d8b4fe;color:#5b21b6;border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;'
   }
 }
 
-Deno.serve(async (req) => {
-  try {
-    const body = await req.text();
-    let event;
+function switchPkgTab(n) {
+  ;[1,2,3].forEach(i => { document.getElementById('ptab'+i).className='ptab2' })
+  document.getElementById('ptab'+n).classList.add('a'+n)
+  let apps = n===1 ? APPS_DATA.guru : n===2 ? APPS_DATA.pentadbir : [...APPS_DATA.guru,...APPS_DATA.pentadbir]
+  document.getElementById('appsGrid').innerHTML = apps.map(a=>`<div class="app-card"><div class="app-ic" style="background:${a.bg}">${a.ic}</div><div class="app-nm">${a.nm}</div><div class="app-ds">${a.ds}</div></div>`).join('')
+}
+switchPkgTab(1)
 
-    try {
-      event = JSON.parse(body);
-    } catch {
-      return new Response(JSON.stringify({ received: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+const PU = encodeURIComponent(window.location.href)
+const PT = encodeURIComponent('EduKit — 17 Apps Digital untuk Guru & Pentadbir Malaysia! Pakej dari RM 95. Akses seumur hidup! ')
+function shareFB() { window.open('https://www.facebook.com/sharer/sharer.php?u='+PU, '_blank', 'width=600,height=400') }
+function shareWA() { window.open('https://api.whatsapp.com/send?text='+PT+PU, '_blank') }
+function copyLink() {
+  navigator.clipboard?.writeText(window.location.href).then(()=>toast('✓ Pautan berjaya disalin!')).catch(()=>{const t=document.createElement('textarea');t.value=window.location.href;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('✓ Pautan berjaya disalin!')})
+}
+function toast(m) { const t=document.createElement('div');t.className='toast-el';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},2400) }
 
-    console.log("Event:", event.type);
+const SPD = [
+  {nm:'Azlan b. Hamid',pkg:'Pakej Guru',loc:'Selangor',m:2},
+  {nm:'Norhafiza Md. Noor',pkg:'Pakej Pentadbir',loc:'Perak',m:5},
+  {nm:'Rashidah Kamarudin',pkg:'Pakej Guru + Pentadbir',loc:'Johor',m:9},
+  {nm:'Hafiz Abd. Rahman',pkg:'Pakej Guru',loc:'Kedah',m:14},
+  {nm:'Zarina bt. Yusof',pkg:'Pakej Pentadbir',loc:'Terengganu',m:18},
+  {nm:'Mohd. Izzat Saad',pkg:'Pakej Guru + Pentadbir',loc:'Pahang',m:25},
+  {nm:'Faridah Mohamad',pkg:'Pakej Guru',loc:'Kelantan',m:33},
+  {nm:'Suhaimi bt. Kassim',pkg:'Pakej Pentadbir',loc:'N. Sembilan',m:41},
+  {nm:'Rozita Ahmad',pkg:'Pakej Guru + Pentadbir',loc:'Melaka',m:50},
+  {nm:'Khairul Nizam',pkg:'Pakej Guru',loc:'Pulau Pinang',m:58},
+  {nm:'Salmah bt. Salleh',pkg:'Pakej Pentadbir',loc:'Sabah',m:66},
+  {nm:'Amirul Hakimi',pkg:'Pakej Guru + Pentadbir',loc:'Sarawak',m:78},
+]
+let si = 0
+const spp = document.getElementById('spp')
+function showSP() {
+  const d = SPD[si % SPD.length]
+  const ini = d.nm.split(' ').filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('')
+  document.getElementById('sppAv').textContent = ini
+  document.getElementById('sppNm').textContent = d.nm
+  document.getElementById('sppInf').innerHTML = 'membeli <strong>' + d.pkg + '</strong>'
+  const t = d.m < 60 ? d.m+' min lalu' : Math.floor(d.m/60)+' jam lalu'
+  document.getElementById('sppTm').textContent = t + ' · ' + d.loc
+  spp.classList.add('show'); setTimeout(()=>spp.classList.remove('show'), 4200); si++
+}
+setTimeout(()=>{ showSP(); setInterval(showSP, 7500) }, 3500)
 
-    // Hanya proses checkout.session.completed
-    if (event.type !== "checkout.session.completed") {
-      return new Response(JSON.stringify({ received: true, skipped: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+const TI = ['🎉 Azlan dari Selangor beli Pakej Guru','✅ Norhafiza dari Perak beli Pakej Pentadbir','🏆 Rashidah dari Johor beli Pakej Gabungan','🎓 500+ warga pendidik dah guna EduKit','⭐ Rating 4.9/5 daripada pengguna','🔍 SK@S Pencerapan — rekod terus jadi laporan PDF','📊 SPIn Analytics — pantau prestasi pelajar','🎮 GameKelas — kelas lebih aktif & seronok','🏫 EduDash Pro — dashboard sekolah lengkap','💎 17 apps hanya RM 165','📱 Mesra phone & tablet','🔒 Data selamat & peribadi']
+document.getElementById('tickerEl').innerHTML = [...TI,...TI].map(t=>'<div class="tick-item"><div class="tick-dot"></div>'+t+'</div>').join('')
 
-    const session = event.data.object;
-    const email = session.customer_details?.email ||
-                  session.customer_email ||
-                  session.receipt_email;
-    const amount = session.amount_total || 0;
-    const pakej = getPakej(amount);
+let v17Current = 1
+function v17Switch(n) {
+  v17Current = n
+  document.getElementById('v17t1').className = 'v17tab' + (n===1 ? ' active' : '')
+  document.getElementById('v17t2').className = 'v17tab p2' + (n===2 ? ' active' : '')
+  renderVid17Grid(n===1 ? 'guru' : 'pentadbir')
+}
 
-    console.log("Email:", email, "Amount:", amount, "Pakej:", pakej);
+function renderVid17Grid(pakej) {
+  const apps = getVideosByPakej(pakej)
+  const isPentadbir = pakej === 'pentadbir'
+  document.getElementById('vid17Grid').innerHTML = apps.map(app => {
+    const hasVid = app.hasVideo
+    const thumbStyle = isPentadbir ? 'v17-thumb p2' : 'v17-thumb'
+    return `<div class="v17card" onclick="openVidModal('${app.key}')">
+      <div class="${thumbStyle}">
+        ${hasVid ? `<img class="v17-thumb-img" src="${app.thumbnail}" onerror="this.style.display='none'" style="display:block">` : ''}
+        <div class="v17-ikon" style="${hasVid?'display:none':'display:flex'}">${app.ikon}</div>
+        <div class="v17-play"><div class="v17-play-btn">▶</div></div>
+        ${!hasVid ? '<div class="v17-badge">Akan Datang</div>' : ''}
+      </div>
+      <div class="v17-body">
+        <div class="v17-nm">${app.ikon} ${app.nama}</div>
+        <div class="v17-ds">${app.ringkasan}</div>
+      </div>
+    </div>`
+  }).join('')
+}
 
-    if (!email) {
-      return new Response(JSON.stringify({ received: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    const password = generatePassword();
-    let userId: string | undefined;
-
-    // Cuba create user baru
-    const { data: created, error: createErr } = await sb.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-    });
-
-    if (created?.user) {
-      userId = created.user.id;
-      console.log("New user:", userId);
-    } else if (createErr) {
-      console.log("User exists:", createErr.message);
-      // Cari dari profiles table
-      const { data: profile } = await sb
-        .from("profiles")
-        .select("id")
-        .eq("email", email)
-        .single();
-
-      if (profile?.id) {
-        userId = profile.id;
-        await sb.auth.admin.updateUserById(userId, { password });
-        console.log("Password reset for:", userId);
-      }
-    }
-
-    // Update profile
-    if (userId) {
-      const pkgId = pakej.includes("Pentadbir") && pakej.includes("Guru")
-        ? "gabungan"
-        : pakej.includes("Guru")
-        ? "guru"
-        : "pentadbir";
-
-      await sb.from("profiles").upsert({
-        id: userId,
-        email,
-        package_id: pkgId,
-        must_change_password: true,
-        default_pw: password,
-      });
-      console.log("Profile updated:", pkgId);
-    }
-
-    // Hantar email
-    await sendWelcomeEmail(email, password, pakej);
-
-    return new Response(JSON.stringify({ received: true, success: true }), {
-      headers: { "Content-Type": "application/json" },
-    });
-
-  } catch (e) {
-    console.error("Error:", e);
-    // Sentiasa return 200 supaya Stripe tidak retry
-    return new Response(JSON.stringify({ received: true }), {
-      headers: { "Content-Type": "application/json" },
-    });
+function openVidModal(key) {
+  const v = EDUKIT_VIDEOS[key]
+  if (!v) return
+  document.getElementById('vmIc').textContent = v.ikon
+  document.getElementById('vmNm').textContent = v.nama
+  document.getElementById('vmPkg').textContent = v.pakejLabel
+  document.getElementById('vmDs').textContent = v.ringkasan
+  const frame = document.getElementById('vmFrame')
+  const ph = document.getElementById('vmPh')
+  if (v.hasVideo) {
+    frame.src = v.ytUrl; frame.style.display='block'; ph.style.display='none'
+  } else {
+    frame.src = ''; frame.style.display='none'; ph.style.display='flex'
+    document.getElementById('vmPhT').textContent = v.nama + ' — Video Akan Datang'
+    document.getElementById('vmPhS').textContent = 'Tutorial untuk ' + v.nama + ' sedang disediakan. Nantikan!'
   }
-});
+  document.getElementById('vidModal').classList.add('open')
+  document.body.style.overflow = 'hidden'
+}
+
+function closeVidModal() {
+  document.getElementById('vmFrame').src = ''
+  document.getElementById('vidModal').classList.remove('open')
+  document.body.style.overflow = ''
+}
+
+document.getElementById('vidModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeVidModal()
+})
+
+renderVid17Grid('guru')
+</script>
+</body>
+</html>
