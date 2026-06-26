@@ -2,834 +2,1691 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EduKit — 17 Apps Untuk Atasi Masalah Paling Kritikal & Strategik Dalam Kerjaya Guru dan Pentadbir Sekolah</title>
-<meta name="description" content="17 apps eksklusif untuk guru dan pentadbir sekolah Malaysia. Jimatkan masa, pulangkan hidup anda. Pakej dari RM 95 sahaja!">
-<meta property="og:title" content="EduKit — 17 Apps Untuk Guru & Pentadbir Sekolah Malaysia">
-<meta property="og:description" content="Bukan apps biasa. Direka oleh orang yang faham setiap borang, setiap laporan, setiap malam yang anda habiskan di meja kerja. Pakej dari RM 95.">
-<meta property="og:image" content="https://apps.cikgukita.com/og-image.jpg">
-<meta name="theme-color" content="#1a56db">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SPIn Analytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <style>
-:root{
-  --p:#1a56db;--pd:#1447c0;--pl:#e8f0fe;
-  --gold:#f59e0b;--ok:#16a34a;--red:#ef4444;
-  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
-  --bg:#f8faff;--surf:#fff;--bdr:#e2e8f4;
-  --r:12px;--rl:20px;
-  --sh:0 1px 3px rgba(0,0,0,.06),0 8px 32px rgba(26,86,219,.08);
-  --shl:0 16px 48px rgba(0,0,0,.12);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, sans-serif; background: #f0f4f8; color: #1e293b; font-size: 13px; }
+#app { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+#app.hidden { display: none; }
+
+/* HEADER */
+#header {
+  background: #fff;
+  border-bottom: 2px solid #1a56db;
+  padding: 10px 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
-a{text-decoration:none;color:inherit;}
+.hrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.hrow:last-child { margin-bottom: 0; }
+.brand { font-size: 18px; font-weight: 800; color: #1a56db; margin-right: 8px; }
+.brand span { color: #0f172a; }
 
-.nav{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
-.nbrand{display:flex;align-items:center;gap:9px;}
-.nlogo{width:34px;height:34px;background:var(--p);border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px;flex-shrink:0;}
-.nname{font-size:18px;font-weight:800;}.nname span{color:var(--p);}
-.nright{display:flex;align-items:center;gap:8px;}
-.n-login{padding:8px 16px;border:1.5px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;background:none;font-family:inherit;min-height:40px;}
-.n-login:hover{border-color:var(--p);color:var(--p);}
-.n-buy{padding:8px 18px;background:var(--p);border:none;border-radius:30px;font-size:13px;font-weight:700;color:white;cursor:pointer;font-family:inherit;min-height:40px;}
-.n-buy:hover{background:var(--pd);}
+/* BUTTONS */
+.btn {
+  padding: 6px 12px; border: 1px solid #cbd5e1; background: #fff;
+  color: #475569; border-radius: 6px; cursor: pointer; font-size: 12px;
+  font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
+  white-space: nowrap; font-family: Arial, sans-serif;
+  transition: background 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+.btn-blue { background: #1a56db; color: #fff; border-color: #1a56db; }
+.btn-blue:hover { background: #1240b0; }
+.btn-green { background: #10b981; color: #fff; border-color: #10b981; }
+.btn-green:hover { background: #059669; }
+.btn-red { background: #ef4444; color: #fff; border-color: #ef4444; }
+.btn-red:hover { background: #dc2626; }
+.btn-orange { background: #f97316; color: #fff; border-color: #f97316; }
+.btn-orange:hover { background: #ea580c; }
+.btn-mode { background: #f1f5f9; }
+.btn-mode.active { background: #1a56db; color: #fff; border-color: #1a56db; }
 
-/* HERO */
-.hero{background:linear-gradient(145deg,#0a1628 0%,#0f2d7a 45%,#1a56db 75%,#0ea5e9 100%);padding:72px 16px 80px;text-align:center;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,255,255,.04),transparent 60%);}
-.hero>*{position:relative;}
-.hbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:7px 16px;font-size:12px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:24px;}
-.hbadge span{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero h1{font-size:clamp(1.7rem,5.5vw,3.2rem);font-weight:900;color:white;line-height:1.15;margin-bottom:20px;max-width:820px;margin-left:auto;margin-right:auto;}
-.hero h1 em{font-style:normal;color:#f59e0b;}
-.hero-sub{font-size:clamp(.95rem,2.8vw,1.15rem);color:rgba(255,255,255,.75);max-width:600px;margin:0 auto 36px;padding:0 4px;line-height:1.85;font-style:italic;}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
-.bhm{padding:16px 34px;background:#f59e0b;border:none;border-radius:40px;font-size:15px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:54px;transition:.15s;box-shadow:0 8px 32px rgba(245,158,11,.35);}
-.bhm:hover{background:#e68a00;transform:translateY(-2px);}
-.bhs{padding:16px 34px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);border-radius:40px;font-size:15px;font-weight:700;color:white;cursor:pointer;font-family:inherit;min-height:54px;}
-.bhs:hover{background:rgba(255,255,255,.18);}
-.hstats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;}
-.hst{text-align:center;}.hst-v{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;color:white;}.hst-l{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+select.sel {
+  padding: 6px 8px; border: 1px solid #cbd5e1; background: #fff;
+  border-radius: 6px; font-size: 12px; font-weight: 600; color: #1e293b;
+  cursor: pointer; font-family: Arial, sans-serif;
+}
 
-/* TICKER */
-.ticker-wrap{background:#0a1628;padding:11px 0;overflow:hidden;}
-.ticker{display:flex;animation:tick 40s linear infinite;width:max-content;}
-.ticker:hover{animation-play-state:paused;}
-@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.tick-item{display:flex;align-items:center;gap:7px;padding:0 24px;white-space:nowrap;font-size:12px;color:rgba(255,255,255,.7);}
-.tick-dot{width:5px;height:5px;background:#4ade80;border-radius:50%;flex-shrink:0;}
+.tahun-box {
+  display: flex; align-items: center; gap: 4px;
+  background: #f1f5f9; border: 1px solid #cbd5e1;
+  border-radius: 6px; padding: 4px 8px;
+  font-size: 12px; font-weight: 700; color: #475569;
+}
+.tahun-box select { border: none; background: transparent; font-weight: 800; color: #1a56db; font-size: 13px; cursor: pointer; outline: none; font-family: Arial, sans-serif; }
+.tahun-box button { padding: 1px 7px; border-radius: 4px; font-size: 14px; font-weight: 800; cursor: pointer; border: 1px solid; }
+.tahun-add { background: #dbeafe; border-color: #1a56db; color: #1a56db; }
+.tahun-del { background: #fee2e2; border-color: #ef4444; color: #ef4444; }
 
-/* PAIN */
-.pain-wrap{background:linear-gradient(135deg,#0f172a,#1e293b);padding:72px 16px;}
-.pain-header{text-align:center;margin-bottom:48px;}
-.pain-header h2{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:white;margin-bottom:12px;line-height:1.25;}
-.pain-header p{font-size:15px;color:rgba(255,255,255,.6);font-style:italic;}
-.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
-.pain-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:26px;}
-.pain-ic{font-size:32px;margin-bottom:14px;}
-.pain-t{font-size:16px;font-weight:800;color:white;margin-bottom:10px;line-height:1.3;}
-.pain-d{font-size:13.5px;color:rgba(255,255,255,.62);line-height:1.8;}
+.subj-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+.subj-btn:hover { border-color: #1a56db; color: #1a56db; }
+.subj-btn.active { background: #1a56db; color: #fff; border-color: #1a56db; }
+.subj-del { padding: 2px 6px; border: none; background: none; color: #94a3b8; cursor: pointer; font-size: 12px; }
+.subj-del:hover { color: #ef4444; }
 
-/* AGITATION */
-.agit-wrap{background:#fffbf0;padding:56px 16px;border-left:6px solid #f59e0b;}
-.agit-box{max-width:720px;margin:0 auto;}
-.agit-box h2{font-size:clamp(1.4rem,4vw,2rem);font-weight:900;color:#0f172a;margin-bottom:20px;line-height:1.35;}
-.agit-box p{font-size:15px;color:#475569;line-height:1.9;margin-bottom:14px;}
-.agit-box strong{color:#dc2626;}
-.agit-box em{font-style:normal;color:#0f172a;font-weight:700;}
+#saveStatus { font-size: 11px; padding: 3px 8px; background: #d1fae5; color: #065f46; border-radius: 4px; font-weight: 600; }
+#saveStatus.saving { background: #fef9c3; color: #713f12; }
+#saveStatus.error { background: #fee2e2; color: #991b1b; }
 
-/* SOLUTION */
-.sol-wrap{background:linear-gradient(135deg,#0f2d7a,#1a56db);padding:72px 16px;}
-.sol-in{max-width:900px;margin:0 auto;text-align:center;}
-.sol-in h2{font-size:clamp(1.5rem,4vw,2.3rem);font-weight:900;color:white;margin-bottom:18px;line-height:1.3;}
-.sol-in h2 em{font-style:normal;color:#f59e0b;}
-.sol-in p{font-size:15px;color:rgba(255,255,255,.78);max-width:640px;margin:0 auto 40px;line-height:1.9;}
-.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
-.sol-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:22px;text-align:center;}
-.sol-ic{font-size:28px;margin-bottom:10px;}
-.sol-t{font-size:13px;font-weight:700;color:white;margin-bottom:4px;}
-.sol-d{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;}
+/* CONTENT */
+#content { flex: 1; overflow-y: auto; padding: 14px 16px; -webkit-overflow-scrolling: touch; }
 
-/* DEMO */
-.demo-section{padding:72px 16px;}
-.sec-in{max-width:1080px;margin:0 auto;}
-.sec-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--p);margin-bottom:10px;text-align:center;}
-.sec-t{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;text-align:center;margin-bottom:12px;line-height:1.2;}
-.sec-s{font-size:15px;color:var(--t2);text-align:center;max-width:560px;margin:0 auto 40px;padding:0 4px;line-height:1.8;}
-.divider{height:1px;background:var(--bdr);max-width:1080px;margin:0 auto;}
-.demo-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
-.dtab{padding:10px 22px;border:2px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:44px;transition:.2s;}
-.dtab.ag{border-color:var(--p);background:var(--pl);color:var(--p);}
-.dtab.ap{border-color:#7c3aed;background:#f5f3ff;color:#5b21b6;}
-.demo-info{border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;}
-.demo-fw{border-radius:14px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.14);border:1px solid var(--bdr);position:relative;}
-.demo-lbl{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,.8);color:white;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;z-index:10;white-space:nowrap;}
-.demo-frame{width:100%;height:500px;border:none;display:block;}
-@media(max-width:600px){.demo-frame{height:420px;}}
+/* TABLE */
+.tbl-wrap { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 14px; }
+.tbl-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: #1e293b; color: #fff; padding: 10px 8px; font-weight: 600; text-align: center; white-space: nowrap; font-size: 11px; }
+th:first-child { text-align: left; padding-left: 14px; min-width: 180px; position: sticky; left: 0; z-index: 3; background: #1e293b; }
+th:nth-child(2) { position: sticky; left: 180px; z-index: 3; background: #1e293b; min-width: 60px; }
+td { padding: 8px; border-bottom: 1px solid #f1f5f9; text-align: center; }
+td:first-child { position: sticky; left: 0; z-index: 2; background: #fff; border-right: none; }
+td:nth-child(2) { position: sticky; left: 180px; z-index: 2; background: #fff; border-right: 1px solid #e2e8f0; min-width: 60px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+tr:hover td:first-child { background: #f1f5f9; }
+tr:hover td:nth-child(2) { background: #f1f5f9; }
+.sum-row td:first-child { background: #f1f5f9 !important; }
+.sum-row td:nth-child(2) { background: #f1f5f9 !important; }
+.cg { background: #d1fae5; color: #065f46; font-weight: 700; }
+.cy { background: #fef9c3; color: #713f12; font-weight: 700; }
+.cr { background: #fee2e2; color: #991b1b; font-weight: 700; }
+.sum-row td { background: #f1f5f9 !important; font-weight: 700; border-top: 2px solid #e2e8f0; }
+td input[type=number] { width: 52px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center; font-size: 12px; font-family: monospace; }
+td input[type=number]:focus { outline: none; border-color: #1a56db; box-shadow: 0 0 0 2px rgba(26,86,219,0.15); }
+.ic { background: none; border: none; cursor: pointer; color: #94a3b8; padding: 2px 5px; border-radius: 3px; font-size: 12px; }
+.ic:hover { color: #1a56db; background: #eff6ff; }
+.ic-del:hover { color: #ef4444 !important; background: #fee2e2 !important; }
 
-/* TESTIMONIALS */
-.testi-wrap{background:var(--p);padding:72px 16px;}
-.testi-in{max-width:1060px;margin:0 auto;}
-.tgrid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:32px;}
-@media(min-width:600px){.tgrid{grid-template-columns:repeat(3,1fr);}}
-.tc{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:24px;}
-.tc-stars{color:#fbbf24;font-size:14px;margin-bottom:12px;}
-.tc-text{font-size:14px;color:rgba(255,255,255,.87);line-height:1.85;margin-bottom:16px;font-style:italic;}
-.tc-user{display:flex;align-items:center;gap:10px;}
-.tc-av{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
-.tc-nm{font-size:12.5px;font-weight:700;color:white;}.tc-loc{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+/* CARDS */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 12px; }
+.card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; }
+.card-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; }
+.card-hd-left { display: flex; align-items: center; gap: 8px; }
+.card-ico { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; }
+.card-bd { padding: 12px 14px; }
+.card-scroll { max-height: 210px; overflow-y: auto; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+.stat-row:last-child { border-bottom: none; }
+.stat-val { font-weight: 700; color: #1a56db; font-family: monospace; }
+.no-data { color: #94a3b8; font-size: 12px; text-align: center; padding: 20px; font-style: italic; }
 
-/* APPS SHOWCASE */
-.apps-showcase{background:white;padding:72px 16px;border-top:1px solid var(--bdr);}
-.pkg-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
-.ptab2{padding:9px 18px;border:1.5px solid var(--bdr);border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:42px;transition:.2s;}
-.ptab2.a1{border-color:var(--p);background:var(--p);color:white;}
-.ptab2.a2{border-color:#7c3aed;background:#7c3aed;color:white;}
-.ptab2.a3{border-color:#f59e0b;background:#f59e0b;color:#0f172a;}
-.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:11px;}
-.app-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:15px 13px;transition:.2s;}
-.app-card:hover{background:white;box-shadow:var(--shl);transform:translateY(-2px);}
-.app-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:9px;}
-.app-nm{font-size:13px;font-weight:700;margin-bottom:4px;}.app-ds{font-size:11.5px;color:var(--t2);line-height:1.5;}
+/* BAR */
+.bar-wrap { margin-bottom: 8px; }
+.bar-label { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+.bar-track { background: #e2e8f0; height: 24px; border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-weight: 700; font-size: 11px; font-family: monospace; border-radius: 5px; min-width: 48px; transition: width 0.5s ease; }
 
-/* VIDEO */
-.vid17-section{background:white;padding:72px 16px;border-top:1px solid var(--bdr);}
-.vid17-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
-.v17tab{padding:10px 22px;border:2px solid var(--bdr);border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;background:white;color:var(--t2);font-family:inherit;min-height:44px;transition:.2s;}
-.v17tab.active{border-color:var(--p);background:var(--pl);color:var(--p);}
-.v17tab.p2.active{border-color:#7c3aed;background:#f5f3ff;color:#5b21b6;}
-.vid17-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;}
-.v17card{background:var(--bg);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;cursor:pointer;transition:.2s;position:relative;}
-.v17card:hover{transform:translateY(-3px);box-shadow:var(--shl);border-color:var(--p);}
-.v17card:hover .v17-play{opacity:1;}
-.v17-thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#0a1628,#1a3a8f);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.v17-thumb.p2{background:linear-gradient(135deg,#0f2044,#0ea5a0);}
-.v17-ikon{font-size:24px;position:relative;z-index:1;}
-.v17-play{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s;z-index:2;}
-.v17-play-btn{width:36px;height:36px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
-.v17-badge{position:absolute;top:6px;right:6px;background:rgba(245,158,11,.9);color:#0f172a;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;z-index:3;}
-.v17-body{padding:10px 11px 12px;}
-.v17-nm{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3;}
-.v17-ds{font-size:11px;color:var(--t2);line-height:1.5;}
-.vid-modal-bak{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8000;display:none;align-items:flex-end;justify-content:center;}
-@media(min-width:600px){.vid-modal-bak{align-items:center;padding:16px;}}
-.vid-modal-bak.open{display:flex;}
-.vid-modal-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;}
-@media(min-width:600px){.vid-modal-box{border-radius:20px;}}
-.vid-modal-head{padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1;}
-.vid-modal-info{display:flex;align-items:center;gap:10px;}
-.vid-modal-ic{width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.vid-modal-nm{font-size:14px;font-weight:700;color:var(--text);}
-.vid-modal-pkg{font-size:11px;color:var(--t2);}
-.vid-modal-close{width:28px;height:28px;background:#f1f5f9;border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.vid-modal-frame-wrap{width:100%;aspect-ratio:16/9;background:#0a1628;position:relative;}
-.vid-modal-frame{width:100%;height:100%;border:none;display:none;}
-.vid-modal-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
-.vm-ph-ic{font-size:40px;margin-bottom:12px;}
-.vm-ph-t{font-size:16px;font-weight:700;color:white;margin-bottom:6px;}
-.vm-ph-s{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;max-width:320px;}
-.vid-modal-ds{padding:14px 16px;font-size:13px;color:var(--t2);line-height:1.65;border-bottom:1px solid var(--bdr);}
-.vid-modal-foot{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.vid-modal-cta{padding:10px 22px;background:var(--p);color:white;border:none;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:42px;}
+/* HEATMAP */
+.heatmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px,1fr)); gap: 5px; }
+.hm-cell { aspect-ratio: 1; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
+.hm-cell:hover { transform: scale(1.08); }
+.hm-name { font-size: 10px; font-weight: 700; color: #fff; }
+.hm-kelas { font-size: 9px; color: rgba(255,255,255,0.8); }
+.hm-score { font-size: 13px; font-weight: 800; color: #fff; font-family: monospace; }
 
-/* PRICING */
-.pricing-wrap{background:linear-gradient(180deg,#f0f4ff,white);padding:72px 16px;}
-.pricing-in{max-width:1060px;margin:0 auto;}
-.pkg-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:32px;}
-@media(min-width:768px){.pkg-grid{grid-template-columns:repeat(3,1fr);}}
-.pkg{background:var(--surf);border:1.5px solid var(--bdr);border-radius:22px;overflow:hidden;position:relative;transition:.2s;}
-.pkg:hover{box-shadow:var(--shl);}
-.pkg.feat{border-color:var(--p);box-shadow:0 0 0 4px rgba(26,86,219,.09);}
-.pkg.gab{border-color:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.09);}
-.pbadge{position:absolute;top:13px;right:13px;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;}
-.phead{padding:20px 20px 14px;}
-.ptier{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--p);margin-bottom:5px;}
-.pnm{font-size:20px;font-weight:800;margin-bottom:3px;}.ptag{font-size:12px;color:var(--t2);}
-.pprice{padding:0 20px 14px;border-bottom:1px solid var(--bdr);}
-.strikrow{display:flex;align-items:center;gap:7px;margin-top:9px;margin-bottom:3px;}
-.strik{font-size:14px;color:var(--t3);text-decoration:line-through;}
-.savepill{background:#fef2f2;color:#dc2626;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
-.prrow{display:flex;align-items:flex-end;gap:3px;}
-.prsym{font-size:15px;font-weight:700;margin-bottom:4px;}
-.prval{font-size:42px;font-weight:900;line-height:1;}
-.prnote{font-size:11px;color:var(--t3);margin-bottom:4px;}
-.papps{padding:13px 20px;}
-.pappst{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:9px;}
-.arow{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--bdr);}
-.arow:last-child{border-bottom:none;}
-.aic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-.anm{font-size:12.5px;font-weight:700;}.ads{font-size:11px;color:var(--t3);margin-top:1px;line-height:1.4;}
-.pfoot{padding:13px 20px 20px;}
-.pbtn{width:100%;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:48px;transition:.15s;}
-.pbtn.blue{background:var(--p);color:white;}.pbtn.blue:hover{background:var(--pd);}
-.pbtn.gold{background:#f59e0b;color:#0f172a;}.pbtn.gold:hover{background:#e68a00;}
-.pbtn.ks{background:linear-gradient(90deg,#312e81,#4338ca);color:white;margin-top:8px;font-size:12.5px;}
-.ks-tag{font-size:10px;color:var(--t3);text-align:center;margin-top:6px;line-height:1.5;}
-.pguar{display:flex;align-items:center;gap:5px;justify-content:center;margin-top:8px;font-size:11.5px;color:var(--t3);}
+/* MODAL */
+#modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; align-items: center; justify-content: center; }
+#modal-bg.show { display: flex; }
+#modal-box { background: #fff; border-radius: 12px; padding: 24px; width: 90%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+#modal-title { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
+#modal-msg { font-size: 13px; color: #64748b; margin-bottom: 14px; }
+#modal-input { width: 100%; padding: 9px 11px; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; display: none; margin-bottom: 14px; }
+#modal-input:focus { outline: none; border-color: #1a56db; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
 
-/* KIDS SPARK */
-.ks-wrap{background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);padding:72px 16px;}
-.ks-in{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:32px;}
-@media(min-width:768px){.ks-in{grid-template-columns:1fr 1fr;align-items:center;}}
-.ks-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a5b4fc;margin-bottom:10px;}
-.ks-in h2{font-size:clamp(1.5rem,4vw,2rem);font-weight:900;color:white;margin-bottom:14px;line-height:1.25;}
-.ks-in h2 em{font-style:normal;color:#f59e0b;}
-.ks-in p{font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.9;margin-bottom:20px;}
-.ks-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
-.ks-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.88);}
-.ks-fic{width:24px;height:24px;border-radius:6px;background:rgba(165,180,252,.15);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
-.ks-price{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 18px;display:inline-flex;align-items:center;gap:12px;margin-bottom:20px;}
-.ks-rm{font-size:26px;font-weight:900;color:#f59e0b;}
-.ks-note{font-size:12px;color:rgba(255,255,255,.6);}
-.ks-btn{padding:14px 28px;background:#f59e0b;border:none;border-radius:30px;font-size:14px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:50px;}
-.ks-btn:hover{background:#e68a00;}
-.ks-fw{width:100%;border-radius:14px;overflow:hidden;position:relative;aspect-ratio:16/9;}
-.ks-iframe{width:100%;height:100%;border:none;display:block;border-radius:14px;pointer-events:none;}
-.ks-blur{position:absolute;inset:0;backdrop-filter:blur(10px);background:rgba(30,27,75,.55);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:20px;text-align:center;}
-.ks-blur-ic{font-size:36px;margin-bottom:9px;}
-.ks-blur-t{font-size:15px;font-weight:800;color:white;margin-bottom:5px;}
-.ks-blur-s{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:14px;}
-.warn-box{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px;}
-.warn-box-ic{font-size:18px;flex-shrink:0;margin-top:1px;}
-.warn-box-t{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.7;}
+/* TOAST */
+.toast { position: fixed; bottom: 18px; right: 18px; background: #1e293b; color: #fff; padding: 9px 15px; border-radius: 7px; font-size: 12px; font-weight: 600; z-index: 9999; animation: tin 0.2s ease; }
+@keyframes tin { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-/* FAQ */
-.faq-wrap{max-width:700px;margin:0 auto;padding:72px 16px;}
-.faq-item{border-bottom:1px solid var(--bdr);padding:16px 0;}
-.faq-q{font-size:14.5px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-.faq-q::after{content:"+";font-size:20px;color:var(--t3);flex-shrink:0;}
-.faq-item.open .faq-q::after{content:"−";color:var(--p);}
-.faq-a{font-size:13.5px;color:var(--t2);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;}
-.faq-item.open .faq-a{max-height:280px;padding-top:12px;}
+/* CHART SELECT */
+.chart-sel { font-size: 11px; padding: 3px 7px; border: 1px solid #e2e8f0; border-radius: 5px; background: #f8fafc; color: #475569; cursor: pointer; font-family: Arial, sans-serif; font-weight: 600; }
 
-/* FINAL CTA */
-.cta-wrap{background:linear-gradient(135deg,#0a1628,#0f2d7a,#1a56db);padding:80px 16px;text-align:center;}
-.cta-wrap h2{font-size:clamp(1.6rem,4vw,2.8rem);font-weight:900;color:white;margin-bottom:16px;line-height:1.25;max-width:700px;margin-left:auto;margin-right:auto;}
-.cta-wrap h2 em{font-style:normal;color:#f59e0b;}
-.cta-wrap p{font-size:16px;color:rgba(255,255,255,.72);margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.85;}
-.cta-btn{display:inline-block;padding:18px 48px;background:#f59e0b;border:none;border-radius:40px;font-size:16px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:56px;transition:.15s;box-shadow:0 8px 40px rgba(245,158,11,.4);}
-.cta-btn:hover{background:#e68a00;transform:translateY(-2px);}
-.cta-guar{margin-top:18px;font-size:12.5px;color:rgba(255,255,255,.45);}
+/* LOADING OVERLAY */
+#loading-overlay {
+  position: fixed; inset: 0; background: #0f172a; z-index: 99999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+}
+.loading-logo {
+  width: 70px; height: 70px; border-radius: 16px;
+  background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 900; color: white;
+  box-shadow: 0 8px 24px rgba(26,86,219,.4);
+  animation: logopulse 2s ease-in-out infinite;
+}
+@keyframes logopulse { 0%,100%{ box-shadow:0 8px 24px rgba(26,86,219,.4); } 50%{ box-shadow:0 8px 40px rgba(26,86,219,.9); } }
+.loading-text { color: white; font-size: 16px; font-weight: 800; }
+.loading-sub { color: #64748b; font-size: 11px; text-align: center; max-width: 260px; line-height: 1.6; min-height: 18px; }
+.loading-bar-wrap { width: 220px; height: 5px; background: #1e293b; border-radius: 99px; overflow: hidden; }
+.loading-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#1a56db,#7c3aed); border-radius: 99px; transition: width 0.5s ease; }
+.loading-tip { font-size: 10px; color: #334155; text-align: center; max-width: 260px; font-style: italic; }
+.spinner {
+  width: 28px; height: 28px; border: 3px solid #1e293b;
+  border-top-color: #1a56db; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* SHARE */
-.share-wrap{background:#f0f4ff;padding:28px 16px;text-align:center;border-top:1px solid var(--bdr);}
-.share-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px;}
-.share-sub{font-size:12.5px;color:var(--t2);margin-bottom:14px;}
-.share-btns{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
-.sbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:none;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:44px;transition:.15s;}
-.sbtn-fb{background:#1877f2;color:white;}
-.sbtn-wa{background:#25d366;color:white;}
-.sbtn-cp{background:var(--text);color:white;}
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  html, body { overflow: auto; }
+  #app { height: auto; min-height: 100vh; overflow: visible; }
+  #header { padding: 8px 10px; position: sticky; top: 0; z-index: 100; }
+  #content { flex: none; overflow: visible; padding: 10px; }
+  .hrow { gap: 6px; }
+  .btn { padding: 8px 10px; font-size: 12px; min-height: 36px; }
+  .sel { padding: 8px 10px; font-size: 12px; min-height: 36px; }
+  .subj-btn { padding: 7px 10px; min-height: 34px; }
+  .grid { grid-template-columns: 1fr; }
+  .card-scroll { max-height: 180px; }
+  .brand { font-size: 16px; }
+  .tahun-box button { min-width: 30px; min-height: 30px; }
+  table { font-size: 11px; }
+  td input[type=number] { width: 46px; font-size: 11px; }
+}
 
-footer{background:#0a1628;padding:28px 16px;text-align:center;}
-footer p{font-size:12px;color:rgba(255,255,255,.3);line-height:1.8;}
-footer a{color:rgba(255,255,255,.4);}
+@media(max-width:480px){
+  .brand { font-size: 14px; }
+  #header { padding: 6px 8px; }
+  #content { padding: 8px; }
+  .btn { padding: 7px 8px; font-size: 11px; }
+  .hrow { gap: 4px; }
+}
 
-.spp{position:fixed;bottom:16px;left:16px;background:white;border:1px solid var(--bdr);border-radius:14px;padding:11px 13px;box-shadow:0 8px 32px rgba(0,0,0,.14);z-index:999;display:flex;align-items:center;gap:10px;max-width:290px;transform:translateX(-340px);transition:transform .5s cubic-bezier(.34,1.56,.64,1);}
-.spp.show{transform:translateX(0);}
-.spp-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
-.spp-nm{font-size:12px;font-weight:700;color:var(--text);}
-.spp-inf{font-size:11px;color:var(--t2);}
-.spp-tm{font-size:10px;color:var(--t3);margin-top:1px;}
-.spp-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;position:absolute;top:10px;right:10px;}
-.toast-el{position:fixed;bottom:16px;right:16px;background:#1e293b;color:white;padding:10px 14px;border-radius:10px;font-size:12.5px;font-weight:600;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.2);animation:tIn .2s ease;}
-@keyframes tIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){
+  .hrow {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .hrow::-webkit-scrollbar { display: none; }
+  #header { box-shadow: 0 2px 12px rgba(0,0,0,.12); }
+  .btn { min-height: 38px; min-width: 38px; flex-shrink: 0; }
+  .sel { min-height: 38px; flex-shrink: 0; }
+  .subj-btn { min-height: 36px; flex-shrink: 0; }
+  #user-info-bar { gap: 4px; }
+  .ui-name { display: none; }
+  .ui-role-admin, .ui-role-guru { display: none; }
+  table { font-size: 11px; }
+  td, th { padding: 5px 6px !important; }
+  td input[type=number] { width: 44px; font-size: 11px; }
+  .grid { grid-template-columns: 1fr; gap: 10px; }
+  .card-bd canvas { max-height: 200px; }
+  #content { padding: 10px 8px; }
+}
+
+@media(max-width:400px){
+  .brand { font-size: 13px; }
+  .btn { padding: 7px 8px; font-size: 11px; }
+  .a-btn { font-size: 13px; }
+}
+
+/* AUTH SYSTEM */
+#auth-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0f172a;
+  flex-direction: column;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.auth-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(26,86,219,.2) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(16,185,129,.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+.auth-wrap { position: relative; z-index: 1; width: 100%; max-width: 360px; }
+.auth-brand { text-align: center; margin-bottom: 24px; }
+.auth-logo {
+  width: 60px; height: 60px; border-radius: 14px;
+  background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 26px; font-weight: 900; color: white;
+  box-shadow: 0 8px 24px rgba(26,86,219,.4);
+  letter-spacing: -1px;
+}
+.auth-appname { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+.auth-appname span { color: #60a5fa; }
+.auth-tagline { font-size: 11px; color: #64748b; margin-top: 4px; }
+.auth-ver { display: inline-flex; align-items: center; gap: 5px; background: rgba(26,86,219,.15); border: 1px solid rgba(26,86,219,.3); border-radius: 20px; padding: 2px 10px; margin-top: 8px; }
+.auth-ver-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+.auth-ver-txt { font-size: 9px; color: rgba(255,255,255,.4); font-weight: 700; }
+.auth-card {
+  background: #1e293b; border-radius: 14px;
+  border: 1px solid #334155; padding: 26px 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+.auth-card-title { font-size: 15px; font-weight: 800; color: white; margin-bottom: 18px; }
+.a-grp { margin-bottom: 13px; }
+.a-lbl { display: block; font-size: 9px; font-weight: 800; color: #64748b; letter-spacing: .7px; text-transform: uppercase; margin-bottom: 5px; }
+.a-inp {
+  width: 100%; background: #0f172a; border: 1.5px solid #334155;
+  border-radius: 7px; padding: 10px 12px; color: white; font-size: 13px;
+  transition: border-color .15s; font-family: Arial, sans-serif;
+}
+.a-inp:focus { outline: none; border-color: #1a56db; box-shadow: 0 0 0 3px rgba(26,86,219,.15); }
+.a-inp::placeholder { color: #475569; }
+.a-btn {
+  width: 100%; background: #1a56db; border: none; border-radius: 7px;
+  padding: 11px; color: white; font-size: 13px; font-weight: 800;
+  cursor: pointer; margin-top: 4px; transition: all .2s;
+  box-shadow: 0 4px 14px rgba(26,86,219,.4); font-family: Arial, sans-serif;
+}
+.a-btn:hover { background: #1240b0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,86,219,.5); }
+.a-btn:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
+.a-err { font-size: 11px; color: #fca5a5; text-align: center; margin-top: 9px; min-height: 16px; }
+.a-note { font-size: 10px; color: #334155; text-align: center; margin-top: 12px; }
+
+/* ADMIN MODAL */
+#adm-modal { position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 8000; display: none; align-items: center; justify-content: center; padding: 16px; }
+#adm-modal.open { display: flex; }
+.adm-box { background: #1e293b; border-radius: 14px; width: 100%; max-width: 480px; max-height: 88vh; display: flex; flex-direction: column; border: 1px solid #334155; overflow: hidden; }
+.adm-hdr { background: #0f172a; padding: 13px 17px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.adm-hdr-t { font-size: 13px; font-weight: 800; color: white; }
+.adm-close { background: none; border: none; color: #64748b; font-size: 22px; cursor: pointer; padding: 0 4px; }
+.adm-close:hover { color: white; }
+.adm-tabs { background: #0f172a; display: flex; padding: 0 13px; border-bottom: 1px solid #1e293b; flex-shrink: 0; }
+.adm-tab { padding: 8px 12px; border: none; background: transparent; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: Arial, sans-serif; }
+.adm-tab:hover:not(.on) { color: rgba(255,255,255,.65); }
+.adm-tab.on { color: white; border-bottom-color: #1a56db; }
+.adm-body { overflow-y: auto; flex: 1; padding: 17px; display: flex; flex-direction: column; gap: 13px; }
+.adm-row { display: flex; align-items: center; gap: 8px; padding: 9px 11px; background: #0f172a; border-radius: 7px; border: 1px solid #334155; }
+.adm-row-name { flex: 1; font-size: 12px; font-weight: 700; color: white; }
+.role-badge { border-radius: 10px; padding: 2px 8px; font-size: 9px; font-weight: 800; }
+.rb-admin { background: #312e81; color: #a5b4fc; }
+.rb-guru  { background: #0c4a6e; color: #7dd3fc; }
+.adm-del-btn { background: #7f1d1d; border: none; border-radius: 5px; color: #fca5a5; padding: 3px 9px; font-size: 11px; cursor: pointer; font-family: Arial, sans-serif; }
+.adm-del-btn:hover { background: #991b1b; }
+.a-section-t { font-size: 12px; font-weight: 800; color: white; margin-bottom: 8px; }
+.a-msg { font-size: 11px; min-height: 16px; }
+.a-ok  { color: #86efac; } .a-bad { color: #fca5a5; }
+.a-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; }
+.a-fbtn { background: #1a56db; border: none; border-radius: 7px; color: white; font-size: 12px; font-weight: 700; padding: 8px 16px; cursor: pointer; align-self: flex-start; font-family: Arial, sans-serif; }
+.a-fbtn:hover { background: #1240b0; }
+.danger-zone { border-top: 1px solid #334155; padding-top: 13px; }
+.danger-t { font-size: 11px; font-weight: 700; color: #ef4444; margin-bottom: 8px; }
+
+/* TOPBAR USER INFO */
+#user-info-bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 4px 12px 4px 0; flex-shrink: 0;
+}
+.ui-name { font-size: 10px; color: #94a3b8; font-weight: 600; }
+.ui-role-admin { font-size: 8px; background: rgba(251,191,36,.15); color: #fbbf24; border-radius: 10px; padding: 1px 7px; font-weight: 800; border: 1px solid rgba(251,191,36,.25); }
+.ui-role-guru  { font-size: 8px; background: rgba(148,163,184,.12); color: #94a3b8; border-radius: 10px; padding: 1px 7px; font-weight: 800; border: 1px solid rgba(148,163,184,.18); }
+.ui-adm-btn { background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.25); border-radius: 5px; color: #fbbf24; padding: 3px 9px; font-size: 10px; font-weight: 700; cursor: pointer; font-family: Arial, sans-serif; }
+.ui-adm-btn:hover { background: rgba(251,191,36,.2); }
+.ui-out-btn { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 5px; color: #94a3b8; padding: 3px 9px; font-size: 10px; cursor: pointer; font-family: Arial, sans-serif; }
+.ui-out-btn:hover { background: rgba(255,255,255,.12); }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nbrand">
-    <div class="nlogo">EK</div>
-    <div class="nname">Edu<span>Kit</span></div>
-  </div>
-  <div class="nright">
-    <button class="n-login" onclick="location.href='dashboard.html'">Log Masuk</button>
-    <button class="n-buy" onclick="goTo('pricing')">Beli Sekarang</button>
-  </div>
-</nav>
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay">
+  <div class="loading-logo">SP<span style="color:#60a5fa">In</span></div>
+  <div class="loading-text">SPIn Analytics</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+  <div class="loading-sub" id="loading-sub">Menyambung ke pangkalan data...</div>
+  <div class="loading-tip" id="loading-tip">Sambungan pertama mungkin mengambil masa 10-20 saat</div>
+</div>
 
-<!-- 1. HERO -->
-<section class="hero">
-  <div class="hbadge"><span></span> Platform Pertama Di Malaysia Yang Faham Betapa Penatnya Jadi Guru</div>
-  <h1>17 Apps Untuk Atasi Masalah Paling <em>Kritikal & Strategik</em> Dalam Kerjaya Guru dan Pentadbir Sekolah</h1>
-  <p class="hero-sub">"Bukan apps biasa. Ini direka oleh orang yang faham — setiap borang, setiap laporan, setiap malam yang anda habiskan di meja kerja sementara keluarga tidur menunggu."</p>
-  <div class="hero-btns">
-    <button class="bhm" onclick="goTo('demo')">Cuba Demo Percuma — Tanpa Daftar →</button>
-    <button class="bhs" onclick="goTo('apps')">Lihat Semua 17 Apps</button>
-  </div>
-  <div class="hstats">
-    <div class="hst"><div class="hst-v">500+</div><div class="hst-l">Pengguna Aktif</div></div>
-    <div class="hst"><div class="hst-v">17</div><div class="hst-l">Apps Eksklusif</div></div>
-    <div class="hst"><div class="hst-v">4.9★</div><div class="hst-l">Rating</div></div>
-    <div class="hst"><div class="hst-v">100%</div><div class="hst-l">Seumur Hidup</div></div>
-  </div>
-</section>
-
-<div class="ticker-wrap"><div class="ticker" id="tickerEl"></div></div>
-
-<!-- 2. PAIN POINTS -->
-<div class="pain-wrap">
-  <div class="sec-in">
-    <div class="pain-header">
-      <h2>Kami Tahu Apa Yang Anda Rasa Setiap Hari...</h2>
-      <p>Kerana kami pernah duduk di tempat yang sama.</p>
+<!-- AUTH SCREEN -->
+<div id="auth-screen" style="display:none">
+  <div class="auth-bg"></div>
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <div class="auth-logo">SP<span style="color:#60a5fa">In</span></div>
+      <div class="auth-appname">SP<span>In</span> Analytics</div>
+      <div class="auth-tagline">Sistem Analitik Prestasi Pelajar</div>
+      <div class="auth-ver"><div class="auth-ver-dot"></div><span class="auth-ver-txt">v3.0 &nbsp;·&nbsp; Cloud Edition</span></div>
     </div>
-    <div class="pain-grid">
-      <div class="pain-card">
-        <div class="pain-ic">😓</div>
-        <div class="pain-t">Pulang Lewat, Kerja Masih Belum Habis</div>
-        <div class="pain-d">Jam 6 petang semua dah balik. Tapi anda masih di bilik guru — bukan kerana anda tidak pandai, tapi kerana sistem yang ada memang tidak direka untuk memudahkan kerja anda.</div>
+    <div class="auth-card">
+      <div class="auth-card-title">Log Masuk</div>
+      <div class="a-grp">
+        <label class="a-lbl">Nama Pengguna</label>
+        <input class="a-inp" id="auth-user" placeholder="nama pengguna" autocomplete="username"
+          onkeydown="if(event.key==='Enter')document.getElementById('auth-pass').focus()">
       </div>
-      <div class="pain-card">
-        <div class="pain-ic">📊</div>
-        <div class="pain-t">Data Pelajar Ada Di Mana-Mana, Tapi Tiada Yang Lengkap</div>
-        <div class="pain-d">Excel di sini, buku rekod di sana, WhatsApp ada lagi satu. Bila pengetua tanya prestasi pelajar, anda perlu kais dari 5 tempat berbeza. Penat dan malu.</div>
+      <div class="a-grp">
+        <label class="a-lbl">Kata Laluan</label>
+        <input class="a-inp" id="auth-pass" type="password" placeholder="kata laluan" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <div class="pain-card">
-        <div class="pain-ic">👨‍👩‍👧</div>
-        <div class="pain-t">Hujung Minggu Pun Masih Fikir Kerja Sekolah</div>
-        <div class="pain-d">Anak minta pergi taman. Suami atau isteri minta waktu bersama. Tapi kepala masih penuh dengan RPH yang belum siap, laporan yang belum hantar, cerapan yang masih kosong.</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-ic">📋</div>
-        <div class="pain-t">Dokumen Rasmi Yang Makan Masa Berminggu</div>
-        <div class="pain-d">SKPM, borang cerapan Standard 4, minit mesyuarat — setiap satu ambil masa berjam-jam. Dan setiap tahun, anda buat benda yang sama dari awal lagi. Tanpa ada yang berubah.</div>
-      </div>
+      <button class="a-btn" id="login-btn" onclick="doLogin()">Log Masuk &rarr;</button>
+      <div class="a-err" id="auth-err"></div>
+      <div class="a-note">Hubungi admin jika terlupa kata laluan</div>
     </div>
   </div>
 </div>
 
-<!-- 3. AGITATION -->
-<div class="agit-wrap">
-  <div class="agit-box">
-    <h2>Kalau Tiada Siapa Yang Tolong Anda Sekarang... Bilakah Ia Akan Berubah?</h2>
-    <p>Tahun depan? <strong>Beban kerja yang sama. Sistem yang sama. Rasa yang sama.</strong></p>
-    <p>Anda masuk bidang perguruan kerana anda <em>CINTA mengajar</em> — bukan kerana anda suka buat laporan. Tapi entah bagaimana, kerja kertas sudah menguasai hampir <strong>40% masa anda</strong> setiap hari.</p>
-    <p>Itu hampir <em>separuh hayat profesional anda</em> — hilang kepada kerja yang sepatutnya boleh diselesaikan dalam minit, bukan jam. Setiap hari yang berlalu adalah satu hari lagi yang anda tidak dapat pulangkan.</p>
-  </div>
-</div>
-
-<!-- 4. SOLUTION -->
-<div class="sol-wrap">
-  <div class="sol-in">
-    <h2>EduKit Dicipta Untuk Memulangkan <em>Masa Anda</em> —<br>Supaya Anda Boleh Fokus Kepada Perkara Yang Betul-Betul Penting</h2>
-    <p>Bukan apps Amerika yang tidak faham sistem Malaysia. Bukan template generik yang anda terpaksa ubah suai sendiri. EduKit direka dengan satu matlamat — setiap minit yang anda jimatkan, adalah minit yang boleh anda berikan kepada pelajar anda, dan kepada orang yang anda sayangi.</p>
-    <div class="sol-grid">
-      <div class="sol-card"><div class="sol-ic">⚡</div><div class="sol-t">Akses Serta-merta</div><div class="sol-d">Bayar, terus dapat login. Tiada tunggu.</div></div>
-      <div class="sol-card"><div class="sol-ic">📱</div><div class="sol-t">Phone & Tablet</div><div class="sol-d">Guna dari mana-mana, bila-bila masa.</div></div>
-      <div class="sol-card"><div class="sol-ic">🔒</div><div class="sol-t">Data 100% Peribadi</div><div class="sol-d">Diasingkan sepenuhnya. Tiada orang lain nampak.</div></div>
-      <div class="sol-card"><div class="sol-ic">📋</div><div class="sol-t">Jana PDF Rasmi</div><div class="sol-d">Laporan siap dalam saat, bukan jam.</div></div>
-      <div class="sol-card"><div class="sol-ic">🔄</div><div class="sol-t">Apps Baru Auto Masuk</div><div class="sol-d">Langgan RM 3/bulan, dapat semua apps baru percuma.</div></div>
-      <div class="sol-card"><div class="sol-ic">🎓</div><div class="sol-t">Tutorial Lengkap</div><div class="sol-d">Video panduan setiap app. Mudah dipelajari.</div></div>
+<!-- ADMIN MODAL -->
+<div id="adm-modal">
+  <div class="adm-box">
+    <div class="adm-hdr">
+      <span class="adm-hdr-t">&#9881; Panel Pentadbir</span>
+      <button class="adm-close" onclick="closeAdmin()">&times;</button>
     </div>
-  </div>
-</div>
-
-<!-- 5. DEMO -->
-<section class="demo-section" id="demo">
-  <div class="sec-in">
-    <div class="sec-lbl">Cuba Sendiri — Percuma</div>
-    <h2 class="sec-t">Jangan Percaya Kata Kami.<br>Cuba Sendiri — Sekarang.</h2>
-    <p class="sec-s">Dalam masa 3 minit, anda akan faham kenapa 500+ guru dan pentadbir tidak mahu kembali kepada cara lama.</p>
-    <div class="demo-tabs">
-      <button class="dtab ag" id="dtab1" onclick="switchDemo(1)">📊 SPIn Analytics — Pakej Guru</button>
-      <button class="dtab" id="dtab2" onclick="switchDemo(2)">🔍 SK@S Pencerapan — Pakej Pentadbir</button>
+    <div class="adm-tabs">
+      <button class="adm-tab on" onclick="admTab('users',this)">Pengguna</button>
+      <button class="adm-tab" onclick="admTab('pw',this)">Kata Laluan</button>
     </div>
-    <div class="demo-info" id="demoInfo" style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;">
-      <strong>📊 Demo SPIn Analytics (Pakej Guru)</strong> — Daftar pelajar, masuk markah, tengok carta trend & analisis. Maksimum 10 pelajar dalam demo.
-    </div>
-    <div class="demo-fw">
-      <div class="demo-lbl" id="demoLbl">🎯 Demo Langsung</div>
-      <iframe id="demoFrame" class="demo-frame" src="demo-spdin.html" title="Demo SPIn Analytics" loading="lazy"></iframe>
-    </div>
-    <div style="text-align:center;margin-top:24px;">
-      <button class="bhm" style="font-size:14px;padding:14px 30px;" onclick="goTo('pricing')">Nak Versi Penuh Tanpa Had? Lihat Pakej Anda →</button>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 6. TESTIMONIALS -->
-<section class="testi-wrap">
-  <div class="testi-in">
-    <div class="sec-lbl" style="color:rgba(255,255,255,.6);">Kata Mereka</div>
-    <h2 class="sec-t" style="color:white;text-align:center;">Mereka Dulu Rasa Sama Seperti Anda.<br>Ini Yang Berlaku Selepas Itu.</h2>
-    <div class="tgrid">
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"Saya ingat lagi malam sebelum guna EduKit — tengah malam masih buat laporan SPIn. Sekarang? Sama kerja, 20 minit je. Saya dah boleh balik awal tengok anak buat homework."</div>
-        <div class="tc-user"><div class="tc-av">NZ</div><div><div class="tc-nm">Norazlin Zainudin</div><div class="tc-loc">Guru Kanan — Selangor</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"Jujur — saya skeptikal. Tapi bila SK@S Pencerapan jana borang PDF rasmi dalam 5 minit yang biasanya ambil 2 jam... saya telefon kawan saya terus suruh dia beli juga."</div>
-        <div class="tc-user"><div class="tc-av">AH</div><div><div class="tc-nm">Ahmad Hafiz Mohd</div><div class="tc-loc">GPK Pentadbiran — Perak</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"RM 95 untuk seumur hidup? Saya bayar lebih dari tu untuk makan malam keluarga sekali. Ini pelaburan terbaik dalam kerjaya saya sejak mula mengajar 33 tahun lalu."</div>
-        <div class="tc-user"><div class="tc-av">SR</div><div><div class="tc-nm">Siti Rohani Abd. Aziz</div><div class="tc-loc">Pengetua — Johor</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. APPS SHOWCASE -->
-<section class="apps-showcase" id="apps">
-  <div class="sec-in">
-    <div class="sec-lbl">Semua Apps</div>
-    <h2 class="sec-t">17 Apps. Satu Masalah Diselesaikan Bagi Setiap Satu.</h2>
-    <p class="sec-s">Bukan koleksi apps rambang. Setiap satu direka untuk menyelesaikan satu masalah spesifik yang anda hadapi — setiap minggu, setiap bulan, setiap tahun dalam kerjaya anda.</p>
-    <div class="pkg-tabs">
-      <button class="ptab2 a1" id="ptab1" onclick="switchPkgTab(1)">📚 Pakej Guru (10)</button>
-      <button class="ptab2" id="ptab2" onclick="switchPkgTab(2)">🏫 Pakej Pentadbir (8)</button>
-      <button class="ptab2" id="ptab3" onclick="switchPkgTab(3)">💎 Semua 17 Apps</button>
-    </div>
-    <div id="appsGrid" class="apps-grid"></div>
-  </div>
-</section>
-
-<!-- 8. VIDEO TUTORIAL -->
-<section class="vid17-section" id="video-apps">
-  <div class="sec-in">
-    <div class="sec-lbl">Video Tutorial</div>
-    <h2 class="sec-t">Tonton Sebelum Anda Putuskan</h2>
-    <p class="sec-s">3 minit tutorial lebih bernilai dari 3 jam anda cuba buat sendiri. Klik mana-mana app untuk tonton.</p>
-    <div class="vid17-tabs">
-      <button class="v17tab active" id="v17t1" onclick="v17Switch(1)">📚 Pakej Guru (10)</button>
-      <button class="v17tab" id="v17t2" onclick="v17Switch(2)">🏫 Pakej Pentadbir (8)</button>
-    </div>
-    <div id="vid17Grid" class="vid17-grid"></div>
-  </div>
-</section>
-
-<div class="vid-modal-bak" id="vidModal">
-  <div class="vid-modal-box">
-    <div class="vid-modal-head">
-      <div class="vid-modal-info">
-        <div class="vid-modal-ic" id="vmIc">📋</div>
-        <div><div class="vid-modal-nm" id="vmNm">App Name</div><div class="vid-modal-pkg" id="vmPkg">Pakej Guru</div></div>
-      </div>
-      <button class="vid-modal-close" onclick="closeVidModal()">✕</button>
-    </div>
-    <div class="vid-modal-frame-wrap">
-      <iframe id="vmFrame" class="vid-modal-frame" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <div class="vid-modal-ph" id="vmPh">
-        <div class="vm-ph-ic">🎬</div>
-        <div class="vm-ph-t" id="vmPhT">Video Akan Datang</div>
-        <div class="vm-ph-s" id="vmPhS">Tutorial untuk app ini sedang disediakan. Nantikan!</div>
-      </div>
-    </div>
-    <div class="vid-modal-ds" id="vmDs">Penerangan app</div>
-    <div class="vid-modal-foot">
-      <button class="vid-modal-cta" onclick="goTo('pricing')">Dapatkan Akses Penuh →</button>
-    </div>
-  </div>
-</div>
-
-<!-- 9. PRICING -->
-<section class="pricing-wrap" id="pricing">
-  <div class="pricing-in">
-    <div class="sec-lbl">Pilih Pakej Anda</div>
-    <h2 class="sec-t">Berapa Nilainya Kalau Anda Boleh<br>Dapat Balik 2 Jam Sehari?</h2>
-    <p class="sec-s">Pakej EduKit bukan kos — ia pelaburan masa. Bayar sekali, jimat seumur hidup. Tanpa yuran tahunan, tanpa bayaran tersembunyi.</p>
-    <div class="pkg-grid">
-
-      <div class="pkg">
-        <div class="phead"><div class="ptier">Pakej 1</div><div class="pnm">Pakej Guru</div><div class="ptag">10 apps untuk guru yang ingin jimat masa & tenaga</div></div>
-        <div class="pprice"><div class="strikrow"><div class="strik">RM 456</div><div class="savepill">Jimat 79%</div></div><div class="prrow"><div class="prsym">RM</div><div class="prval">95</div><div class="prnote">/ seumur hidup</div></div></div>
-        <div class="papps"><div class="pappst">10 Apps Termasuk</div>
-          <div class="arow"><div class="aic" style="background:#e8f0fe">📋</div><div><div class="anm">GuruKits</div><div class="ads">Agih tugas guru, pantau beban kerja mengikut bidang</div></div></div>
-          <div class="arow"><div class="aic" style="background:#dbeafe">📈</div><div><div class="anm">SPIn Analytics</div><div class="ads">Analitik prestasi pelajar OTR vs AR, carta kemajuan</div></div></div>
-          <div class="arow"><div class="aic" style="background:#eff6ff">📊</div><div><div class="anm">Dashboard SPIn Pro</div><div class="ads">Dashboard visual prestasi pelajar komprehensif</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fef3c7">📅</div><div><div class="anm">GanttPro</div><div class="ads">Carta Gantt digital untuk perancangan projek sekolah</div></div></div>
-          <div class="arow"><div class="aic" style="background:#f0fdf4">🏅</div><div><div class="anm">KokurikulumTrack</div><div class="ads">Rekod kehadiran kokurikulum — persatuan, sukan</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fdf4ff">🌡️</div><div><div class="anm">Mood Radar Pro</div><div class="ads">Kesan mood & emosi pelajar dalam kelas</div></div></div>
-          <div class="arow"><div class="aic" style="background:#f0fdf4">🗂️</div><div><div class="anm">OrgChart Pro</div><div class="ads">Jana carta organisasi digital sekolah</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fff7ed">📝</div><div><div class="anm">RPH Fleksi KSSR Pro</div><div class="ads">Rancangan Pengajaran Harian fleksibel</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fef2f2">✅</div><div><div class="anm">Senarai Semak Ultimate</div><div class="ads">Senarai semak tugas sekolah lengkap</div></div></div>
-          <div class="arow"><div class="aic" style="background:#f5f3ff">🎮</div><div><div class="anm">GameKelas</div><div class="ads">Game interaktif kelas — MCQ, kad kilat</div></div></div>
+    <div class="adm-body">
+      <div id="at-users" style="display:flex;flex-direction:column;gap:13px">
+        <div>
+          <div class="a-section-t">Senarai Pengguna</div>
+          <div id="spin-user-list"></div>
         </div>
-        <div class="pfoot">
-          <button class="pbtn blue" onclick="window.location.href=STRIPE[1]">Beli Pakej Guru — RM 95 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
-          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
-        </div>
-      </div>
-
-      <div class="pkg feat">
-        <div class="pbadge" style="background:#f59e0b;color:#0f172a;">⭐ POPULAR</div>
-        <div class="phead"><div class="ptier">Pakej 2</div><div class="pnm">Pakej Pentadbir</div><div class="ptag">8 apps untuk GPK, Pengetua & pentadbir</div></div>
-        <div class="pprice"><div class="strikrow"><div class="strik">RM 488</div><div class="savepill">Jimat 81%</div></div><div class="prrow"><div class="prsym">RM</div><div class="prval">95</div><div class="prnote">/ seumur hidup</div></div></div>
-        <div class="papps"><div class="pappst">8 Apps Termasuk</div>
-          <div class="arow"><div class="aic" style="background:#e8f0fe">🏫</div><div><div class="anm">EduDash Pro</div><div class="ads">Dashboard sekolah — kehadiran, BMI, disiplin, PAJSK</div></div></div>
-          <div class="arow"><div class="aic" style="background:#dbeafe">🎯</div><div><div class="anm">H2 Headcount 2.0</div><div class="ads">Pemantauan progres pelajar OTR vs AR per kelas</div></div></div>
-          <div class="arow"><div class="aic" style="background:#f0fdf4">👥</div><div><div class="anm">StaffTrack Pro</div><div class="ads">Sistem kehadiran digital staf sekolah</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fef3c7">📋</div><div><div class="anm">GuruKits</div><div class="ads">Urus & pantau agihan tugas semua guru</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fdf4ff">🏅</div><div><div class="anm">Rekod Kehadiran Kokurikulum</div><div class="ads">Pandangan pentadbir kehadiran kokurikulum</div></div></div>
-          <div class="arow"><div class="aic" style="background:#f5f3ff">🔍</div><div><div class="anm">SK@S — Pencerapan</div><div class="ads">Cerapan guru Standard 4 SKPMg2, jana PDF rasmi</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fff7ed">🔄</div><div><div class="anm">Sistem Guru Ganti Pro</div><div class="ads">Urus guru ganti, analisis bulanan</div></div></div>
-          <div class="arow"><div class="aic" style="background:#fef2f2">⭐</div><div><div class="anm">SKPM Pro</div><div class="ads">Kualiti pengurusan sekolah — IKS, Standard 1–5</div></div></div>
-        </div>
-        <div class="pfoot">
-          <button class="pbtn blue" onclick="window.location.href=STRIPE[2]">Beli Pakej Pentadbir — RM 95 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
-          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
-        </div>
-      </div>
-
-      <div class="pkg gab">
-        <div class="pbadge" style="background:#1a56db;color:white;">💎 TERBAIK</div>
-        <div class="phead"><div class="ptier" style="color:#f59e0b;">Pakej 3 — Gabungan</div><div class="pnm">Pakej Guru + Pentadbir</div><div class="ptag">Akses penuh 17 apps — jimat RM 25</div></div>
-        <div class="pprice"><div class="strikrow"><div class="strik">RM 944</div><div class="savepill">Jimat 83%</div></div><div class="prrow"><div class="prsym" style="color:#f59e0b;">RM</div><div class="prval" style="color:#f59e0b;">165</div><div class="prnote">/ seumur hidup</div></div></div>
-        <div class="papps"><div class="pappst">17 Apps Unik — Semua Pakej 1 + Pakej 2</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
-            <div style="background:#e8f0fe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e40af;">📋 GuruKits</div>
-            <div style="background:#e8f0fe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e40af;">🏫 EduDash Pro</div>
-            <div style="background:#dbeafe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">📈 SPIn Analytics</div>
-            <div style="background:#dbeafe;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">🎯 H2 Headcount 2.0</div>
-            <div style="background:#eff6ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#1e3a8a;">📊 Dashboard SPIn Pro</div>
-            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">👥 StaffTrack Pro</div>
-            <div style="background:#fef3c7;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#92400e;">📅 GanttPro</div>
-            <div style="background:#fdf4ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#581c87;">🏅 Rekod Kokurikulum</div>
-            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">🏅 KokurikulumTrack</div>
-            <div style="background:#f5f3ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#4c1d95;">🔍 SK@S Pencerapan</div>
-            <div style="background:#fdf4ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#581c87;">🌡️ Mood Radar Pro</div>
-            <div style="background:#fff7ed;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7c2d12;">🔄 Guru Ganti Pro</div>
-            <div style="background:#f0fdf4;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#14532d;">🗂️ OrgChart Pro</div>
-            <div style="background:#fef2f2;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7f1d1d;">⭐ SKPM Pro</div>
-            <div style="background:#fff7ed;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7c2d12;">📝 RPH Fleksi KSSR</div>
-            <div style="background:#fef2f2;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#7f1d1d;">✅ Senarai Semak</div>
-            <div style="background:#f5f3ff;border-radius:7px;padding:6px 8px;font-size:11px;font-weight:600;color:#4c1d95;grid-column:1/-1;">🎮 GameKelas</div>
+        <div>
+          <div class="a-section-t">Tambah Pengguna Baru</div>
+          <div class="a-row"><label class="a-lbl">Nama Pengguna</label><input class="a-inp" id="nu-name" placeholder="cth: guru_ali"></div>
+          <div class="a-row"><label class="a-lbl">Kata Laluan</label><input class="a-inp" id="nu-pw" type="password" placeholder="min. 4 aksara"></div>
+          <div class="a-row">
+            <label class="a-lbl">Peranan</label>
+            <select class="a-inp" id="nu-role" style="cursor:pointer">
+              <option value="guru">Guru — akses rekod sahaja</option>
+              <option value="admin">Admin — akses penuh</option>
+            </select>
           </div>
-        </div>
-        <div class="pfoot">
-          <button class="pbtn gold" onclick="window.location.href=STRIPE[3]">Beli Semua 17 Apps — RM 165 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
-          <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
+          <button class="a-fbtn" onclick="spinAddUser()">+ Tambah</button>
+          <div class="a-msg" id="msg-user"></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 10. KIDS SPARK -->
-<section class="ks-wrap" id="kidspark">
-  <div class="ks-in">
-    <div>
-      <div class="ks-lbl">✨ Satu Lagi Hadiah — Untuk Anda Yang Nak Lebih</div>
-      <h2>Hanya <em>RM 3 Sebulan</em> —<br>Masa Anda Lebih Berharga Dari Itu</h2>
-      <p>Bayangkan ini. Anda selesai kerja awal. Balik rumah. Anak anda bukan tengok YouTube — mereka belajar sambil bermain di Kids Spark. Dan setiap apps baru EduKit yang kami lancarkan? Terus masuk ke akaun anda. Percuma. Selama-lamanya. Harga sebulan? Kurang dari sebotol air mineral di pejabat.</p>
-      <div class="warn-box">
-        <div class="warn-box-ic">⚠️</div>
-        <div class="warn-box-t">Tanpa langgan, apps baru EduKit akan dijual berasingan pada harga penuh bila ditambah pada masa hadapan. Langgan sekarang — kunci harga untuk selamanya.</div>
-      </div>
-      <div class="ks-feats">
-        <div class="ks-feat"><div class="ks-fic">🚀</div>Semua apps EduKit baru — auto masuk, <strong>percuma selama-lamanya</strong></div>
-        <div class="ks-feat"><div class="ks-fic">🎮</div>Akses penuh <strong>Kids Spark</strong> — pembelajaran fun untuk anak</div>
-        <div class="ks-feat"><div class="ks-fic">🔓</div>Akses awal apps baru sebelum orang lain</div>
-        <div class="ks-feat"><div class="ks-fic">❌</div>Batal bila-bila masa — tiada kontrak, tiada soal jawab</div>
-      </div>
-      <div class="ks-price">
-        <div><div class="ks-rm">RM 3</div></div>
-        <div><div class="ks-note">/ bulan sahaja</div><div class="ks-note">Auto potong • Batal bila-bila masa</div></div>
-      </div>
-      <button class="ks-btn" onclick="window.location.href=STRIPE.ks">🚀 Aktifkan Sewaan RM 3/Bulan →</button>
-    </div>
-    <div>
-      <div class="ks-fw">
-        <iframe class="ks-iframe" src="https://kidspark.website/" title="Kids Spark" sandbox="allow-scripts allow-same-origin"></iframe>
-        <div class="ks-blur">
-          <div class="ks-blur-ic">🔒</div>
-          <div class="ks-blur-t">Kids Spark — Terkunci</div>
-          <div class="ks-blur-s">Langgan RM 3/bulan untuk akses penuh Kids Spark dan semua apps EduKit baru</div>
-          <button style="padding:10px 22px;background:#f59e0b;border:none;border-radius:20px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;font-family:inherit;" onclick="window.location.href=STRIPE.ks">Aktifkan Sekarang →</button>
-        </div>
+      <div id="at-pw" style="display:none;flex-direction:column;gap:13px">
+        <div class="a-section-t">Tukar Kata Laluan Saya</div>
+        <div class="a-row"><label class="a-lbl">Kata Laluan Semasa</label><input class="a-inp" id="pw-cur" type="password"></div>
+        <div class="a-row"><label class="a-lbl">Kata Laluan Baru</label><input class="a-inp" id="pw-new" type="password"></div>
+        <div class="a-row"><label class="a-lbl">Sahkan</label><input class="a-inp" id="pw-conf" type="password"></div>
+        <button class="a-fbtn" onclick="spinChangePw()">Tukar</button>
+        <div class="a-msg" id="msg-pw"></div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 11. FAQ -->
-<section class="faq-wrap">
-  <div class="sec-lbl" style="text-align:center;">Soalan Lazim</div>
-  <h2 class="sec-t" style="margin-bottom:30px;">Ada Soalan? Kami Jawab.</h2>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Berapa lama boleh guna apps ini?</div><div class="faq-a">Akses seumur hidup. Bayar sekali, guna selama-lamanya. Semua kemaskini apps percuma. Langgan RM 3/bulan untuk dapat semua apps baru secara automatik — tanpa perlu bayar tambahan.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Apa yang dapat kalau langgan RM 3/bulan?</div><div class="faq-a">Anda dapat akses penuh Kids Spark untuk anak-anak DAN semua apps EduKit baru yang akan ditambah pada masa hadapan — masuk ke akaun anda secara automatik dan percuma selama-lamanya. Tanpa langgan, apps baru perlu dibeli berasingan.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh guna dari phone atau tablet?</div><div class="faq-a">Ya, semua apps EduKit dioptimumkan untuk phone, tablet dan komputer. Guna dari mana-mana device tanpa perlu install apa-apa.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Data sekolah saya selamat ke?</div><div class="faq-a">Ya, 100% selamat. Kami guna teknologi Supabase dengan Row Level Security — data anda tidak boleh dilihat oleh pengguna lain langsung. Setiap akaun diasingkan sepenuhnya.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Sewaan RM 3/bulan tu wajib ke?</div><div class="faq-a">Tidak wajib sama sekali. Ia pilihan semata-mata. Tanpa langgan, anda tetap guna semua apps yang dibeli. Cuma apps baru yang ditambah pada masa hadapan tidak masuk automatik.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh upgrade pakej kemudian?</div><div class="faq-a">Boleh! Hubungi kami dan kami proses upgrade dengan caj perbezaan harga sahaja. Tidak perlu bayar penuh semula.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Ada jaminan wang balik?</div><div class="faq-a">Ya! Jaminan wang balik 7 hari penuh tanpa soal jika tidak berpuas hati. Kami yakin dengan apa yang kami bina.</div></div>
-</section>
-
-<!-- 12. FINAL CTA -->
-<section class="cta-wrap">
-  <h2>Anda Dah Baca Sampai Sini.<br>Hati Anda Dah Tahu <em>Jawapannya.</em></h2>
-  <p>Setiap hari yang berlalu tanpa EduKit adalah satu hari lagi kerja kertas mencuri masa anda daripada pelajar, daripada keluarga, daripada diri anda sendiri. Bilakah masa yang tepat untuk berubah, kalau bukan sekarang?</p>
-  <button class="cta-btn" onclick="goTo('pricing')">Mulakan Perubahan Hari Ini →</button>
-  <div class="cta-guar">🛡️ Jaminan wang balik 7 hari • Akses seumur hidup • Tanpa yuran tahunan</div>
-</section>
-
-<div class="share-wrap">
-  <div class="share-title">📢 Kongsi kepada rakan-rakan guru</div>
-  <div class="share-sub">Bantu rakan guru tahu tentang EduKit. Klik untuk kongsi!</div>
-  <div class="share-btns">
-    <button class="sbtn sbtn-fb" onclick="shareFB()"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Kongsi di Facebook</button>
-    <button class="sbtn sbtn-wa" onclick="shareWA()"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Kongsi di WhatsApp</button>
-    <button class="sbtn sbtn-cp" onclick="copyLink()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Salin Pautan</button>
   </div>
 </div>
 
-<footer>
-  <p>© 2025 EduKit — Platform Digital untuk Warga Pendidik Malaysia<br>
-  <a href="#">Dasar Privasi</a> &nbsp;|&nbsp; <a href="#">Hubungi Kami</a> &nbsp;|&nbsp; <a href="dashboard.html">Log Masuk</a></p>
-</footer>
+<div id="app" style="display:none">
+  <div id="header">
+    <div class="hrow">
+      <span class="brand">SP<span>In</span> Analytics</span>
+      <div id="user-info-bar" style="display:flex;align-items:center;gap:7px;margin-left:4px;flex-shrink:0"></div>
+      <div class="tahun-box">
+        TAHUN:
+        <select id="tahunSel" onchange="switchTahun(this.value)"></select>
+        <button class="tahun-add" onclick="addTahun()">+</button>
+        <button class="tahun-del" onclick="delTahun()">-</button>
+      </div>
+      <span id="saveStatus">&#9729; Cloud</span>
+    </div>
+    <div class="hrow">
+      <button class="btn btn-mode active" id="btnKelas" onclick="setMode('kelas')">Kelas</button>
+      <button class="btn btn-mode" id="btnMulti" onclick="setMode('multi')">Multi-Kelas</button>
+      <select class="sel" id="kelasSel" onchange="renderAll()"></select>
+      <button class="btn btn-blue" onclick="doTambahKelas()">+ Kelas</button>
+      <button class="btn btn-blue" onclick="doTambahPelajar()">+ Pelajar</button>
+      <button class="btn btn-blue" onclick="doTambahUjian()">+ Ujian</button>
+      <button class="btn" onclick="doImport()">Import CSV/Excel</button>
+      <button class="btn btn-red" onclick="doReset()">Reset Kelas</button>
+    </div>
+    <div class="hrow">
+      <button class="btn btn-orange" onclick="pdfKelas()">PDF Kelas</button>
+      <button class="btn btn-orange" onclick="pdfMulti()">PDF Multi</button>
+      <button class="btn btn-orange" onclick="pdfFull(this)">Laporan Penuh</button>
+      <button class="btn" onclick="doEditGred()">Tetapan Gred</button>
+      <button class="btn btn-green" onclick="saveAll()">&#9729; Simpan</button>
+      <button class="btn" onclick="exportJSON()">Eksport JSON</button>
+      <button class="btn" onclick="document.getElementById('jsonIn').click()">Import JSON</button>
+    </div>
+    <div class="hrow" id="subjRow">
+      <span style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Subjek:</span>
+      <div id="subjList" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+      <button class="btn" onclick="doTambahSubjek()">+ Subjek</button>
+    </div>
+  </div>
 
-<div class="spp" id="spp">
-  <div class="spp-av" id="sppAv">AZ</div>
-  <div><div class="spp-nm" id="sppNm"></div><div class="spp-inf" id="sppInf"></div><div class="spp-tm" id="sppTm"></div></div>
-  <div class="spp-dot"></div>
+  <div id="content">
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left"><div class="card-ico" style="background:#dbeafe;color:#1a56db">&#9650;</div><span class="card-title">Trend Ujian</span></div>
+          <select class="chart-sel" id="trendType" onchange="rebuildTrend(this.value)">
+            <option value="line">Garisan</option>
+            <option value="bar">Bar</option>
+            <option value="pie">Pai</option>
+          </select>
+        </div>
+        <div class="card-bd"><canvas id="trendChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">&#9646;</div><span class="card-title">Analisis Gred</span></div>
+          <select class="chart-sel" id="gradeType" onchange="rebuildGrade(this.value)">
+            <option value="bar">Bar</option>
+            <option value="pie">Pai</option>
+            <option value="line">Garisan</option>
+          </select>
+        </div>
+        <div class="card-bd"><canvas id="gradeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fef9c3;color:#ca8a04">&#9733;</div><span class="card-title">Ranking Pelajar</span></div></div>
+        <div class="card-bd card-scroll" id="rankDiv"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#ede9fe;color:#7c3aed">&#9654;</div><span class="card-title">Indeks Prestasi</span></div></div>
+        <div class="card-bd" id="indeksDiv"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fee2e2;color:#ef4444">&#9888;</div><span class="card-title">Pelajar Berisiko</span></div></div>
+        <div class="card-bd card-scroll" id="risikoDiv"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">&#8593;</div><span class="card-title">Prestasi Meningkat</span></div></div>
+        <div class="card-bd card-scroll" id="improveDiv"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fff7ed;color:#ea580c">&#8595;</div><span class="card-title">Prestasi Menurun</span></div></div>
+        <div class="card-bd card-scroll" id="declineDiv"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fdf4ff;color:#9333ea">&#9632;</div><span class="card-title">Heatmap Prestasi</span></div></div>
+        <div class="card-bd"><div id="heatmapDiv" class="heatmap"></div></div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- MODAL -->
+<div id="modal-bg">
+  <div id="modal-box">
+    <div id="modal-title"></div>
+    <div id="modal-msg"></div>
+    <input type="text" id="modal-input" autocomplete="off">
+    <div class="modal-btns">
+      <button class="btn" onclick="modalCancel()">Batal</button>
+      <button class="btn btn-blue" onclick="modalOK()">OK</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="csvIn" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleCSV(event)">
+<input type="file" id="jsonIn" accept=".json" style="display:none" onchange="handleJSON(event)">
 
 <script>
-const STRIPE = {
-  1: 'https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400',
-  2: 'https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402',
-  3: 'https://buy.stripe.com/5kQdR8doZbSG7reg777g403',
-  ks: 'https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'
+// ============================================================
+// AUTH & DATA — localStorage (tiada server diperlukan)
+// ============================================================
+var LS_USERS = 'spin_users_v1';
+var LS_DATA  = 'spin_data_v1';
+var LS_SESS  = 'spin_session_v3';
+
+function lsGetUsers() {
+  try { return JSON.parse(localStorage.getItem(LS_USERS)) || []; } catch(e) { return []; }
+}
+function lsSaveUsers(users) {
+  localStorage.setItem(LS_USERS, JSON.stringify(users));
+}
+function lsGetData() {
+  try { return JSON.parse(localStorage.getItem(LS_DATA)); } catch(e) { return null; }
+}
+function lsSaveData(data) {
+  localStorage.setItem(LS_DATA, JSON.stringify(data));
 }
 
-const EDUKIT_VIDEOS = {
-  eduassign:  { nama:'GuruKits',                    pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📋', ringkasan:'Agih dan pantau beban tugas guru mengikut bidang dan jana laporan PDF.',                     ytId:'GANTI_ID_EDUASSIGN_PRO' },
-  spin:       { nama:'SPIn Analytics',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📈', ringkasan:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.',    ytId:'GANTI_ID_SPIN_ANALYTICS' },
-  spinpro:    { nama:'Dashboard SPIn Pro',          pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📊', ringkasan:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.',            ytId:'GANTI_ID_DASHBOARD_SPIN_PRO' },
-  gantt:      { nama:'GanttPro',                    pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📅', ringkasan:'Carta Gantt digital untuk perancangan projek dan program sekolah.',                          ytId:'GANTI_ID_GANTT_PRO' },
-  kokum:      { nama:'KokurikulumTrack',            pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🏅', ringkasan:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.',                         ytId:'GANTI_ID_KOKURIKULUM_TRACK' },
-  moodradar:  { nama:'Mood Radar Pro',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🌡️', ringkasan:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.',                             ytId:'GANTI_ID_MOOD_RADAR_PRO' },
-  orgchart:   { nama:'OrgChart Pro',                pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🗂️', ringkasan:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.',                   ytId:'GANTI_ID_ORGCHART_PRO' },
-  rph:        { nama:'RPH Fleksi KSSR Pro',         pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📝', ringkasan:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.',           ytId:'GANTI_ID_RPH_FLEKSI' },
-  senarai:    { nama:'Senarai Semak Ultimate',      pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'✅', ringkasan:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.',             ytId:'GANTI_ID_SENARAI_SEMAK' },
-  gamekelas:  { nama:'GameKelas',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🎮', ringkasan:'Cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.',                    ytId:'GANTI_ID_GAME_KELAS' },
-  edudash:    { nama:'EduDash Pro',                 pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏫', ringkasan:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.',             ytId:'GANTI_ID_EDUDASH_PRO' },
-  headcount:  { nama:'H2 Headcount 2.0',            pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🎯', ringkasan:'Pemantauan progres pelajar OTR vs AR per kelas secara visual.',                             ytId:'GANTI_ID_H2_HEADCOUNT' },
-  stafftrack: { nama:'StaffTrack Pro',              pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'👥', ringkasan:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.',            ytId:'GANTI_ID_STAFFTRACK_PRO' },
-  kokum2:     { nama:'Rekod Kehadiran Kokurikulum', pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏅', ringkasan:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.',                        ytId:'GANTI_ID_REKOD_KOKURIKULUM' },
-  pencerapan: { nama:'SK@S — Pencerapan',           pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔍', ringkasan:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.',            ytId:'GANTI_ID_SKAS_PENCERAPAN' },
-  guruganti:  { nama:'Sistem Guru Ganti Pro',       pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔄', ringkasan:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.',                   ytId:'GANTI_ID_GURU_GANTI' },
-  skpm:       { nama:'SKPM Pro',                    pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'⭐', ringkasan:'Kualiti pengurusan sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.',                 ytId:'GANTI_ID_SKPM_PRO' },
+// Init default admin jika tiada pengguna
+function ensureDefaultAdmin() {
+  var users = lsGetUsers();
+  if (!users.length) {
+    users = [{ id: 1, username: 'admin', password: 'admin123', role: 'admin' }];
+    lsSaveUsers(users);
+  }
+  return users;
 }
 
-Object.keys(EDUKIT_VIDEOS).forEach(k => {
-  const v = EDUKIT_VIDEOS[k], id = v.ytId
-  v.hasVideo = !id.startsWith('GANTI_')
-  v.ytUrl = v.hasVideo ? 'https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1' : ''
-  v.thumbnail = v.hasVideo ? 'https://img.youtube.com/vi/'+id+'/mqdefault.jpg' : ''
-})
+// ============================================================
+// AUTH STATE
+// ============================================================
+var SPIN_CU = null;
+var SPIN_USERS = [];
 
-function getVideosByPakej(pakej) {
-  return Object.entries(EDUKIT_VIDEOS).filter(([,v])=>v.pakej===pakej).map(([k,v])=>({key:k,...v}))
+// ============================================================
+// BOOT
+// ============================================================
+async function spinBoot() {
+  setLoadingMsg('Memulakan aplikasi...', 30);
+  SPIN_USERS = ensureDefaultAdmin();
+
+  setLoadingMsg('Menyemak sesi...', 70);
+  var sess = null;
+  try { sess = JSON.parse(localStorage.getItem(LS_SESS)); } catch(e){}
+  if (sess && sess.username) {
+    var u = SPIN_USERS.find(function(x){ return x.username === sess.username; });
+    if (u) {
+      SPIN_CU = u;
+      setLoadingMsg('Selamat datang semula!', 100);
+      setTimeout(function(){ hideLoading(); }, 300);
+      await spinLoginOK();
+      return;
+    }
+  }
+  setLoadingMsg('Bersedia!', 100);
+  setTimeout(function(){ hideLoading(); showAuthScreen(); }, 300);
 }
 
-const APPS_DATA = {
-  guru: [
-    {nm:'GuruKits',ic:'📋',bg:'#e8f0fe',ds:'Agih tugas guru, pantau beban kerja mengikut bidang.'},
-    {nm:'SPIn Analytics',ic:'📈',bg:'#dbeafe',ds:'Analitik prestasi pelajar OTR vs AR, carta kemajuan.'},
-    {nm:'Dashboard SPIn Pro',ic:'📊',bg:'#eff6ff',ds:'Dashboard visual prestasi pelajar komprehensif.'},
-    {nm:'GanttPro',ic:'📅',bg:'#fef3c7',ds:'Carta Gantt digital untuk perancangan projek sekolah.'},
-    {nm:'KokurikulumTrack',ic:'🏅',bg:'#f0fdf4',ds:'Rekod kehadiran kokurikulum — persatuan, sukan.'},
-    {nm:'Mood Radar Pro',ic:'🌡️',bg:'#fdf4ff',ds:'Kesan mood & emosi pelajar dalam kelas.'},
-    {nm:'OrgChart Pro',ic:'🗂️',bg:'#f0fdf4',ds:'Jana carta organisasi digital sekolah, masjid.'},
-    {nm:'RPH Fleksi KSSR Pro',ic:'📝',bg:'#fff7ed',ds:'Rancangan Pengajaran Harian fleksibel.'},
-    {nm:'Senarai Semak Ultimate',ic:'✅',bg:'#fef2f2',ds:'Senarai semak tugas sekolah lengkap.'},
-    {nm:'GameKelas',ic:'🎮',bg:'#f5f3ff',ds:'Game interaktif kelas — MCQ, kad kilat.'},
-  ],
-  pentadbir: [
-    {nm:'EduDash Pro',ic:'🏫',bg:'#e8f0fe',ds:'Dashboard sekolah — kehadiran, BMI, disiplin.'},
-    {nm:'H2 Headcount 2.0',ic:'🎯',bg:'#dbeafe',ds:'Pemantauan OTR vs AR per kelas secara visual.'},
-    {nm:'StaffTrack Pro',ic:'👥',bg:'#f0fdf4',ds:'Sistem kehadiran digital staf sekolah.'},
-    {nm:'GuruKits',ic:'📋',bg:'#fef3c7',ds:'Urus & pantau agihan tugas semua guru.'},
-    {nm:'Rekod Kehadiran Kokurikulum',ic:'🏅',bg:'#fdf4ff',ds:'Pandangan pentadbir kehadiran kokurikulum.'},
-    {nm:'SK@S — Pencerapan',ic:'🔍',bg:'#f5f3ff',ds:'Cerapan guru Standard 4 SKPMg2, jana PDF rasmi.'},
-    {nm:'Sistem Guru Ganti Pro',ic:'🔄',bg:'#fff7ed',ds:'Urus guru ganti, analisis kekerapan bulanan.'},
-    {nm:'SKPM Pro',ic:'⭐',bg:'#fef2f2',ds:'Kualiti pengurusan sekolah — IKS, Standard 1–5.'},
-  ]
-}
-
-function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}) }
-
-function switchDemo(n) {
-  document.getElementById('dtab1').className = 'dtab' + (n===1 ? ' ag' : '')
-  document.getElementById('dtab2').className = 'dtab' + (n===2 ? ' ap' : '')
-  const di = document.getElementById('demoInfo')
-  if (n===1) {
-    document.getElementById('demoFrame').src = 'demo-spdin.html'
-    document.getElementById('demoLbl').textContent = '🎯 Demo Langsung — Pakej Guru'
-    di.innerHTML = '<strong>📊 Demo SPIn Analytics (Pakej Guru)</strong> — Daftar pelajar, masuk markah, tengok carta trend & analisis. Maksimum 10 pelajar.'
-    di.style.cssText = 'background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;'
-  } else {
-    document.getElementById('demoFrame').src = 'demo-pencerapan.html'
-    document.getElementById('demoLbl').textContent = '🔍 Demo Langsung — Pakej Pentadbir'
-    di.innerHTML = '<strong>🔍 Demo SK@S Pencerapan (Pakej Pentadbir)</strong> — Tambah guru, rekod cerapan, lihat skor. Maksimum 10 guru.'
-    di.style.cssText = 'background:#f5f3ff;border:1px solid #d8b4fe;color:#5b21b6;border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;'
+function setLoadingMsg(msg, pct) {
+  var el = document.getElementById('loading-sub');
+  if (el) el.textContent = msg;
+  if (pct !== undefined) {
+    var bar = document.getElementById('loading-bar');
+    if (bar) bar.style.width = pct + '%';
   }
 }
 
-function switchPkgTab(n) {
-  ;[1,2,3].forEach(i => { document.getElementById('ptab'+i).className='ptab2' })
-  document.getElementById('ptab'+n).classList.add('a'+n)
-  let apps = n===1 ? APPS_DATA.guru : n===2 ? APPS_DATA.pentadbir : [...APPS_DATA.guru,...APPS_DATA.pentadbir]
-  document.getElementById('appsGrid').innerHTML = apps.map(a=>`<div class="app-card"><div class="app-ic" style="background:${a.bg}">${a.ic}</div><div class="app-nm">${a.nm}</div><div class="app-ds">${a.ds}</div></div>`).join('')
-}
-switchPkgTab(1)
-
-const PU = encodeURIComponent(window.location.href)
-const PT = encodeURIComponent('EduKit — 17 Apps untuk atasi masalah paling kritikal dalam kerjaya guru & pentadbir Malaysia! Pakej dari RM 95. ')
-function shareFB() { window.open('https://www.facebook.com/sharer/sharer.php?u='+PU, '_blank', 'width=600,height=400') }
-function shareWA() { window.open('https://api.whatsapp.com/send?text='+PT+PU, '_blank') }
-function copyLink() {
-  navigator.clipboard?.writeText(window.location.href).then(()=>toast('✓ Pautan berjaya disalin!')).catch(()=>{const t=document.createElement('textarea');t.value=window.location.href;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('✓ Pautan berjaya disalin!')})
-}
-function toast(m) { const t=document.createElement('div');t.className='toast-el';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},2400) }
-
-const SPD = [
-  {nm:'Azlan b. Hamid',pkg:'Pakej Guru',loc:'Selangor',m:2},
-  {nm:'Norhafiza Md. Noor',pkg:'Pakej Pentadbir',loc:'Perak',m:5},
-  {nm:'Rashidah Kamarudin',pkg:'Pakej Guru + Pentadbir',loc:'Johor',m:9},
-  {nm:'Hafiz Abd. Rahman',pkg:'Pakej Guru',loc:'Kedah',m:14},
-  {nm:'Zarina bt. Yusof',pkg:'Pakej Pentadbir',loc:'Terengganu',m:18},
-  {nm:'Mohd. Izzat Saad',pkg:'Pakej Guru + Pentadbir',loc:'Pahang',m:25},
-  {nm:'Faridah Mohamad',pkg:'Pakej Guru',loc:'Kelantan',m:33},
-  {nm:'Suhaimi bt. Kassim',pkg:'Pakej Pentadbir',loc:'N. Sembilan',m:41},
-  {nm:'Rozita Ahmad',pkg:'Pakej Guru + Pentadbir',loc:'Melaka',m:50},
-  {nm:'Khairul Nizam',pkg:'Pakej Guru',loc:'Pulau Pinang',m:58},
-  {nm:'Salmah bt. Salleh',pkg:'Pakej Pentadbir',loc:'Sabah',m:66},
-  {nm:'Amirul Hakimi',pkg:'Pakej Guru + Pentadbir',loc:'Sarawak',m:78},
-]
-let si = 0
-const spp = document.getElementById('spp')
-function showSP() {
-  const d = SPD[si % SPD.length]
-  const ini = d.nm.split(' ').filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('')
-  document.getElementById('sppAv').textContent = ini
-  document.getElementById('sppNm').textContent = d.nm
-  document.getElementById('sppInf').innerHTML = 'membeli <strong>' + d.pkg + '</strong>'
-  const t = d.m < 60 ? d.m+' min lalu' : Math.floor(d.m/60)+' jam lalu'
-  document.getElementById('sppTm').textContent = t + ' · ' + d.loc
-  spp.classList.add('show'); setTimeout(()=>spp.classList.remove('show'), 4200); si++
-}
-setTimeout(()=>{ showSP(); setInterval(showSP, 7500) }, 3500)
-
-const TI = ['🎉 Azlan dari Selangor beli Pakej Guru','✅ Norhafiza dari Perak beli Pakej Pentadbir','🏆 Rashidah dari Johor beli Pakej Gabungan','🎓 500+ warga pendidik dah guna EduKit','⭐ Rating 4.9/5 daripada pengguna','🔍 SK@S Pencerapan — borang PDF dalam 5 minit','📊 SPIn Analytics — pantau prestasi pelajar','🎮 GameKelas — kelas lebih aktif & seronok','🏫 EduDash Pro — dashboard sekolah lengkap','💎 17 apps hanya RM 165 seumur hidup','📱 Mesra phone & tablet','🔒 Data selamat & peribadi sepenuhnya']
-document.getElementById('tickerEl').innerHTML = [...TI,...TI].map(t=>'<div class="tick-item"><div class="tick-dot"></div>'+t+'</div>').join('')
-
-let v17Current = 1
-function v17Switch(n) {
-  v17Current = n
-  document.getElementById('v17t1').className = 'v17tab' + (n===1 ? ' active' : '')
-  document.getElementById('v17t2').className = 'v17tab p2' + (n===2 ? ' active' : '')
-  renderVid17Grid(n===1 ? 'guru' : 'pentadbir')
+function hideLoadingTip() {
+  var el = document.getElementById('loading-tip');
+  if (el) el.style.display = 'none';
 }
 
-function renderVid17Grid(pakej) {
-  const apps = getVideosByPakej(pakej)
-  const isPentadbir = pakej === 'pentadbir'
-  document.getElementById('vid17Grid').innerHTML = apps.map(app => {
-    const hasVid = app.hasVideo
-    const thumbStyle = isPentadbir ? 'v17-thumb p2' : 'v17-thumb'
-    return `<div class="v17card" onclick="openVidModal('${app.key}')">
-      <div class="${thumbStyle}">
-        ${hasVid ? `<img src="${app.thumbnail}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover;display:block">` : ''}
-        <div class="v17-ikon" style="${hasVid?'display:none':'display:flex'}">${app.ikon}</div>
-        <div class="v17-play"><div class="v17-play-btn">▶</div></div>
-        ${!hasVid ? '<div class="v17-badge">Akan Datang</div>' : ''}
-      </div>
-      <div class="v17-body">
-        <div class="v17-nm">${app.ikon} ${app.nama}</div>
-        <div class="v17-ds">${app.ringkasan}</div>
-      </div>
-    </div>`
-  }).join('')
+function hideLoading() {
+  var el = document.getElementById('loading-overlay');
+  if (el) el.style.display = 'none';
 }
 
-function openVidModal(key) {
-  const v = EDUKIT_VIDEOS[key]
-  if (!v) return
-  document.getElementById('vmIc').textContent = v.ikon
-  document.getElementById('vmNm').textContent = v.nama
-  document.getElementById('vmPkg').textContent = v.pakejLabel
-  document.getElementById('vmDs').textContent = v.ringkasan
-  const frame = document.getElementById('vmFrame')
-  const ph = document.getElementById('vmPh')
-  if (v.hasVideo) {
-    frame.src = v.ytUrl; frame.style.display='block'; ph.style.display='none'
-  } else {
-    frame.src = ''; frame.style.display='none'; ph.style.display='flex'
-    document.getElementById('vmPhT').textContent = v.nama + ' — Video Akan Datang'
-    document.getElementById('vmPhS').textContent = 'Tutorial untuk ' + v.nama + ' sedang disediakan. Nantikan!'
+function showAuthScreen() {
+  var as = document.getElementById('auth-screen');
+  as.style.display = 'flex';
+  as.style.alignItems = 'center';
+  as.style.justifyContent = 'center';
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+async function doLogin() {
+  var u = document.getElementById('auth-user').value.trim();
+  var p = document.getElementById('auth-pass').value;
+  var err = document.getElementById('auth-err');
+  var btn = document.getElementById('login-btn');
+  err.textContent = '';
+  if (!u || !p) { err.textContent = 'Sila isi semua maklumat.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Sedang log masuk...';
+  SPIN_USERS = lsGetUsers();
+  var found = SPIN_USERS.find(function(x){ return x.username === u && x.password === p; });
+  if (!found) {
+    err.textContent = 'Nama pengguna atau kata laluan tidak sah.';
+    btn.disabled = false; btn.textContent = 'Log Masuk →';
+    return;
   }
-  document.getElementById('vidModal').classList.add('open')
-  document.body.style.overflow = 'hidden'
+  SPIN_CU = found;
+  localStorage.setItem(LS_SESS, JSON.stringify({ username: u }));
+  document.getElementById('auth-pass').value = '';
+  document.getElementById('auth-screen').style.display = 'none';
+  btn.disabled = false; btn.textContent = 'Log Masuk →';
+  await spinLoginOK();
 }
 
-function closeVidModal() {
-  document.getElementById('vmFrame').src = ''
-  document.getElementById('vidModal').classList.remove('open')
-  document.body.style.overflow = ''
+async function spinLoginOK() {
+  document.getElementById('app').style.display = 'flex';
+  spinRenderUserBar();
+  setSaveStatus('Memuatkan data...', 'saving');
+  await loadAll();
+  renderTahunSel();
+  renderKelasSel();
+  renderSubjList();
+  renderAll();
+  setSaveStatus('&#128190; Tersimpan', '');
+  spinToast('Selamat datang, ' + SPIN_CU.username + '!');
 }
 
-document.getElementById('vidModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeVidModal()
-})
+function doLogout() {
+  allData = {}; curTahun = '2025'; subjects = {}; curSubject = null;
+  SPIN_CU = null;
+  localStorage.removeItem(LS_SESS);
+  document.getElementById('app').style.display = 'none';
+  showAuthScreen();
+  document.getElementById('auth-user').value = '';
+  document.getElementById('auth-pass').value = '';
+  document.getElementById('auth-err').textContent = '';
+  document.getElementById('user-info-bar').innerHTML = '';
+  closeAdmin();
+}
 
-renderVid17Grid('guru')
+function spinRenderUserBar() {
+  if (!SPIN_CU) return;
+  var bar = document.getElementById('user-info-bar');
+  var roleLabel = SPIN_CU.role === 'admin'
+    ? '<span class="ui-role-admin">ADMIN</span>'
+    : '<span class="ui-role-guru">GURU</span>';
+  bar.innerHTML = '<span class="ui-name">&#128100; ' + SPIN_CU.username + '</span>'
+    + roleLabel
+    + (SPIN_CU.role === 'admin' ? '<button class="ui-adm-btn" onclick="openAdmin()">&#9881; Admin</button>' : '')
+    + '<button class="ui-out-btn" onclick="doLogout()">Keluar</button>';
+}
+
+// ---- Admin panel ----
+async function openAdmin() {
+  if (!SPIN_CU || SPIN_CU.role !== 'admin') return;
+  await spinRenderUserList();
+  document.getElementById('adm-modal').classList.add('open');
+}
+function closeAdmin() { document.getElementById('adm-modal').classList.remove('open'); }
+function admTab(tab, btn) {
+  ['users','pw'].forEach(function(t){
+    document.getElementById('at-'+t).style.display = t===tab?'flex':'none';
+  });
+  document.querySelectorAll('.adm-tab').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+async function spinRenderUserList() {
+  var el = document.getElementById('spin-user-list');
+  SPIN_USERS = lsGetUsers();
+  el.innerHTML = '';
+  SPIN_USERS.forEach(function(u) {
+    var r = document.createElement('div'); r.className = 'adm-row';
+    r.innerHTML = '<span class="adm-row-name">' + u.username + '</span>'
+      + '<span class="role-badge ' + (u.role==='admin'?'rb-admin':'rb-guru') + '">' + (u.role==='admin'?'Admin':'Guru') + '</span>'
+      + (u.username === 'admin'
+          ? '<span style="font-size:9px;color:#334155">Dilindungi</span>'
+          : '<button class="adm-del-btn" onclick="spinDelUser(' + u.id + ',\'' + u.username + '\')">Buang</button>');
+    el.appendChild(r);
+  });
+}
+
+async function spinAddUser() {
+  var n = document.getElementById('nu-name').value.trim();
+  var p = document.getElementById('nu-pw').value;
+  var r = document.getElementById('nu-role').value;
+  var m = document.getElementById('msg-user');
+  if (!n) { m.innerHTML = '<span class="a-bad">Nama diperlukan.</span>'; return; }
+  if (p.length < 4) { m.innerHTML = '<span class="a-bad">Min. 4 aksara.</span>'; return; }
+  var users = lsGetUsers();
+  if (users.find(function(x){ return x.username === n; })) {
+    m.innerHTML = '<span class="a-bad">Ralat: nama mungkin sudah wujud.</span>'; return;
+  }
+  var newId = Math.max.apply(null, users.map(function(x){ return x.id||0; })) + 1;
+  users.push({ id: newId, username: n, password: p, role: r });
+  lsSaveUsers(users);
+  SPIN_USERS = users;
+  await spinRenderUserList();
+  document.getElementById('nu-name').value = '';
+  document.getElementById('nu-pw').value = '';
+  m.innerHTML = '<span class="a-ok">&#10003; "' + n + '" ditambah.</span>';
+  setTimeout(function(){ m.textContent = ''; }, 3000);
+}
+
+async function spinDelUser(id, uname) {
+  if (!confirm('Padam pengguna "' + uname + '"?')) return;
+  var users = lsGetUsers().filter(function(x){ return x.id !== id; });
+  lsSaveUsers(users);
+  SPIN_USERS = users;
+  await spinRenderUserList();
+}
+
+async function spinChangePw() {
+  var cur = document.getElementById('pw-cur').value;
+  var nw = document.getElementById('pw-new').value;
+  var cf = document.getElementById('pw-conf').value;
+  var m = document.getElementById('msg-pw');
+  if (SPIN_CU.password !== cur) { m.innerHTML = '<span class="a-bad">Kata laluan semasa salah.</span>'; return; }
+  if (nw.length < 4) { m.innerHTML = '<span class="a-bad">Min. 4 aksara.</span>'; return; }
+  if (nw !== cf) { m.innerHTML = '<span class="a-bad">Tidak sepadan.</span>'; return; }
+  var users = lsGetUsers();
+  var idx = users.findIndex(function(x){ return x.id === SPIN_CU.id; });
+  if (idx >= 0) { users[idx].password = nw; lsSaveUsers(users); }
+  SPIN_CU.password = nw;
+  m.innerHTML = '<span class="a-ok">&#10003; Berjaya ditukar.</span>';
+  ['pw-cur','pw-new','pw-conf'].forEach(function(id){ document.getElementById(id).value = ''; });
+  setTimeout(function(){ m.textContent = ''; }, 3000);
+}
+
+function spinToast(msg) {
+  var t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1e293b;color:white;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 2500);
+}
+
+function setSaveStatus(text, type) {
+  var el = document.getElementById('saveStatus');
+  if (!el) return;
+  el.innerHTML = text;
+  el.className = type || '';
+}
+
+// ============================================================
+// DATA PERSISTENCE — localStorage
+// ============================================================
+// ============================================================
+// STATE
+// ============================================================
+var allData = {};
+var curTahun = '2025';
+var curSubject = null;
+var subjects = {};
+var mode = 'kelas';
+var modalResolve = null;
+var tChart = null;
+var gChart = null;
+var tLastData = null;
+var gLastData = null;
+var saveTimer = null;
+
+var gradeRange = { 'A+':90,'A':85,'A-':80,'B+':75,'B':70,'C+':65,'C':60,'D':50,'E':0,'G':-1 };
+
+// ============================================================
+// HELPERS
+// ============================================================
+function num(v){ return isNaN(Number(v)) ? 0 : Number(v); }
+
+function avg(arr){
+  var valid = arr.map(function(m){ return num(m); }).filter(function(m){ return m > 0; });
+  if (!valid.length) return 0;
+  return valid.reduce(function(a,b){ return a+b; }, 0) / valid.length;
+}
+
+function gred(v){
+  var order = ['A+','A','A-','B+','B','C+','C','D','E'];
+  for (var i=0; i<order.length; i++) { if (v >= gradeRange[order[i]]) return order[i]; }
+  return 'G';
+}
+
+function cellClass(v){
+  var g = gred(v);
+  if (['A+','A','A-'].indexOf(g)>=0) return 'cg';
+  if (['B+','B','C+','C'].indexOf(g)>=0) return 'cy';
+  return 'cr';
+}
+
+function barColor(v){
+  var g = gred(v);
+  if (['A+','A','A-'].indexOf(g)>=0) return '#10b981';
+  if (['B+','B','C+','C'].indexOf(g)>=0) return '#f59e0b';
+  return '#ef4444';
+}
+
+function hmColor(v){ return v>=75 ? '#10b981' : v>=60 ? '#f59e0b' : '#ef4444'; }
+
+function toast(msg){
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+
+function safe(s){ return String(s || '').replace(/[^\x20-\x7E\xA0-\xFF]/g,'?'); }
+
+// ============================================================
+// MODAL
+// ============================================================
+function showModal(title, msg, type, defVal){
+  return new Promise(function(resolve){
+    modalResolve = resolve;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-msg').textContent = msg;
+    var inp = document.getElementById('modal-input');
+    if (type === 'input'){
+      inp.style.display = 'block';
+      inp.value = defVal || '';
+      setTimeout(function(){ inp.focus(); inp.select(); }, 80);
+    } else {
+      inp.style.display = 'none';
+    }
+    document.getElementById('modal-bg').classList.add('show');
+  });
+}
+
+function modalOK(){
+  var inp = document.getElementById('modal-input');
+  var val = inp.style.display !== 'none' ? inp.value.trim() : true;
+  document.getElementById('modal-bg').classList.remove('show');
+  if (modalResolve){ modalResolve(val); modalResolve = null; }
+}
+
+function modalCancel(){
+  document.getElementById('modal-bg').classList.remove('show');
+  if (modalResolve){ modalResolve(null); modalResolve = null; }
+}
+
+document.getElementById('modal-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') modalOK();
+  if (e.key === 'Escape') modalCancel();
+});
+
+// ============================================================
+// DATA PERSISTENCE — SUPABASE
+// ============================================================
+function defaultData(){
+  return {
+    subjects: {
+      'Matematik': {
+        kelasData: {
+          '5A': [
+            {nama:'Ahmad Ali',kelas:'5A',markah:[85,78]},
+            {nama:'Fatimah Hassan',kelas:'5A',markah:[92,88]},
+            {nama:'Muhammad Hafiz',kelas:'5A',markah:[45,52]}
+          ],
+          '5B': [
+            {nama:'Razak Ismail',kelas:'5B',markah:[55,60]},
+            {nama:'Aminah Yusof',kelas:'5B',markah:[78,82]}
+          ]
+        },
+        ujian: ['Ujian 1','Ujian 2']
+      }
+    },
+    currentSubject: 'Matematik'
+  };
+}
+
+async function loadAll(){
+  var saved = lsGetData();
+  if (saved && saved.allData && Object.keys(saved.allData).length) {
+    allData = saved.allData;
+    curTahun = saved.curTahun || Object.keys(allData).sort(function(a,b){return b-a;})[0] || '2025';
+  } else {
+    // Data asal dari Supabase — dipindah masuk
+    var _d = JSON.parse('{"2025": {"subjects": {"Muet": {"ujian": [], "kelasData": {}}, "Matematik": {"ujian": ["Ujian 1", "Ujian 2"], "kelasData": {"5A": [{"nama": "Ahmad Ali", "kelas": "5A", "markah": [85, 78]}, {"nama": "Fatimah Hassan", "kelas": "5A", "markah": [92, 88]}, {"nama": "Muhammad Hafiz", "kelas": "5A", "markah": [45, 52]}], "5B": [{"nama": "Razak Ismail", "kelas": "5B", "markah": [55, 60]}, {"nama": "Aminah Yusof", "kelas": "5B", "markah": [78, 82]}], "UMK25": []}}}, "currentSubject": "Muet"}, "2026": {"subjects": {"SEJARAH": {"ujian": [], "kelasData": {"6AUMS25": [], "6BUNISZA26": []}}}, "currentSubject": "SEJARAH"}}');
+    allData = _d;
+    curTahun = '2026';
+    pushData();
+  }
+  if (!allData[curTahun]) curTahun = Object.keys(allData).sort(function(a,b){return b-a;})[0];
+  subjects = allData[curTahun].subjects || {};
+  curSubject = allData[curTahun].currentSubject;
+  if (!curSubject || !subjects[curSubject]) curSubject = Object.keys(subjects)[0] || null;
+}
+
+function pushData(){
+  lsSaveData({ allData: allData, curTahun: curTahun });
+  return true;
+}
+
+async function saveAll(){
+  allData[curTahun].subjects = subjects;
+  allData[curTahun].currentSubject = curSubject;
+  setSaveStatus('Menyimpan...', 'saving');
+  pushData();
+  setSaveStatus('&#128190; Tersimpan', '');
+  toast('Data tersimpan');
+}
+
+// Auto-save with debounce
+function autoSave(){
+  setSaveStatus('Belum disimpan...', 'saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){ saveAll(); }, 1500);
+}
+
+// ============================================================
+// TAHUN
+// ============================================================
+function renderTahunSel(){
+  var sel = document.getElementById('tahunSel');
+  var years = Object.keys(allData).sort(function(a,b){return b-a;});
+  sel.innerHTML = years.map(function(y){
+    return '<option value="'+y+'"'+(y===curTahun?' selected':'')+'>'+y+'</option>';
+  }).join('');
+}
+
+async function switchTahun(t){
+  allData[curTahun].subjects = subjects;
+  allData[curTahun].currentSubject = curSubject;
+  curTahun = t;
+  subjects = allData[t].subjects || {};
+  curSubject = allData[t].currentSubject;
+  if (!curSubject || !subjects[curSubject]) curSubject = Object.keys(subjects)[0] || null;
+  destroyCharts();
+  renderTahunSel();
+  renderKelasSel();
+  renderSubjList();
+  renderAll();
+  await saveAll();
+}
+
+function addTahun(){
+  var next = String(parseInt(curTahun)+1);
+  showModal('Tambah Tahun', 'Masukkan tahun baharu:', 'input', next).then(async function(v){
+    if (!v) return;
+    v = v.trim();
+    if (!v || isNaN(Number(v))){ toast('Tahun tidak sah'); return; }
+    if (allData[v]){ toast('Tahun '+v+' sudah wujud'); return; }
+    allData[v] = { subjects:{}, currentSubject:null };
+    allData[curTahun].subjects = subjects;
+    allData[curTahun].currentSubject = curSubject;
+    curTahun = v;
+    subjects = {};
+    curSubject = null;
+    destroyCharts();
+    renderTahunSel();
+    renderKelasSel();
+    renderSubjList();
+    renderAll();
+    await saveAll();
+    toast('Tahun '+v+' ditambah');
+  });
+}
+
+function delTahun(){
+  if (Object.keys(allData).length <= 1){ toast('Mesti ada sekurang-kurangnya 1 tahun'); return; }
+  showModal('Padam Tahun', 'Padam tahun '+curTahun+'? Semua data tahun ini akan hilang.', 'confirm').then(async function(ok){
+    if (!ok) return;
+    delete allData[curTahun];
+    curTahun = Object.keys(allData).sort(function(a,b){return b-a;})[0];
+    subjects = allData[curTahun].subjects || {};
+    curSubject = allData[curTahun].currentSubject;
+    if (!curSubject||!subjects[curSubject]) curSubject = Object.keys(subjects)[0]||null;
+    destroyCharts();
+    renderTahunSel();
+    renderKelasSel();
+    renderSubjList();
+    renderAll();
+    await saveAll();
+    toast('Tahun dipadamkan');
+  });
+}
+
+// ============================================================
+// SUBJECT
+// ============================================================
+function renderSubjList(){
+  var div = document.getElementById('subjList');
+  div.innerHTML = Object.keys(subjects).map(function(s){
+    return '<span style="display:inline-flex;align-items:center;gap:1px;">'
+      +'<button class="subj-btn'+(s===curSubject?' active':'')+'" onclick="switchSubj(\''+s+'\')">' +s+'</button>'
+      +'<button class="subj-del ic-del" onclick="delSubj(\''+s+'\')" title="Padam">x</button>'
+      +'</span>';
+  }).join('');
+}
+
+function switchSubj(s){
+  curSubject = s;
+  allData[curTahun].currentSubject = s;
+  destroyCharts();
+  renderKelasSel();
+  renderSubjList();
+  renderAll();
+  autoSave();
+}
+
+function doTambahSubjek(){
+  showModal('Tambah Subjek', 'Nama subjek:', 'input', '').then(function(v){
+    if (!v) return;
+    if (subjects[v]){ toast('Subjek sudah wujud'); return; }
+    subjects[v] = { kelasData:{}, ujian:[] };
+    curSubject = v;
+    destroyCharts();
+    renderKelasSel();
+    renderSubjList();
+    renderAll();
+    autoSave();
+  });
+}
+
+function delSubj(s){
+  showModal('Padam Subjek', 'Padam "'+s+'"? Semua data subjek ini hilang.', 'confirm').then(function(ok){
+    if (!ok) return;
+    delete subjects[s];
+    if (curSubject===s) curSubject = Object.keys(subjects)[0]||null;
+    destroyCharts();
+    renderKelasSel();
+    renderSubjList();
+    renderAll();
+    autoSave();
+    toast('"'+s+'" dipadamkan');
+  });
+}
+
+// ============================================================
+// KELAS
+// ============================================================
+function getCurSubj(){
+  if (!curSubject||!subjects[curSubject]) return { kelasData:{}, ujian:[] };
+  return subjects[curSubject];
+}
+
+function renderKelasSel(){
+  var sel = document.getElementById('kelasSel');
+  var prev = sel.value;
+  var kelas = Object.keys(getCurSubj().kelasData);
+  sel.innerHTML = kelas.map(function(k){ return '<option value="'+k+'"'+(k===prev?' selected':'')+'>'+k+'</option>'; }).join('');
+}
+
+function doTambahKelas(){
+  showModal('Tambah Kelas', 'Nama kelas (cth: 5A):', 'input', '').then(function(v){
+    if (!v) return;
+    if (!curSubject){ toast('Pilih atau tambah subjek dahulu'); return; }
+    getCurSubj().kelasData[v] = [];
+    renderKelasSel();
+    renderAll();
+    autoSave();
+  });
+}
+
+function doTambahPelajar(){
+  var k = document.getElementById('kelasSel').value;
+  if (!k){ toast('Pilih kelas dahulu'); return; }
+  showModal('Tambah Pelajar', 'Nama pelajar:', 'input', '').then(function(v){
+    if (!v) return;
+    var subj = getCurSubj();
+    subj.kelasData[k].push({ nama:v, kelas:k, markah:subj.ujian.map(function(){ return 0; }) });
+    renderAll();
+    autoSave();
+  });
+}
+
+function doTambahUjian(){
+  showModal('Tambah Ujian', 'Nama ujian (cth: Ujian 1):', 'input', '').then(function(v){
+    if (!v) return;
+    var subj = getCurSubj();
+    subj.ujian.push(v);
+    Object.values(subj.kelasData).forEach(function(arr){
+      arr.forEach(function(p){ p.markah.push(0); });
+    });
+    renderAll();
+    autoSave();
+  });
+}
+
+function editUjian(i){
+  var subj = getCurSubj();
+  showModal('Edit Ujian', 'Nama baharu:', 'input', subj.ujian[i]).then(function(v){
+    if (!v||v===subj.ujian[i]) return;
+    subj.ujian[i] = v;
+    renderAll();
+    autoSave();
+  });
+}
+
+function delUjian(i){
+  showModal('Padam Ujian', 'Padam ujian ini? Semua markah ujian akan hilang.', 'confirm').then(function(ok){
+    if (!ok) return;
+    var subj = getCurSubj();
+    subj.ujian.splice(i,1);
+    Object.values(subj.kelasData).forEach(function(arr){
+      arr.forEach(function(p){ p.markah.splice(i,1); });
+    });
+    renderAll();
+    autoSave();
+  });
+}
+
+function editPelajar(kelas, nama){
+  showModal('Edit Nama Pelajar', 'Nama baharu:', 'input', nama).then(function(v){
+    if (!v||v===nama) return;
+    var p = getCurSubj().kelasData[kelas].find(function(x){ return x.nama===nama; });
+    if (p){ p.nama=v; renderAll(); autoSave(); }
+  });
+}
+
+function delPelajar(kelas, nama){
+  showModal('Padam Pelajar', 'Padam "'+nama+'" dari kelas '+kelas+'?', 'confirm').then(function(ok){
+    if (!ok) return;
+    var arr = getCurSubj().kelasData[kelas];
+    var i = arr.findIndex(function(x){ return x.nama===nama; });
+    if (i>=0){ arr.splice(i,1); renderAll(); autoSave(); toast('"'+nama+'" dipadamkan'); }
+  });
+}
+
+function updateMark(kelas, nama, i, val){
+  var p = getCurSubj().kelasData[kelas].find(function(x){ return x.nama===nama; });
+  if (p){ p.markah[i] = Math.round(num(val)); renderAll(); autoSave(); }
+}
+
+function doReset(){
+  var k = document.getElementById('kelasSel').value;
+  if (!k){ toast('Pilih kelas dahulu'); return; }
+  showModal('Reset Kelas', 'Reset semua pelajar dalam kelas '+k+'?', 'confirm').then(function(ok){
+    if (!ok) return;
+    getCurSubj().kelasData[k] = [];
+    renderAll();
+    autoSave();
+  });
+}
+
+function doEditGred(){
+  var txt = Object.keys(gradeRange).map(function(g){ return g+':'+gradeRange[g]; }).join('\n');
+  showModal('Tetapan Gred', 'Format: A+:90  (satu per baris)', 'input', txt).then(function(v){
+    if (!v) return;
+    v.split('\n').forEach(function(line){
+      var parts = line.split(':');
+      if (parts.length===2 && !isNaN(Number(parts[1]))) gradeRange[parts[0].trim()] = Number(parts[1]);
+    });
+    autoSave();
+    renderAll();
+  });
+}
+
+// ============================================================
+// MODE
+// ============================================================
+function setMode(m){
+  mode = m;
+  document.getElementById('btnKelas').classList.toggle('active', m==='kelas');
+  document.getElementById('btnMulti').classList.toggle('active', m==='multi');
+  destroyCharts();
+  renderAll();
+}
+
+function getDisplayData(){
+  var subj = getCurSubj();
+  if (mode==='kelas'){
+    var k = document.getElementById('kelasSel').value;
+    return [].concat(subj.kelasData[k]||[]).sort(function(a,b){ return a.nama.localeCompare(b.nama); });
+  }
+  var all = [];
+  Object.values(subj.kelasData).forEach(function(arr){ all = all.concat(arr); });
+  return all.sort(function(a,b){ return a.nama.localeCompare(b.nama); });
+}
+
+// ============================================================
+// RENDER TABLE
+// ============================================================
+function renderTable(data){
+  var subj = getCurSubj();
+  var ranked = [].concat(data).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
+  var rankMap = {};
+  ranked.forEach(function(p,i){ rankMap[p.kelas+'|'+p.nama] = i+1; });
+
+  var h = '<tr><th style="text-align:left;padding-left:14px;">Nama Pelajar</th><th>Kelas</th>';
+  subj.ujian.forEach(function(u,i){
+    h += '<th style="min-width:100px"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">'
+      +'<span>'+u+'</span>'
+      +'<span style="display:flex;gap:2px;">'
+      +'<button class="ic" onclick="editUjian('+i+')" title="Edit">&#9998;</button>'
+      +'<button class="ic ic-del" onclick="delUjian('+i+')" title="Padam">&#10006;</button>'
+      +'</span></div></th>';
+  });
+  h += '<th>Purata</th><th>Gred</th><th>Rank</th><th>Tindakan</th></tr>';
+  document.getElementById('thead').innerHTML = h;
+
+  var b = '';
+  data.forEach(function(p){
+    var a = avg(p.markah);
+    b += '<tr><td style="text-align:left;padding-left:14px;">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;">'
+      +'<span style="font-weight:600">'+p.nama+'</span>'
+      +'<button class="ic" onclick="editPelajar(\''+p.kelas+'\',\''+p.nama+'\')" title="Edit">&#9998;</button>'
+      +'</div></td>'
+      +'<td style="color:#64748b">'+p.kelas+'</td>';
+    p.markah.forEach(function(m,j){
+      b += '<td class="'+cellClass(num(m))+'">'
+        +'<input type="number" value="'+Math.round(num(m))+'" min="0" max="100" '
+        +'onchange="updateMark(\''+p.kelas+'\',\''+p.nama+'\','+j+',this.value)">'
+        +'</td>';
+    });
+    b += '<td class="'+cellClass(a)+'" style="font-family:monospace;font-weight:700">'+a.toFixed(1)+'</td>'
+      +'<td class="'+cellClass(a)+'" style="font-weight:800">'+gred(a)+'</td>'
+      +'<td style="color:#64748b;font-weight:700">'+rankMap[p.kelas+'|'+p.nama]+'</td>'
+      +'<td><button class="ic ic-del" onclick="delPelajar(\''+p.kelas+'\',\''+p.nama+'\')" title="Padam">&#128465;</button></td>'
+      +'</tr>';
+  });
+
+  var uAvgs = [];
+  subj.ujian.forEach(function(u,i){
+    var vals = data.map(function(p){ return num(p.markah[i]); }).filter(function(m){ return m>0; });
+    uAvgs.push(vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : 0);
+  });
+  var totAvg = uAvgs.filter(function(v){return v>0;}).length
+    ? uAvgs.filter(function(v){return v>0;}).reduce(function(a,b){return a+b;},0)/uAvgs.filter(function(v){return v>0;}).length : 0;
+
+  b += '<tr class="sum-row"><td style="text-align:left;padding-left:14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px">Rumusan</td><td>-</td>';
+  uAvgs.forEach(function(av){ b += '<td style="font-family:monospace">'+av.toFixed(1)+'</td>'; });
+  b += '<td class="'+cellClass(totAvg)+'" style="font-family:monospace;font-weight:800">'+totAvg.toFixed(1)+'</td>'
+    +'<td class="'+cellClass(totAvg)+'" style="font-size:15px;font-weight:800">'+gred(totAvg)+'</td>'
+    +'<td>-</td><td>-</td></tr>';
+
+  document.getElementById('tbody').innerHTML = b;
+}
+
+// ============================================================
+// RENDER ANALYTICS
+// ============================================================
+function renderAnalytics(data){
+  if (!data.length){
+    ['rankDiv','risikoDiv','improveDiv','declineDiv','indeksDiv'].forEach(function(id){
+      document.getElementById(id).innerHTML = '<div class="no-data">Tiada data</div>';
+    });
+    document.getElementById('heatmapDiv').innerHTML = '';
+    return;
+  }
+
+  var ranked = [].concat(data).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
+  document.getElementById('rankDiv').innerHTML = ranked.map(function(p,i){
+    var medals = ['#1','#2','#3'];
+    var badge = i<3 ? medals[i] : (i+1)+'.';
+    return '<div class="stat-row"><span>'+badge+' '+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'
+      +'<span class="stat-val">'+avg(p.markah).toFixed(1)+'</span></div>';
+  }).join('');
+
+  var subj = getCurSubj();
+  var indHtml = '';
+  if (mode==='kelas'){
+    var k = document.getElementById('kelasSel').value;
+    var sts = subj.kelasData[k]||[];
+    var av = sts.length ? avg(sts.map(function(p){ return avg(p.markah); })) : 0;
+    var bc = barColor(av);
+    indHtml = '<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'
+      +'<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+bc+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
+  } else {
+    Object.keys(subj.kelasData).forEach(function(k){
+      var sts = subj.kelasData[k]||[];
+      var av = sts.length ? avg(sts.map(function(p){ return avg(p.markah); })) : 0;
+      var bc = barColor(av);
+      indHtml += '<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'
+        +'<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+bc+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
+    });
+  }
+  document.getElementById('indeksDiv').innerHTML = indHtml;
+
+  var risiko = data.filter(function(p){ return avg(p.markah)<40; });
+  document.getElementById('risikoDiv').innerHTML = risiko.length
+    ? risiko.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#ef4444;font-weight:700;font-family:monospace">'+avg(p.markah).toFixed(1)+'</span></div>'; }).join('')
+    : '<div class="no-data" style="color:#10b981">Tiada pelajar berisiko</div>';
+
+  var diffs = data.filter(function(p){ return p.markah.length>=2; }).map(function(p){
+    var valid = p.markah.map(function(m){return num(m);}).filter(function(m){return m>0;});
+    if (valid.length<2) return null;
+    return { nama:p.nama, kelas:p.kelas, diff: valid[valid.length-1]-valid[0] };
+  }).filter(function(d){ return d!==null; });
+
+  var imp = diffs.filter(function(d){return d.diff>0;}).sort(function(a,b){return b.diff-a.diff;}).slice(0,5);
+  document.getElementById('improveDiv').innerHTML = imp.length
+    ? imp.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#10b981;font-weight:700;font-family:monospace">+'+p.diff.toFixed(1)+'</span></div>'; }).join('')
+    : '<div class="no-data">Tiada data mencukupi</div>';
+
+  var dec = diffs.filter(function(d){return d.diff<0;}).sort(function(a,b){return a.diff-b.diff;}).slice(0,5);
+  document.getElementById('declineDiv').innerHTML = dec.length
+    ? dec.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#ef4444;font-weight:700;font-family:monospace">'+p.diff.toFixed(1)+'</span></div>'; }).join('')
+    : '<div class="no-data">Tiada data mencukupi</div>';
+
+  document.getElementById('heatmapDiv').innerHTML = data.map(function(p){
+    var a = avg(p.markah);
+    return '<div class="hm-cell" style="background:'+hmColor(a)+'" title="'+p.nama+' ('+p.kelas+'): '+a.toFixed(1)+'">'
+      +'<div class="hm-name">'+p.nama.split(' ')[0]+'</div>'
+      +'<div class="hm-kelas">'+p.kelas+'</div>'
+      +'<div class="hm-score">'+a.toFixed(1)+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+function destroyCharts(){
+  if (tChart){ tChart.destroy(); tChart=null; }
+  if (gChart){ gChart.destroy(); gChart=null; }
+  tLastData=null; gLastData=null;
+}
+
+function renderCharts(data){
+  var subj = getCurSubj();
+  var tType = document.getElementById('trendType').value;
+  var gType = document.getElementById('gradeType').value;
+
+  var tLabels = subj.ujian;
+  var tVals = subj.ujian.map(function(u,i){
+    var vals = data.map(function(p){ return num(p.markah[i]); }).filter(function(m){return m>0;});
+    return vals.length ? parseFloat((vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(1)) : 0;
+  });
+  tLastData = { labels:tLabels, vals:tVals };
+  if (tChart){ tChart.destroy(); tChart=null; }
+  tChart = buildChart('trendChart', tType, tLabels, tVals, 'Purata', null);
+
+  var gOrder = ['A+','A','A-','B+','B','C+','C','D','E','G'];
+  var gCount = {};
+  data.forEach(function(p){ var g=gred(avg(p.markah)); gCount[g]=(gCount[g]||0)+1; });
+  var gLabels = gOrder.filter(function(g){return gCount[g];});
+  var gVals = gLabels.map(function(g){return gCount[g];});
+  var gColors = gLabels.map(function(g){
+    if (['A+','A','A-'].indexOf(g)>=0) return '#10b981';
+    if (['B+','B'].indexOf(g)>=0) return '#84cc16';
+    if (['C+','C'].indexOf(g)>=0) return '#f59e0b';
+    if (g==='D') return '#f97316';
+    return '#ef4444';
+  });
+  gLastData = { labels:gLabels, vals:gVals, colors:gColors };
+  if (gChart){ gChart.destroy(); gChart=null; }
+  gChart = buildChart('gradeChart', gType, gLabels, gVals, 'Bilangan', gColors);
+}
+
+function buildChart(id, type, labels, vals, lbl, colors){
+  var isPie = type==='pie';
+  var defColors = ['#1a56db','#0ea5e9','#7c3aed','#10b981','#f59e0b','#ef4444','#ec4899','#8b5cf6'];
+  var bgColor = isPie
+    ? (colors || labels.map(function(_,i){return defColors[i%defColors.length];}))
+    : (type==='bar' ? (colors || 'rgba(26,86,219,0.75)') : 'rgba(26,86,219,0.1)');
+
+  return new Chart(document.getElementById(id), {
+    type: isPie ? 'pie' : type,
+    data: {
+      labels: labels,
+      datasets:[{
+        label: lbl,
+        data: vals,
+        backgroundColor: bgColor,
+        borderColor: (!isPie && type!=='bar') ? '#1a56db' : undefined,
+        borderWidth: isPie ? 2 : 1.5,
+        borderRadius: type==='bar' ? 4 : undefined,
+        tension: 0.4,
+        fill: type==='line',
+        pointRadius: type==='line' ? 5 : undefined,
+        pointBackgroundColor: type==='line' ? '#1a56db' : undefined,
+        hoverOffset: isPie ? 8 : undefined
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{ display:isPie, position:'bottom', labels:{ font:{size:11} } },
+        datalabels:{
+          color: isPie ? '#fff' : '#1e293b',
+          anchor: isPie ? 'center' : 'end',
+          align: isPie ? 'center' : 'top',
+          font:{ weight:'bold', size:11 },
+          formatter: function(v){ return type==='line'||type==='bar' ? (lbl==='Bilangan'?v:v.toFixed(1)) : v; }
+        }
+      },
+      scales: isPie ? {} : {
+        y:{ beginAtZero:true, max: lbl==='Purata'?100:undefined, grid:{color:'rgba(0,0,0,0.04)'} }
+      }
+    }
+  });
+}
+
+function rebuildTrend(type){
+  if (!tLastData) return;
+  if (tChart){ tChart.destroy(); tChart=null; }
+  tChart = buildChart('trendChart', type, tLastData.labels, tLastData.vals, 'Purata', null);
+}
+
+function rebuildGrade(type){
+  if (!gLastData) return;
+  if (gChart){ gChart.destroy(); gChart=null; }
+  gChart = buildChart('gradeChart', type, gLastData.labels, gLastData.vals, 'Bilangan', gLastData.colors);
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
+function renderAll(){
+  var data = getDisplayData();
+  renderTable(data);
+  renderAnalytics(data);
+  renderCharts(data);
+}
+
+// ============================================================
+// IMPORT CSV/EXCEL
+// ============================================================
+function doImport(){ document.getElementById('csvIn').click(); }
+
+function handleCSV(e){
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    var subj = getCurSubj();
+    var wb = XLSX.read(ev.target.result, {type:'binary'});
+    var sheet = wb.Sheets[wb.SheetNames[0]];
+    var rows = XLSX.utils.sheet_to_json(sheet, {header:1});
+    rows.slice(1).forEach(function(r){
+      if (r.length<2) return;
+      var k=String(r[0]), n=String(r[1]);
+      if (!subj.kelasData[k]) subj.kelasData[k]=[];
+      while (subj.ujian.length < r.length-2) subj.ujian.push('Ujian '+(subj.ujian.length+1));
+      subj.kelasData[k].push({ nama:n, kelas:k, markah:r.slice(2).map(function(v){ return Math.round(num(v)); }) });
+    });
+    renderKelasSel();
+    renderAll();
+    autoSave();
+    toast('Import berjaya');
+  };
+  reader.readAsBinaryString(file);
+  e.target.value='';
+}
+
+// ============================================================
+// EXPORT/IMPORT JSON
+// ============================================================
+function exportJSON(){
+  allData[curTahun].subjects = subjects;
+  allData[curTahun].currentSubject = curSubject;
+  var blob = new Blob([JSON.stringify({allData:allData,curTahun:curTahun},null,2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SPIn_Backup_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Data dieksport');
+}
+
+function handleJSON(e){
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try {
+      var d = JSON.parse(ev.target.result);
+      if (!d.allData){ toast('Format fail tidak sah'); return; }
+      showModal('Import Data', 'Ini akan GANTIKAN semua data cloud. Teruskan?', 'confirm').then(async function(ok){
+        if (!ok) return;
+        allData = d.allData;
+        curTahun = d.curTahun || Object.keys(allData).sort(function(a,b){return b-a;})[0];
+        subjects = allData[curTahun].subjects || {};
+        curSubject = allData[curTahun].currentSubject;
+        if (!curSubject||!subjects[curSubject]) curSubject=Object.keys(subjects)[0]||null;
+        destroyCharts();
+        renderTahunSel();
+        renderKelasSel();
+        renderSubjList();
+        renderAll();
+        await saveAll();
+        toast('Import JSON berjaya');
+      });
+    } catch(err){ toast('Ralat membaca JSON'); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+// ============================================================
+// PDF
+// ============================================================
+function getJsPDF(){
+  if (window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
+  if (window.jsPDF) return window.jsPDF;
+  throw new Error('jsPDF tidak dimuatkan');
+}
+
+function pdfKelas(){
+  try {
+    var JsPDF = getJsPDF();
+    var doc = new JsPDF('p','mm','a4');
+    var subj = getCurSubj();
+    var k = document.getElementById('kelasSel').value;
+    if (!k){ toast('Pilih kelas dahulu'); return; }
+    var data = [].concat(subj.kelasData[k]||[]).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(16);
+    doc.text(safe(curSubject)+' - Tahun '+curTahun, 10, 15);
+    doc.setFontSize(13);
+    doc.text('Laporan Kelas '+k, 10, 23);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text('Dijana: '+new Date().toLocaleString(), 10, 29);
+    doc.line(10, 32, 200, 32);
+
+    var y = 40;
+    doc.setFont('helvetica','bold'); doc.setFontSize(9);
+    doc.text('Bil', 10, y); doc.text('Nama Pelajar', 22, y);
+    doc.text('Purata', 140, y); doc.text('Gred', 160, y); doc.text('Rank', 175, y);
+    y += 7;
+
+    doc.setFont('helvetica','normal');
+    data.forEach(function(p,i){
+      if (y>275){ doc.addPage(); y=15; }
+      var a = avg(p.markah);
+      doc.text(String(i+1), 10, y);
+      doc.text(safe(p.nama).substring(0,35), 22, y);
+      doc.text(a.toFixed(1), 140, y);
+      doc.text(safe(gred(a)), 160, y);
+      doc.text(String(i+1), 175, y);
+      y += 6;
+    });
+
+    y += 4; doc.line(10, y, 200, y); y += 6;
+    doc.setFont('helvetica','bold'); doc.setFontSize(9);
+    var total = data.length;
+    var avgAll = total ? data.reduce(function(s,p){return s+avg(p.markah);},0)/total : 0;
+    doc.text('Jumlah Pelajar: '+total, 12, y); y += 5;
+    doc.text('Purata Kelas: '+avgAll.toFixed(2), 12, y); y += 5;
+    doc.text('Gred Purata: '+safe(gred(avgAll)), 12, y);
+
+    doc.save('Kelas_'+k+'_'+safe(curSubject)+'_'+curTahun+'.pdf');
+    toast('PDF Kelas dimuat turun');
+  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
+}
+
+function pdfMulti(){
+  try {
+    var JsPDF = getJsPDF();
+    var doc = new JsPDF('p','mm','a4');
+    var subj = getCurSubj();
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(16);
+    doc.text(safe(curSubject)+' - Tahun '+curTahun, 10, 15);
+    doc.setFontSize(13);
+    doc.text('Laporan Semua Kelas', 10, 23);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text('Dijana: '+new Date().toLocaleString(), 10, 29);
+    doc.line(10, 32, 200, 32);
+
+    var y = 38; var first = true;
+    Object.keys(subj.kelasData).forEach(function(k){
+      var data = [].concat(subj.kelasData[k]).sort(function(a,b){return avg(b.markah)-avg(a.markah);});
+      if (!first && y>210){ doc.addPage(); y=15; }
+      first = false;
+
+      doc.setFont('helvetica','bold'); doc.setFontSize(11);
+      doc.text('Kelas '+k, 10, y); y += 6;
+      doc.setFontSize(8);
+      doc.text('Bil', 10, y); doc.text('Nama Pelajar', 22, y);
+      doc.text('Purata', 140, y); doc.text('Gred', 160, y); y += 5;
+      doc.setFont('helvetica','normal');
+      data.forEach(function(p,i){
+        if (y>275){ doc.addPage(); y=15; }
+        var a = avg(p.markah);
+        doc.text(String(i+1), 10, y);
+        doc.text(safe(p.nama).substring(0,35), 22, y);
+        doc.text(a.toFixed(1), 140, y);
+        doc.text(safe(gred(a)), 160, y);
+        y += 5;
+      });
+      y += 4;
+    });
+
+    doc.save('Multi_'+safe(curSubject)+'_'+curTahun+'.pdf');
+    toast('PDF Multi dimuat turun');
+  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
+}
+
+function pdfFull(btn){
+  var orig = btn.textContent;
+  btn.textContent = 'Menjana...';
+  btn.disabled = true;
+  try {
+    var JsPDF = getJsPDF();
+    var doc = new JsPDF('p','mm','a4');
+    var subj = getCurSubj();
+
+    var y=20, margin=10, cw=190, ph=297;
+    doc.setFont('helvetica','bold'); doc.setFontSize(15);
+    doc.text('Laporan Penuh SPIn Analytics', margin+cw/2, y, {align:'center'}); y+=9;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Subjek: '+safe(curSubject)+'   Tahun: '+curTahun, margin+cw/2, y, {align:'center'}); y+=6;
+    doc.setFontSize(8);
+    doc.text('Dijana: '+new Date().toLocaleString(), margin+cw/2, y, {align:'center'}); y+=8;
+    doc.line(margin, y, margin+cw, y); y+=6;
+
+    Object.keys(subj.kelasData).forEach(function(k){
+      var students = [].concat(subj.kelasData[k]).sort(function(a,b){return avg(b.markah)-avg(a.markah);});
+      var avgClass = students.length ? avg(students.map(function(p){return avg(p.markah);})) : 0;
+
+      if (y > ph-50){ doc.addPage(); y=20; }
+
+      doc.setFont('helvetica','bold'); doc.setFontSize(11);
+      doc.text('Kelas '+k, margin, y); y+=6;
+
+      doc.setFontSize(8); doc.setFont('helvetica','bold');
+      doc.setFillColor(26,86,219); doc.setTextColor(255,255,255);
+      doc.rect(margin, y-4, cw, 6, 'F');
+      var xp = margin+1;
+      doc.text('Bil', xp, y); xp+=10;
+      doc.text('Nama', xp, y); xp+=42;
+      var colW = subj.ujian.length ? (cw-53-17-12)/subj.ujian.length : 0;
+      subj.ujian.forEach(function(u){
+        doc.text(safe(u).substring(0,7), xp+colW/2, y, {align:'center'});
+        xp+=colW;
+      });
+      doc.text('Purata', xp+2, y); xp+=17;
+      doc.text('Gred', xp+2, y);
+      doc.setTextColor(0,0,0);
+      y+=8;
+
+      doc.setFont('helvetica','normal');
+      students.forEach(function(p,i){
+        if (y>ph-12){ doc.addPage(); y=20; }
+        var a=avg(p.markah);
+        if (i%2===0){ doc.setFillColor(248,250,252); doc.rect(margin,y-4,cw,5,'F'); }
+        xp = margin+1;
+        doc.text(String(i+1), xp, y); xp+=10;
+        doc.text(safe(p.nama).substring(0,24), xp, y); xp+=42;
+        p.markah.forEach(function(m){
+          doc.text(String(Math.round(num(m))), xp+colW/2, y, {align:'center'});
+          xp+=colW;
+        });
+        doc.text(a.toFixed(1), xp+2, y); xp+=17;
+        doc.text(safe(gred(a)), xp+2, y);
+        y+=5;
+      });
+
+      y+=3;
+      doc.setFillColor(240,244,255); doc.rect(margin, y-3, cw, 10, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(8);
+      doc.text('Ringkasan '+k+': Jumlah '+students.length+' pelajar   Purata '+avgClass.toFixed(1)+'   Gred '+safe(gred(avgClass)), margin+2, y+3);
+      y+=12;
+    });
+
+    doc.save('LaporanPenuh_'+safe(curSubject)+'_'+curTahun+'.pdf');
+    toast('Laporan penuh dimuat turun');
+  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
+  finally { btn.textContent=orig; btn.disabled=false; }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+Chart.register(ChartDataLabels);
+document.addEventListener('DOMContentLoaded', function(){ spinBoot(); });
 </script>
 </body>
 </html>
