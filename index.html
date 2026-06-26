@@ -337,8 +337,8 @@ td input[type=number]:focus { outline: none; border-color: #1a56db; box-shadow: 
   <div class="loading-logo">SP<span style="color:#60a5fa">In</span></div>
   <div class="loading-text">SPIn Analytics</div>
   <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  <div class="loading-sub" id="loading-sub">Menyambung ke pangkalan data...</div>
-  <div class="loading-tip" id="loading-tip">Sambungan pertama mungkin mengambil masa 10-20 saat</div>
+  <div class="loading-sub" id="loading-sub">Memulakan aplikasi...</div>
+  <div class="loading-tip" id="loading-tip"></div>
 </div>
 
 <!-- AUTH SCREEN -->
@@ -603,7 +603,12 @@ function hideLoadingTip() {
 
 function hideLoading() {
   var el = document.getElementById('loading-overlay');
-  if (el) el.style.display = 'none';
+  if (el) {
+    el.style.display = 'none';
+    el.style.visibility = 'hidden';
+    el.style.opacity = '0';
+    el.style.pointerEvents = 'none';
+  }
 }
 
 function showAuthScreen() {
@@ -1686,7 +1691,18 @@ function pdfFull(btn){
 // INIT
 // ============================================================
 Chart.register(ChartDataLabels);
-document.addEventListener('DOMContentLoaded', function(){ spinBoot(); });
+document.addEventListener('DOMContentLoaded', function(){
+  try {
+    spinBoot();
+  } catch(e) {
+    console.error('spinBoot error:', e);
+    // Force show auth screen if boot fails
+    var lo = document.getElementById('loading-overlay');
+    if (lo) lo.style.display = 'none';
+    var as = document.getElementById('auth-screen');
+    if (as) { as.style.display = 'flex'; as.style.alignItems = 'center'; as.style.justifyContent = 'center'; }
+  }
+});
 </script>
 </body>
 </html>
