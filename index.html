@@ -2,1707 +2,603 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SPIn Analytics</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduKit — Alat Digital untuk Guru & Pentadbir Malaysia</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: Arial, sans-serif; background: #f0f4f8; color: #1e293b; font-size: 13px; }
-#app { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-#app.hidden { display: none; }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* HEADER */
-#header {
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --biru: #1a56db;
+  --biru-gelap: #1240b0;
+  --biru-cerah: #60a5fa;
+  --hijau: #10b981;
+  --kuning: #f59e0b;
+  --merah: #ef4444;
+  --gelap: #0f172a;
+  --gelap2: #1e293b;
+  --kelabu: #64748b;
+  --border: #e2e8f0;
+  --bg: #f8fafc;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
   background: #fff;
-  border-bottom: 2px solid #1a56db;
-  padding: 10px 16px;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-.hrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-.hrow:last-child { margin-bottom: 0; }
-.brand { font-size: 18px; font-weight: 800; color: #1a56db; margin-right: 8px; }
-.brand span { color: #0f172a; }
-
-/* BUTTONS */
-.btn {
-  padding: 6px 12px; border: 1px solid #cbd5e1; background: #fff;
-  color: #475569; border-radius: 6px; cursor: pointer; font-size: 12px;
-  font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
-  white-space: nowrap; font-family: Arial, sans-serif;
-  transition: background 0.15s, border-color 0.15s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.btn:hover { background: #f1f5f9; border-color: #94a3b8; }
-.btn-blue { background: #1a56db; color: #fff; border-color: #1a56db; }
-.btn-blue:hover { background: #1240b0; }
-.btn-green { background: #10b981; color: #fff; border-color: #10b981; }
-.btn-green:hover { background: #059669; }
-.btn-red { background: #ef4444; color: #fff; border-color: #ef4444; }
-.btn-red:hover { background: #dc2626; }
-.btn-orange { background: #f97316; color: #fff; border-color: #f97316; }
-.btn-orange:hover { background: #ea580c; }
-.btn-mode { background: #f1f5f9; }
-.btn-mode.active { background: #1a56db; color: #fff; border-color: #1a56db; }
-
-select.sel {
-  padding: 6px 8px; border: 1px solid #cbd5e1; background: #fff;
-  border-radius: 6px; font-size: 12px; font-weight: 600; color: #1e293b;
-  cursor: pointer; font-family: Arial, sans-serif;
+  color: var(--gelap);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-.tahun-box {
-  display: flex; align-items: center; gap: 4px;
-  background: #f1f5f9; border: 1px solid #cbd5e1;
-  border-radius: 6px; padding: 4px 8px;
-  font-size: 12px; font-weight: 700; color: #475569;
+/* ── NAVBAR ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
 }
-.tahun-box select { border: none; background: transparent; font-weight: 800; color: #1a56db; font-size: 13px; cursor: pointer; outline: none; font-family: Arial, sans-serif; }
-.tahun-box button { padding: 1px 7px; border-radius: 4px; font-size: 14px; font-weight: 800; cursor: pointer; border: 1px solid; }
-.tahun-add { background: #dbeafe; border-color: #1a56db; color: #1a56db; }
-.tahun-del { background: #fee2e2; border-color: #ef4444; color: #ef4444; }
-
-.subj-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
-.subj-btn:hover { border-color: #1a56db; color: #1a56db; }
-.subj-btn.active { background: #1a56db; color: #fff; border-color: #1a56db; }
-.subj-del { padding: 2px 6px; border: none; background: none; color: #94a3b8; cursor: pointer; font-size: 12px; }
-.subj-del:hover { color: #ef4444; }
-
-#saveStatus { font-size: 11px; padding: 3px 8px; background: #d1fae5; color: #065f46; border-radius: 4px; font-weight: 600; }
-#saveStatus.saving { background: #fef9c3; color: #713f12; }
-#saveStatus.error { background: #fee2e2; color: #991b1b; }
-
-/* CONTENT */
-#content { flex: 1; overflow-y: auto; padding: 14px 16px; -webkit-overflow-scrolling: touch; }
-
-/* TABLE */
-.tbl-wrap { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 14px; }
-.tbl-scroll { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-th { background: #1e293b; color: #fff; padding: 10px 8px; font-weight: 600; text-align: center; white-space: nowrap; font-size: 11px; }
-th:first-child { text-align: left; padding-left: 14px; min-width: 180px; position: sticky; left: 0; z-index: 3; background: #1e293b; }
-th:nth-child(2) { position: sticky; left: 180px; z-index: 3; background: #1e293b; min-width: 60px; }
-td { padding: 8px; border-bottom: 1px solid #f1f5f9; text-align: center; }
-td:first-child { position: sticky; left: 0; z-index: 2; background: #fff; border-right: none; }
-td:nth-child(2) { position: sticky; left: 180px; z-index: 2; background: #fff; border-right: 1px solid #e2e8f0; min-width: 60px; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
-tr:hover td:first-child { background: #f1f5f9; }
-tr:hover td:nth-child(2) { background: #f1f5f9; }
-.sum-row td:first-child { background: #f1f5f9 !important; }
-.sum-row td:nth-child(2) { background: #f1f5f9 !important; }
-.cg { background: #d1fae5; color: #065f46; font-weight: 700; }
-.cy { background: #fef9c3; color: #713f12; font-weight: 700; }
-.cr { background: #fee2e2; color: #991b1b; font-weight: 700; }
-.sum-row td { background: #f1f5f9 !important; font-weight: 700; border-top: 2px solid #e2e8f0; }
-td input[type=number] { width: 52px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center; font-size: 12px; font-family: monospace; }
-td input[type=number]:focus { outline: none; border-color: #1a56db; box-shadow: 0 0 0 2px rgba(26,86,219,0.15); }
-.ic { background: none; border: none; cursor: pointer; color: #94a3b8; padding: 2px 5px; border-radius: 3px; font-size: 12px; }
-.ic:hover { color: #1a56db; background: #eff6ff; }
-.ic-del:hover { color: #ef4444 !important; background: #fee2e2 !important; }
-
-/* CARDS */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 12px; }
-.card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; }
-.card-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; }
-.card-hd-left { display: flex; align-items: center; gap: 8px; }
-.card-ico { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-.card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; }
-.card-bd { padding: 12px 14px; }
-.card-scroll { max-height: 210px; overflow-y: auto; }
-.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
-.stat-row:last-child { border-bottom: none; }
-.stat-val { font-weight: 700; color: #1a56db; font-family: monospace; }
-.no-data { color: #94a3b8; font-size: 12px; text-align: center; padding: 20px; font-style: italic; }
-
-/* BAR */
-.bar-wrap { margin-bottom: 8px; }
-.bar-label { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
-.bar-track { background: #e2e8f0; height: 24px; border-radius: 5px; overflow: hidden; }
-.bar-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-weight: 700; font-size: 11px; font-family: monospace; border-radius: 5px; min-width: 48px; transition: width 0.5s ease; }
-
-/* HEATMAP */
-.heatmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px,1fr)); gap: 5px; }
-.hm-cell { aspect-ratio: 1; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
-.hm-cell:hover { transform: scale(1.08); }
-.hm-name { font-size: 10px; font-weight: 700; color: #fff; }
-.hm-kelas { font-size: 9px; color: rgba(255,255,255,0.8); }
-.hm-score { font-size: 13px; font-weight: 800; color: #fff; font-family: monospace; }
-
-/* MODAL */
-#modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; align-items: center; justify-content: center; }
-#modal-bg.show { display: flex; }
-#modal-box { background: #fff; border-radius: 12px; padding: 24px; width: 90%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-#modal-title { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
-#modal-msg { font-size: 13px; color: #64748b; margin-bottom: 14px; }
-#modal-input { width: 100%; padding: 9px 11px; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; display: none; margin-bottom: 14px; }
-#modal-input:focus { outline: none; border-color: #1a56db; }
-.modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
-
-/* TOAST */
-.toast { position: fixed; bottom: 18px; right: 18px; background: #1e293b; color: #fff; padding: 9px 15px; border-radius: 7px; font-size: 12px; font-weight: 600; z-index: 9999; animation: tin 0.2s ease; }
-@keyframes tin { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
-/* CHART SELECT */
-.chart-sel { font-size: 11px; padding: 3px 7px; border: 1px solid #e2e8f0; border-radius: 5px; background: #f8fafc; color: #475569; cursor: pointer; font-family: Arial, sans-serif; font-weight: 600; }
-
-/* LOADING OVERLAY */
-#loading-overlay {
-  position: fixed; inset: 0; background: #0f172a; z-index: 99999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+.nav-brand {
+  font-size: 20px; font-weight: 800; color: var(--biru);
+  letter-spacing: -0.5px;
 }
-.loading-logo {
-  width: 70px; height: 70px; border-radius: 16px;
-  background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px; font-weight: 900; color: white;
-  box-shadow: 0 8px 24px rgba(26,86,219,.4);
-  animation: logopulse 2s ease-in-out infinite;
+.nav-brand span { color: var(--gelap); }
+.nav-cta {
+  background: var(--biru); color: #fff;
+  padding: 8px 18px; border-radius: 8px;
+  font-size: 13px; font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
 }
-@keyframes logopulse { 0%,100%{ box-shadow:0 8px 24px rgba(26,86,219,.4); } 50%{ box-shadow:0 8px 40px rgba(26,86,219,.9); } }
-.loading-text { color: white; font-size: 16px; font-weight: 800; }
-.loading-sub { color: #64748b; font-size: 11px; text-align: center; max-width: 260px; line-height: 1.6; min-height: 18px; }
-.loading-bar-wrap { width: 220px; height: 5px; background: #1e293b; border-radius: 99px; overflow: hidden; }
-.loading-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#1a56db,#7c3aed); border-radius: 99px; transition: width 0.5s ease; }
-.loading-tip { font-size: 10px; color: #334155; text-align: center; max-width: 260px; font-style: italic; }
-.spinner {
-  width: 28px; height: 28px; border: 3px solid #1e293b;
-  border-top-color: #1a56db; border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.nav-cta:hover { background: var(--biru-gelap); }
 
-/* ── RESPONSIVE ── */
-@media(max-width:768px){
-  html, body { overflow: auto; }
-  #app { height: auto; min-height: 100vh; overflow: visible; }
-  #header { padding: 8px 10px; position: sticky; top: 0; z-index: 100; }
-  #content { flex: none; overflow: visible; padding: 10px; }
-  .hrow { gap: 6px; }
-  .btn { padding: 8px 10px; font-size: 12px; min-height: 36px; }
-  .sel { padding: 8px 10px; font-size: 12px; min-height: 36px; }
-  .subj-btn { padding: 7px 10px; min-height: 34px; }
-  .grid { grid-template-columns: 1fr; }
-  .card-scroll { max-height: 180px; }
-  .brand { font-size: 16px; }
-  .tahun-box button { min-width: 30px; min-height: 30px; }
-  table { font-size: 11px; }
-  td input[type=number] { width: 46px; font-size: 11px; }
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+  padding: 80px 24px 70px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-
-@media(max-width:480px){
-  .brand { font-size: 14px; }
-  #header { padding: 6px 8px; }
-  #content { padding: 8px; }
-  .btn { padding: 7px 8px; font-size: 11px; }
-  .hrow { gap: 4px; }
-}
-
-@media(max-width:768px){
-  .hrow {
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-  }
-  .hrow::-webkit-scrollbar { display: none; }
-  #header { box-shadow: 0 2px 12px rgba(0,0,0,.12); }
-  .btn { min-height: 38px; min-width: 38px; flex-shrink: 0; }
-  .sel { min-height: 38px; flex-shrink: 0; }
-  .subj-btn { min-height: 36px; flex-shrink: 0; }
-  #user-info-bar { gap: 4px; }
-  .ui-name { display: none; }
-  .ui-role-admin, .ui-role-guru { display: none; }
-  table { font-size: 11px; }
-  td, th { padding: 5px 6px !important; }
-  td input[type=number] { width: 44px; font-size: 11px; }
-  .grid { grid-template-columns: 1fr; gap: 10px; }
-  .card-bd canvas { max-height: 200px; }
-  #content { padding: 10px 8px; }
-}
-
-@media(max-width:400px){
-  .brand { font-size: 13px; }
-  .btn { padding: 7px 8px; font-size: 11px; }
-  .a-btn { font-size: 13px; }
-}
-
-/* AUTH SYSTEM */
-#auth-screen {
-  position: fixed; inset: 0; z-index: 9999;
-  background: #0f172a;
-  flex-direction: column;
-  align-items: center; justify-content: center; padding: 20px;
-}
-.auth-bg {
+.hero::before {
+  content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 30% 40%, rgba(26,86,219,.2) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 60%, rgba(16,185,129,.12) 0%, transparent 55%);
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(26,86,219,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(16,185,129,0.15) 0%, transparent 55%);
   pointer-events: none;
 }
-.auth-wrap { position: relative; z-index: 1; width: 100%; max-width: 360px; }
-.auth-brand { text-align: center; margin-bottom: 24px; }
-.auth-logo {
-  width: 60px; height: 60px; border-radius: 14px;
-  background: linear-gradient(135deg, #1a56db 0%, #7c3aed 100%);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 12px; font-size: 26px; font-weight: 900; color: white;
-  box-shadow: 0 8px 24px rgba(26,86,219,.4);
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(26,86,219,0.2); border: 1px solid rgba(96,165,250,0.3);
+  border-radius: 20px; padding: 4px 14px;
+  font-size: 12px; font-weight: 700; color: var(--biru-cerah);
+  letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+.hero h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800; color: #fff;
+  line-height: 1.15;
   letter-spacing: -1px;
+  max-width: 720px; margin: 0 auto 16px;
 }
-.auth-appname { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; }
-.auth-appname span { color: #60a5fa; }
-.auth-tagline { font-size: 11px; color: #64748b; margin-top: 4px; }
-.auth-ver { display: inline-flex; align-items: center; gap: 5px; background: rgba(26,86,219,.15); border: 1px solid rgba(26,86,219,.3); border-radius: 20px; padding: 2px 10px; margin-top: 8px; }
-.auth-ver-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
-.auth-ver-txt { font-size: 9px; color: rgba(255,255,255,.4); font-weight: 700; }
-.auth-card {
-  background: #1e293b; border-radius: 14px;
-  border: 1px solid #334155; padding: 26px 24px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+.hero h1 em { color: var(--biru-cerah); font-style: normal; }
+.hero-sub {
+  font-size: clamp(14px, 2vw, 18px);
+  color: #94a3b8;
+  max-width: 560px; margin: 0 auto 36px;
+  line-height: 1.7;
 }
-.auth-card-title { font-size: 15px; font-weight: 800; color: white; margin-bottom: 18px; }
-.a-grp { margin-bottom: 13px; }
-.a-lbl { display: block; font-size: 9px; font-weight: 800; color: #64748b; letter-spacing: .7px; text-transform: uppercase; margin-bottom: 5px; }
-.a-inp {
-  width: 100%; background: #0f172a; border: 1.5px solid #334155;
-  border-radius: 7px; padding: 10px 12px; color: white; font-size: 13px;
-  transition: border-color .15s; font-family: Arial, sans-serif;
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--biru); color: #fff;
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 15px; font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(26,86,219,0.4);
+  transition: all 0.2s;
 }
-.a-inp:focus { outline: none; border-color: #1a56db; box-shadow: 0 0 0 3px rgba(26,86,219,.15); }
-.a-inp::placeholder { color: #475569; }
-.a-btn {
-  width: 100%; background: #1a56db; border: none; border-radius: 7px;
-  padding: 11px; color: white; font-size: 13px; font-weight: 800;
-  cursor: pointer; margin-top: 4px; transition: all .2s;
-  box-shadow: 0 4px 14px rgba(26,86,219,.4); font-family: Arial, sans-serif;
+.btn-primary:hover { background: var(--biru-gelap); transform: translateY(-1px); }
+.btn-ghost {
+  background: rgba(255,255,255,0.08); color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
 }
-.a-btn:hover { background: #1240b0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,86,219,.5); }
-.a-btn:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; }
-.a-err { font-size: 11px; color: #fca5a5; text-align: center; margin-top: 9px; min-height: 16px; }
-.a-note { font-size: 10px; color: #334155; text-align: center; margin-top: 12px; }
+.btn-ghost:hover { background: rgba(255,255,255,0.14); }
+.hero-stats {
+  display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+  margin-top: 48px; padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.stat { text-align: center; }
+.stat-num { font-size: 28px; font-weight: 800; color: #fff; }
+.stat-lbl { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
-/* ADMIN MODAL */
-#adm-modal { position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 8000; display: none; align-items: center; justify-content: center; padding: 16px; }
-#adm-modal.open { display: flex; }
-.adm-box { background: #1e293b; border-radius: 14px; width: 100%; max-width: 480px; max-height: 88vh; display: flex; flex-direction: column; border: 1px solid #334155; overflow: hidden; }
-.adm-hdr { background: #0f172a; padding: 13px 17px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.adm-hdr-t { font-size: 13px; font-weight: 800; color: white; }
-.adm-close { background: none; border: none; color: #64748b; font-size: 22px; cursor: pointer; padding: 0 4px; }
-.adm-close:hover { color: white; }
-.adm-tabs { background: #0f172a; display: flex; padding: 0 13px; border-bottom: 1px solid #1e293b; flex-shrink: 0; }
-.adm-tab { padding: 8px 12px; border: none; background: transparent; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: Arial, sans-serif; }
-.adm-tab:hover:not(.on) { color: rgba(255,255,255,.65); }
-.adm-tab.on { color: white; border-bottom-color: #1a56db; }
-.adm-body { overflow-y: auto; flex: 1; padding: 17px; display: flex; flex-direction: column; gap: 13px; }
-.adm-row { display: flex; align-items: center; gap: 8px; padding: 9px 11px; background: #0f172a; border-radius: 7px; border: 1px solid #334155; }
-.adm-row-name { flex: 1; font-size: 12px; font-weight: 700; color: white; }
-.role-badge { border-radius: 10px; padding: 2px 8px; font-size: 9px; font-weight: 800; }
-.rb-admin { background: #312e81; color: #a5b4fc; }
-.rb-guru  { background: #0c4a6e; color: #7dd3fc; }
-.adm-del-btn { background: #7f1d1d; border: none; border-radius: 5px; color: #fca5a5; padding: 3px 9px; font-size: 11px; cursor: pointer; font-family: Arial, sans-serif; }
-.adm-del-btn:hover { background: #991b1b; }
-.a-section-t { font-size: 12px; font-weight: 800; color: white; margin-bottom: 8px; }
-.a-msg { font-size: 11px; min-height: 16px; }
-.a-ok  { color: #86efac; } .a-bad { color: #fca5a5; }
-.a-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; }
-.a-fbtn { background: #1a56db; border: none; border-radius: 7px; color: white; font-size: 12px; font-weight: 700; padding: 8px 16px; cursor: pointer; align-self: flex-start; font-family: Arial, sans-serif; }
-.a-fbtn:hover { background: #1240b0; }
-.danger-zone { border-top: 1px solid #334155; padding-top: 13px; }
-.danger-t { font-size: 11px; font-weight: 700; color: #ef4444; margin-bottom: 8px; }
-
-/* TOPBAR USER INFO */
-#user-info-bar {
-  display: flex; align-items: center; gap: 7px;
-  padding: 4px 12px 4px 0; flex-shrink: 0;
+/* ── SECTION BASE ── */
+section { padding: 72px 24px; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 800; color: var(--biru);
+  text-transform: uppercase; letter-spacing: 1px;
+  background: #eff6ff; border-radius: 4px; padding: 3px 10px;
+  margin-bottom: 12px;
 }
-.ui-name { font-size: 10px; color: #94a3b8; font-weight: 600; }
-.ui-role-admin { font-size: 8px; background: rgba(251,191,36,.15); color: #fbbf24; border-radius: 10px; padding: 1px 7px; font-weight: 800; border: 1px solid rgba(251,191,36,.25); }
-.ui-role-guru  { font-size: 8px; background: rgba(148,163,184,.12); color: #94a3b8; border-radius: 10px; padding: 1px 7px; font-weight: 800; border: 1px solid rgba(148,163,184,.18); }
-.ui-adm-btn { background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.25); border-radius: 5px; color: #fbbf24; padding: 3px 9px; font-size: 10px; font-weight: 700; cursor: pointer; font-family: Arial, sans-serif; }
-.ui-adm-btn:hover { background: rgba(251,191,36,.2); }
-.ui-out-btn { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 5px; color: #94a3b8; padding: 3px 9px; font-size: 10px; cursor: pointer; font-family: Arial, sans-serif; }
-.ui-out-btn:hover { background: rgba(255,255,255,.12); }
+.section-title {
+  font-size: clamp(22px, 3.5vw, 36px);
+  font-weight: 800; line-height: 1.2;
+  letter-spacing: -0.5px; margin-bottom: 12px;
+}
+.section-sub {
+  font-size: 15px; color: var(--kelabu);
+  max-width: 560px; line-height: 1.7;
+}
+
+/* ── MASALAH ── */
+.masalah { background: var(--bg); }
+.masalah-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; margin-top: 40px;
+}
+.masalah-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.masalah-ico {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: #fee2e2; color: var(--merah);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.masalah-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.masalah-card p { font-size: 12px; color: var(--kelabu); line-height: 1.6; }
+
+/* ── APPS ── */
+.apps { background: #fff; }
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px; margin-top: 40px;
+}
+.app-card {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px; transition: all 0.2s;
+  cursor: default;
+}
+.app-card:hover { border-color: var(--biru); box-shadow: 0 4px 16px rgba(26,86,219,0.1); }
+.app-icon {
+  width: 38px; height: 38px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 10px;
+}
+.app-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.app-card p { font-size: 11px; color: var(--kelabu); line-height: 1.5; }
+.app-tag {
+  display: inline-block; font-size: 9px; font-weight: 800;
+  border-radius: 4px; padding: 2px 7px; margin-top: 8px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.tag-guru { background: #eff6ff; color: var(--biru); }
+.tag-pentadbir { background: #f0fdf4; color: #15803d; }
+.tag-gabungan { background: #fdf4ff; color: #7e22ce; }
+
+/* ── PAKEJ (PRICING) ── */
+.pakej { background: var(--bg); }
+.pakej-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px; margin-top: 44px;
+}
+.pakej-card {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: 16px; padding: 28px 24px;
+  position: relative; transition: all 0.2s;
+}
+.pakej-card:hover { border-color: var(--biru); box-shadow: 0 8px 32px rgba(26,86,219,0.12); }
+.pakej-card.featured {
+  border-color: var(--biru);
+  box-shadow: 0 8px 32px rgba(26,86,219,0.15);
+}
+.pakej-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--biru); color: #fff;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+  padding: 3px 14px; border-radius: 20px; text-transform: uppercase;
+  white-space: nowrap;
+}
+.pakej-nama { font-size: 13px; font-weight: 800; color: var(--kelabu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.pakej-harga { font-size: 38px; font-weight: 800; color: var(--gelap); letter-spacing: -1px; }
+.pakej-harga span { font-size: 16px; font-weight: 600; color: var(--kelabu); }
+.pakej-asal { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-bottom: 4px; }
+.pakej-jimat { font-size: 12px; color: var(--hijau); font-weight: 700; margin-bottom: 20px; }
+.pakej-apps { font-size: 12px; color: var(--kelabu); margin-bottom: 16px; }
+.pakej-list { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
+.pakej-list li {
+  font-size: 13px; display: flex; align-items: flex-start; gap: 8px;
+}
+.pakej-list li::before {
+  content: '✓'; color: var(--hijau); font-weight: 800;
+  font-size: 12px; flex-shrink: 0; margin-top: 2px;
+}
+.btn-beli {
+  display: block; text-align: center;
+  background: var(--biru); color: #fff;
+  padding: 13px; border-radius: 10px;
+  font-size: 14px; font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(26,86,219,0.3);
+}
+.btn-beli:hover { background: var(--biru-gelap); transform: translateY(-1px); }
+.pakej-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+/* KidSpark */
+.kidspark {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  border-radius: 16px; padding: 32px 28px;
+  margin-top: 24px; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+}
+.kidspark-left h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.kidspark-left p { font-size: 13px; color: rgba(255,255,255,0.75); }
+.kidspark-price { font-size: 28px; font-weight: 800; }
+.kidspark-price span { font-size: 13px; font-weight: 500; opacity: 0.7; }
+.btn-kidspark {
+  background: #fff; color: #7c3aed;
+  padding: 11px 22px; border-radius: 9px;
+  font-size: 13px; font-weight: 800;
+  text-decoration: none; white-space: nowrap;
+  transition: all 0.2s;
+}
+.btn-kidspark:hover { background: #f5f3ff; }
+
+/* ── JAMINAN ── */
+.jaminan { background: #fff; }
+.jaminan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px; margin-top: 40px;
+}
+.jaminan-item { text-align: center; padding: 20px; }
+.jaminan-ico { font-size: 32px; margin-bottom: 12px; }
+.jaminan-item h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.jaminan-item p { font-size: 12px; color: var(--kelabu); line-height: 1.6; }
+
+/* ── CTA AKHIR ── */
+.cta-akhir {
+  background: var(--gelap);
+  text-align: center; padding: 80px 24px;
+}
+.cta-akhir h2 { font-size: clamp(22px, 3.5vw, 36px); font-weight: 800; color: #fff; margin-bottom: 12px; }
+.cta-akhir p { color: #64748b; margin-bottom: 32px; font-size: 15px; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── FOOTER ── */
+footer {
+  background: #0f172a; padding: 28px 24px;
+  text-align: center;
+  border-top: 1px solid #1e293b;
+}
+footer p { font-size: 12px; color: #334155; }
+footer a { color: #475569; text-decoration: none; }
+footer a:hover { color: #94a3b8; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero { padding: 56px 16px 52px; }
+  section { padding: 52px 16px; }
+  .pakej-grid { grid-template-columns: 1fr; }
+  .kidspark { flex-direction: column; text-align: center; }
+  nav { padding: 0 16px; }
+}
 </style>
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
-<div id="loading-overlay">
-  <div class="loading-logo">SP<span style="color:#60a5fa">In</span></div>
-  <div class="loading-text">SPIn Analytics</div>
-  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  <div class="loading-sub" id="loading-sub">Memulakan aplikasi...</div>
-  <div class="loading-tip" id="loading-tip"></div>
-</div>
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-brand">Edu<span>Kit</span></div>
+  <a href="#pakej" class="nav-cta">Lihat Pakej →</a>
+</nav>
 
-<!-- AUTH SCREEN -->
-<div id="auth-screen" style="display:none">
-  <div class="auth-bg"></div>
-  <div class="auth-wrap">
-    <div class="auth-brand">
-      <div class="auth-logo">SP<span style="color:#60a5fa">In</span></div>
-      <div class="auth-appname">SP<span>In</span> Analytics</div>
-      <div class="auth-tagline">Sistem Analitik Prestasi Pelajar</div>
-      <div class="auth-ver"><div class="auth-ver-dot"></div><span class="auth-ver-txt">v3.0 &nbsp;·&nbsp; Cloud Edition</span></div>
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>17 Aplikasi Digital untuk Sekolah Malaysia</div>
+    <h1>Urus kelas & sekolah<br>dengan <em>lebih pantas</em></h1>
+    <p class="hero-sub">Koleksi aplikasi HTML yang berjalan terus dalam browser — tanpa instalasi, tanpa internet wajib, tanpa kerumitan teknikal.</p>
+    <div class="hero-btns">
+      <a href="#pakej" class="btn-primary">Pilih Pakej Sekarang</a>
+      <a href="#apps" class="btn-ghost">Lihat Semua Apps</a>
     </div>
-    <div class="auth-card">
-      <div class="auth-card-title">Log Masuk</div>
-      <div class="a-grp">
-        <label class="a-lbl">Nama Pengguna</label>
-        <input class="a-inp" id="auth-user" placeholder="nama pengguna" autocomplete="username"
-          onkeydown="if(event.key==='Enter')document.getElementById('auth-pass').focus()">
-      </div>
-      <div class="a-grp">
-        <label class="a-lbl">Kata Laluan</label>
-        <input class="a-inp" id="auth-pass" type="password" placeholder="kata laluan" autocomplete="current-password"
-          onkeydown="if(event.key==='Enter')doLogin()">
-      </div>
-      <button class="a-btn" id="login-btn" onclick="doLogin()">Log Masuk &rarr;</button>
-      <div class="a-err" id="auth-err"></div>
-      <div class="a-note">Hubungi admin jika terlupa kata laluan</div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">17</div><div class="stat-lbl">Aplikasi Dalam 1 Platform</div></div>
+      <div class="stat"><div class="stat-num">RM95</div><div class="stat-lbl">Mulai Dari</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Berjalan Dalam Browser</div></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ADMIN MODAL -->
-<div id="adm-modal">
-  <div class="adm-box">
-    <div class="adm-hdr">
-      <span class="adm-hdr-t">&#9881; Panel Pentadbir</span>
-      <button class="adm-close" onclick="closeAdmin()">&times;</button>
-    </div>
-    <div class="adm-tabs">
-      <button class="adm-tab on" onclick="admTab('users',this)">Pengguna</button>
-      <button class="adm-tab" onclick="admTab('pw',this)">Kata Laluan</button>
-    </div>
-    <div class="adm-body">
-      <div id="at-users" style="display:flex;flex-direction:column;gap:13px">
-        <div>
-          <div class="a-section-t">Senarai Pengguna</div>
-          <div id="spin-user-list"></div>
-        </div>
-        <div>
-          <div class="a-section-t">Tambah Pengguna Baru</div>
-          <div class="a-row"><label class="a-lbl">Nama Pengguna</label><input class="a-inp" id="nu-name" placeholder="cth: guru_ali"></div>
-          <div class="a-row"><label class="a-lbl">Kata Laluan</label><input class="a-inp" id="nu-pw" type="password" placeholder="min. 4 aksara"></div>
-          <div class="a-row">
-            <label class="a-lbl">Peranan</label>
-            <select class="a-inp" id="nu-role" style="cursor:pointer">
-              <option value="guru">Guru — akses rekod sahaja</option>
-              <option value="admin">Admin — akses penuh</option>
-            </select>
-          </div>
-          <button class="a-fbtn" onclick="spinAddUser()">+ Tambah</button>
-          <div class="a-msg" id="msg-user"></div>
-        </div>
+<!-- MASALAH -->
+<section class="masalah">
+  <div class="container">
+    <div class="section-tag">Masalah Guru & Pentadbir</div>
+    <h2 class="section-title">Kerja makin banyak,<br>masa makin sedikit</h2>
+    <p class="section-sub">Guru dan pentadbir sekolah menghadapi cabaran harian yang sama — EduKit hadir untuk meringankan beban ini.</p>
+    <div class="masalah-grid">
+      <div class="masalah-card">
+        <div class="masalah-ico">📊</div>
+        <div><h3>Analisis prestasi pelajar ambil masa lama</h3><p>Terpaksa kira markah secara manual, susah nak kenal pasti pelajar berisiko dengan cepat.</p></div>
       </div>
-      <div id="at-pw" style="display:none;flex-direction:column;gap:13px">
-        <div class="a-section-t">Tukar Kata Laluan Saya</div>
-        <div class="a-row"><label class="a-lbl">Kata Laluan Semasa</label><input class="a-inp" id="pw-cur" type="password"></div>
-        <div class="a-row"><label class="a-lbl">Kata Laluan Baru</label><input class="a-inp" id="pw-new" type="password"></div>
-        <div class="a-row"><label class="a-lbl">Sahkan</label><input class="a-inp" id="pw-conf" type="password"></div>
-        <button class="a-fbtn" onclick="spinChangePw()">Tukar</button>
-        <div class="a-msg" id="msg-pw"></div>
+      <div class="masalah-card">
+        <div class="masalah-ico">📅</div>
+        <div><h3>Rancangan pengajaran tiap minggu jadi beban</h3><p>RPH yang sama format tapi kena taip semula setiap kali — bazir masa yang boleh digunakan untuk mengajar.</p></div>
+      </div>
+      <div class="masalah-card">
+        <div class="masalah-ico">📋</div>
+        <div><h3>Rekod kokurikulum berselerak</h3><p>Data kehadiran, markah dan pencapaian pelajar disimpan merata-rata dalam fail berbeza.</p></div>
+      </div>
+      <div class="masalah-card">
+        <div class="masalah-ico">🏫</div>
+        <div><h3>Pentadbiran sekolah makin kompleks</h3><p>Carta organisasi, jadual gantt, agihan tugas — semua makan masa jika buat secara manual.</p></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<div id="app" style="display:none">
-  <div id="header">
-    <div class="hrow">
-      <span class="brand">SP<span>In</span> Analytics</span>
-      <div id="user-info-bar" style="display:flex;align-items:center;gap:7px;margin-left:4px;flex-shrink:0"></div>
-      <div class="tahun-box">
-        TAHUN:
-        <select id="tahunSel" onchange="switchTahun(this.value)"></select>
-        <button class="tahun-add" onclick="addTahun()">+</button>
-        <button class="tahun-del" onclick="delTahun()">-</button>
+<!-- APPS -->
+<section class="apps" id="apps">
+  <div class="container">
+    <div class="section-tag">Senarai Aplikasi</div>
+    <h2 class="section-title">17 aplikasi dalam genggaman anda</h2>
+    <p class="section-sub">Setiap aplikasi direka khas untuk keperluan guru dan pentadbir sekolah Malaysia.</p>
+    <div class="apps-grid">
+      <div class="app-card">
+        <div class="app-icon" style="background:#dbeafe;">📊</div>
+        <h3>SPIn Analytics</h3>
+        <p>Analisis prestasi pelajar mengikut kelas & subjek</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <span id="saveStatus">&#9729; Cloud</span>
-    </div>
-    <div class="hrow">
-      <button class="btn btn-mode active" id="btnKelas" onclick="setMode('kelas')">Kelas</button>
-      <button class="btn btn-mode" id="btnMulti" onclick="setMode('multi')">Multi-Kelas</button>
-      <select class="sel" id="kelasSel" onchange="renderAll()"></select>
-      <button class="btn btn-blue" onclick="doTambahKelas()">+ Kelas</button>
-      <button class="btn btn-blue" onclick="doTambahPelajar()">+ Pelajar</button>
-      <button class="btn btn-blue" onclick="doTambahUjian()">+ Ujian</button>
-      <button class="btn" onclick="doImport()">Import CSV/Excel</button>
-      <button class="btn btn-red" onclick="doReset()">Reset Kelas</button>
-    </div>
-    <div class="hrow">
-      <button class="btn btn-orange" onclick="pdfKelas()">PDF Kelas</button>
-      <button class="btn btn-orange" onclick="pdfMulti()">PDF Multi</button>
-      <button class="btn btn-orange" onclick="pdfFull(this)">Laporan Penuh</button>
-      <button class="btn" onclick="doEditGred()">Tetapan Gred</button>
-      <button class="btn btn-green" onclick="saveAll()">&#9729; Simpan</button>
-      <button class="btn" onclick="exportJSON()">Eksport JSON</button>
-      <button class="btn" onclick="document.getElementById('jsonIn').click()">Import JSON</button>
-    </div>
-    <div class="hrow" id="subjRow">
-      <span style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Subjek:</span>
-      <div id="subjList" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
-      <button class="btn" onclick="doTambahSubjek()">+ Subjek</button>
-    </div>
-  </div>
-
-  <div id="content">
-    <div class="tbl-wrap">
-      <div class="tbl-scroll">
-        <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+      <div class="app-card">
+        <div class="app-icon" style="background:#dcfce7;">📈</div>
+        <h3>Dashboard SPIn Pro</h3>
+        <p>Papan pemuka analitik pelajar peringkat sekolah</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-    </div>
-    <div class="grid">
-      <div class="card">
-        <div class="card-hd">
-          <div class="card-hd-left"><div class="card-ico" style="background:#dbeafe;color:#1a56db">&#9650;</div><span class="card-title">Trend Ujian</span></div>
-          <select class="chart-sel" id="trendType" onchange="rebuildTrend(this.value)">
-            <option value="line">Garisan</option>
-            <option value="bar">Bar</option>
-            <option value="pie">Pai</option>
-          </select>
-        </div>
-        <div class="card-bd"><canvas id="trendChart"></canvas></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fef9c3;">📝</div>
+        <h3>RPH Fleksi KSSR Pro</h3>
+        <p>Jana rancangan pengajaran harian dengan mudah</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd">
-          <div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">&#9646;</div><span class="card-title">Analisis Gred</span></div>
-          <select class="chart-sel" id="gradeType" onchange="rebuildGrade(this.value)">
-            <option value="bar">Bar</option>
-            <option value="pie">Pai</option>
-            <option value="line">Garisan</option>
-          </select>
-        </div>
-        <div class="card-bd"><canvas id="gradeChart"></canvas></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fee2e2;">✅</div>
+        <h3>EduAssign Pro</h3>
+        <p>Urus tugasan dan pemantauan pelajar</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fef9c3;color:#ca8a04">&#9733;</div><span class="card-title">Ranking Pelajar</span></div></div>
-        <div class="card-bd card-scroll" id="rankDiv"></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#ede9fe;">🏆</div>
+        <h3>GameKelas</h3>
+        <p>Gamifikasi dalam kelas untuk tingkatkan penglibatan pelajar</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#ede9fe;color:#7c3aed">&#9654;</div><span class="card-title">Indeks Prestasi</span></div></div>
-        <div class="card-bd" id="indeksDiv"></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#f0fdf4;">🎯</div>
+        <h3>KokurikulumTrack</h3>
+        <p>Pantau aktiviti kokurikulum pelajar secara sistematik</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fee2e2;color:#ef4444">&#9888;</div><span class="card-title">Pelajar Berisiko</span></div></div>
-        <div class="card-bd card-scroll" id="risikoDiv"></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fff7ed;">😊</div>
+        <h3>Mood Radar Pro</h3>
+        <p>Pantau mood dan kesejahteraan pelajar dalam kelas</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#dcfce7;color:#10b981">&#8593;</div><span class="card-title">Prestasi Meningkat</span></div></div>
-        <div class="card-bd card-scroll" id="improveDiv"></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fdf4ff;">📋</div>
+        <h3>Senarai Semak Ultimate</h3>
+        <p>Senarai semak tugas dan peperiksaan yang fleksibel</p>
+        <span class="app-tag tag-guru">Pakej Guru</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fff7ed;color:#ea580c">&#8595;</div><span class="card-title">Prestasi Menurun</span></div></div>
-        <div class="card-bd card-scroll" id="declineDiv"></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#dbeafe;">🗂️</div>
+        <h3>OrgChart Pro</h3>
+        <p>Bina carta organisasi sekolah dengan drag & drop</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
       </div>
-      <div class="card">
-        <div class="card-hd"><div class="card-hd-left"><div class="card-ico" style="background:#fdf4ff;color:#9333ea">&#9632;</div><span class="card-title">Heatmap Prestasi</span></div></div>
-        <div class="card-bd"><div id="heatmapDiv" class="heatmap"></div></div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#dcfce7;">📅</div>
+        <h3>GanttPro</h3>
+        <p>Perancangan projek sekolah dengan carta Gantt interaktif</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL -->
-<div id="modal-bg">
-  <div id="modal-box">
-    <div id="modal-title"></div>
-    <div id="modal-msg"></div>
-    <input type="text" id="modal-input" autocomplete="off">
-    <div class="modal-btns">
-      <button class="btn" onclick="modalCancel()">Batal</button>
-      <button class="btn btn-blue" onclick="modalOK()">OK</button>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fef9c3;">👥</div>
+        <h3>StaffTrack Pro</h3>
+        <p>Rekod kehadiran dan prestasi staf sekolah</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
+      </div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#fee2e2;">📐</div>
+        <h3>SK@S Pencerapan</h3>
+        <p>Standard 4 pencerapan pengajaran guru</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
+      </div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#ede9fe;">👤</div>
+        <h3>AgihTugas Pro</h3>
+        <p>Agihan tugas guru dan staf sekolah secara adil</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
+      </div>
+      <div class="app-card">
+        <div class="app-icon" style="background:#f0fdf4;">📊</div>
+        <h3>H2 Headcount 2.0</h3>
+        <p>Pengurusan bilangan pelajar dan statistik sekolah</p>
+        <span class="app-tag tag-pentadbir">Pakej Pentadbir</span>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- PAKEJ -->
+<section class="pakej" id="pakej">
+  <div class="container">
+    <div class="section-tag">Harga & Pakej</div>
+    <h2 class="section-title">Pilih pakej yang sesuai</h2>
+    <p class="section-sub">Bayar sekali, guna selama-lamanya. Tiada bayaran berulang, tiada yuran tahunan.</p>
+
+    <div class="pakej-grid">
+      <!-- Pakej Guru -->
+      <div class="pakej-card">
+        <div class="pakej-nama">Pakej Guru</div>
+        <div class="pakej-asal">Nilai asal RM456</div>
+        <div class="pakej-harga">RM95 <span>/ sekali bayar</span></div>
+        <div class="pakej-jimat">✦ Jimat 79%</div>
+        <div class="pakej-apps">10 aplikasi untuk guru</div>
+        <hr class="pakej-divider">
+        <ul class="pakej-list">
+          <li>SPIn Analytics</li>
+          <li>Dashboard SPIn Pro</li>
+          <li>RPH Fleksi KSSR Pro</li>
+          <li>EduAssign Pro</li>
+          <li>GameKelas</li>
+          <li>KokurikulumTrack</li>
+          <li>Mood Radar Pro</li>
+          <li>Senarai Semak Ultimate</li>
+          <li>OrgChart Pro</li>
+          <li>GanttPro</li>
+        </ul>
+        <a href="https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400" class="btn-beli" target="_blank">Beli Pakej Guru →</a>
+      </div>
+
+      <!-- Pakej Pentadbir -->
+      <div class="pakej-card">
+        <div class="pakej-nama">Pakej Pentadbir</div>
+        <div class="pakej-asal">Nilai asal RM488</div>
+        <div class="pakej-harga">RM95 <span>/ sekali bayar</span></div>
+        <div class="pakej-jimat">✦ Jimat 81%</div>
+        <div class="pakej-apps">8 aplikasi untuk pentadbir</div>
+        <hr class="pakej-divider">
+        <ul class="pakej-list">
+          <li>OrgChart Pro</li>
+          <li>GanttPro</li>
+          <li>StaffTrack Pro</li>
+          <li>SK@S Pencerapan Standard 4</li>
+          <li>AgihTugas Pro</li>
+          <li>H2 Headcount 2.0</li>
+          <li>SPIn Analytics</li>
+          <li>Dashboard SPIn Pro</li>
+        </ul>
+        <a href="https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402" class="btn-beli" target="_blank">Beli Pakej Pentadbir →</a>
+      </div>
+
+      <!-- Pakej Gabungan -->
+      <div class="pakej-card featured">
+        <div class="pakej-badge">🏆 Nilai Terbaik</div>
+        <div class="pakej-nama">Pakej Guru + Pentadbir</div>
+        <div class="pakej-asal">Nilai asal RM944</div>
+        <div class="pakej-harga">RM165 <span>/ sekali bayar</span></div>
+        <div class="pakej-jimat">✦ Jimat 83%</div>
+        <div class="pakej-apps">17 aplikasi unik — semua dalam satu</div>
+        <hr class="pakej-divider">
+        <ul class="pakej-list">
+          <li>Semua 10 apps Pakej Guru</li>
+          <li>Semua 8 apps Pakej Pentadbir</li>
+          <li>17 aplikasi unik kesemuanya</li>
+          <li>Akses penuh seumur hidup</li>
+          <li>Kemas kini percuma</li>
+        </ul>
+        <a href="https://buy.stripe.com/5kQdR8doZbSG7reg777g403" class="btn-beli" target="_blank">Beli Pakej Gabungan →</a>
+      </div>
+    </div>
+
+    <!-- KidSpark -->
+    <div class="kidspark">
+      <div class="kidspark-left">
+        <h3>🌟 Kids Spark — Tambahan untuk Murid</h3>
+        <p>Platform pembelajaran interaktif untuk murid sekolah rendah. Langganan bulanan yang mudah dibatalkan.</p>
+      </div>
+      <div style="text-align:center;">
+        <div class="kidspark-price">RM3 <span>/ bulan</span></div>
+      </div>
+      <a href="https://buy.stripe.com/aFacN41Gh7CqdPCg777g404" class="btn-kidspark" target="_blank">Langgan KidSpark</a>
+    </div>
+  </div>
+</section>
+
+<!-- JAMINAN -->
+<section class="jaminan">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 0;">
+      <div class="section-tag">Kenapa EduKit?</div>
+      <h2 class="section-title">Dibina khas untuk sekolah Malaysia</h2>
+    </div>
+    <div class="jaminan-grid">
+      <div class="jaminan-item">
+        <div class="jaminan-ico">⚡</div>
+        <h3>Serta-merta Guna</h3>
+        <p>Tiada instalasi. Buka browser, terus guna. Berfungsi pada mana-mana komputer atau tablet.</p>
+      </div>
+      <div class="jaminan-item">
+        <div class="jaminan-ico">🔒</div>
+        <h3>Data Selamat</h3>
+        <p>Data disimpan dalam peranti anda sendiri. Tiada data pelajar dihantar ke pelayan luar.</p>
+      </div>
+      <div class="jaminan-item">
+        <div class="jaminan-ico">📧</div>
+        <h3>Akses Terus Selepas Bayar</h3>
+        <p>Kata laluan dihantar ke email anda secara automatik sebaik sahaja pembayaran disahkan.</p>
+      </div>
+      <div class="jaminan-item">
+        <div class="jaminan-ico">🇲🇾</div>
+        <h3>100% Bahasa Malaysia</h3>
+        <p>Antara muka penuh dalam Bahasa Malaysia, sesuai dengan sukatan KSSR dan KSSM.</p>
+      </div>
+      <div class="jaminan-item">
+        <div class="jaminan-ico">💳</div>
+        <h3>Bayaran Selamat</h3>
+        <p>Diproses melalui Stripe — platform pembayaran antarabangsa yang dipercayai.</p>
+      </div>
+      <div class="jaminan-item">
+        <div class="jaminan-ico">♾️</div>
+        <h3>Akses Seumur Hidup</h3>
+        <p>Bayar sekali, guna selama-lamanya. Termasuk semua kemas kini akan datang.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA AKHIR -->
+<section class="cta-akhir">
+  <div class="container">
+    <h2>Mulakan sekarang, jimat masa setiap hari</h2>
+    <p>Sertai guru dan pentadbir sekolah yang telah menggunakan EduKit.</p>
+    <div class="cta-btns">
+      <a href="https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400" class="btn-primary" target="_blank">Pakej Guru — RM95</a>
+      <a href="https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402" class="btn-primary" target="_blank">Pakej Pentadbir — RM95</a>
+      <a href="https://buy.stripe.com/5kQdR8doZbSG7reg777g403" class="btn-primary" target="_blank">Pakej Gabungan — RM165</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 EduKit · <a href="mailto:noreply@cikgukita.com">noreply@cikgukita.com</a> · apps.cikgukita.com</p>
+</footer>
 
-<input type="file" id="csvIn" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleCSV(event)">
-<input type="file" id="jsonIn" accept=".json" style="display:none" onchange="handleJSON(event)">
-
-<script>
-// ============================================================
-// AUTH & DATA — localStorage (tiada server diperlukan)
-// ============================================================
-var LS_USERS = 'spin_users_v1';
-var LS_DATA  = 'spin_data_v1';
-var LS_SESS  = 'spin_session_v3';
-
-function lsGetUsers() {
-  try { return JSON.parse(localStorage.getItem(LS_USERS)) || []; } catch(e) { return []; }
-}
-function lsSaveUsers(users) {
-  localStorage.setItem(LS_USERS, JSON.stringify(users));
-}
-function lsGetData() {
-  try { return JSON.parse(localStorage.getItem(LS_DATA)); } catch(e) { return null; }
-}
-function lsSaveData(data) {
-  localStorage.setItem(LS_DATA, JSON.stringify(data));
-}
-
-// Init default admin jika tiada pengguna
-function ensureDefaultAdmin() {
-  var users = lsGetUsers();
-  if (!users.length) {
-    users = [{ id: 1, username: 'admin', password: 'admin123', role: 'admin' }];
-    lsSaveUsers(users);
-  }
-  return users;
-}
-
-// ============================================================
-// AUTH STATE
-// ============================================================
-var SPIN_CU = null;
-var SPIN_USERS = [];
-
-// ============================================================
-// BOOT
-// ============================================================
-async function spinBoot() {
-  setLoadingMsg('Memulakan aplikasi...', 30);
-  SPIN_USERS = ensureDefaultAdmin();
-
-  setLoadingMsg('Menyemak sesi...', 70);
-  var sess = null;
-  try { sess = JSON.parse(localStorage.getItem(LS_SESS)); } catch(e){}
-  if (sess && sess.username) {
-    var u = SPIN_USERS.find(function(x){ return x.username === sess.username; });
-    if (u) {
-      SPIN_CU = u;
-      setLoadingMsg('Selamat datang semula!', 100);
-      setTimeout(function(){ hideLoading(); }, 300);
-      await spinLoginOK();
-      return;
-    }
-  }
-  setLoadingMsg('Bersedia!', 100);
-  setTimeout(function(){ hideLoading(); showAuthScreen(); }, 300);
-}
-
-function setLoadingMsg(msg, pct) {
-  var el = document.getElementById('loading-sub');
-  if (el) el.textContent = msg;
-  if (pct !== undefined) {
-    var bar = document.getElementById('loading-bar');
-    if (bar) bar.style.width = pct + '%';
-  }
-}
-
-function hideLoadingTip() {
-  var el = document.getElementById('loading-tip');
-  if (el) el.style.display = 'none';
-}
-
-function hideLoading() {
-  var el = document.getElementById('loading-overlay');
-  if (el) {
-    el.style.display = 'none';
-    el.style.visibility = 'hidden';
-    el.style.opacity = '0';
-    el.style.pointerEvents = 'none';
-  }
-}
-
-function showAuthScreen() {
-  var as = document.getElementById('auth-screen');
-  as.style.display = 'flex';
-  as.style.alignItems = 'center';
-  as.style.justifyContent = 'center';
-}
-
-// ============================================================
-// LOGIN
-// ============================================================
-async function doLogin() {
-  var u = document.getElementById('auth-user').value.trim();
-  var p = document.getElementById('auth-pass').value;
-  var err = document.getElementById('auth-err');
-  var btn = document.getElementById('login-btn');
-  err.textContent = '';
-  if (!u || !p) { err.textContent = 'Sila isi semua maklumat.'; return; }
-
-  btn.disabled = true; btn.textContent = 'Sedang log masuk...';
-  SPIN_USERS = lsGetUsers();
-  var found = SPIN_USERS.find(function(x){ return x.username === u && x.password === p; });
-  if (!found) {
-    err.textContent = 'Nama pengguna atau kata laluan tidak sah.';
-    btn.disabled = false; btn.textContent = 'Log Masuk →';
-    return;
-  }
-  SPIN_CU = found;
-  localStorage.setItem(LS_SESS, JSON.stringify({ username: u }));
-  document.getElementById('auth-pass').value = '';
-  document.getElementById('auth-screen').style.display = 'none';
-  btn.disabled = false; btn.textContent = 'Log Masuk →';
-  await spinLoginOK();
-}
-
-async function spinLoginOK() {
-  document.getElementById('app').style.display = 'flex';
-  spinRenderUserBar();
-  setSaveStatus('Memuatkan data...', 'saving');
-  await loadAll();
-  renderTahunSel();
-  renderKelasSel();
-  renderSubjList();
-  renderAll();
-  setSaveStatus('&#128190; Tersimpan', '');
-  spinToast('Selamat datang, ' + SPIN_CU.username + '!');
-}
-
-function doLogout() {
-  allData = {}; curTahun = '2025'; subjects = {}; curSubject = null;
-  SPIN_CU = null;
-  localStorage.removeItem(LS_SESS);
-  document.getElementById('app').style.display = 'none';
-  showAuthScreen();
-  document.getElementById('auth-user').value = '';
-  document.getElementById('auth-pass').value = '';
-  document.getElementById('auth-err').textContent = '';
-  document.getElementById('user-info-bar').innerHTML = '';
-  closeAdmin();
-}
-
-function spinRenderUserBar() {
-  if (!SPIN_CU) return;
-  var bar = document.getElementById('user-info-bar');
-  var roleLabel = SPIN_CU.role === 'admin'
-    ? '<span class="ui-role-admin">ADMIN</span>'
-    : '<span class="ui-role-guru">GURU</span>';
-  bar.innerHTML = '<span class="ui-name">&#128100; ' + SPIN_CU.username + '</span>'
-    + roleLabel
-    + (SPIN_CU.role === 'admin' ? '<button class="ui-adm-btn" onclick="openAdmin()">&#9881; Admin</button>' : '')
-    + '<button class="ui-out-btn" onclick="doLogout()">Keluar</button>';
-}
-
-// ---- Admin panel ----
-async function openAdmin() {
-  if (!SPIN_CU || SPIN_CU.role !== 'admin') return;
-  await spinRenderUserList();
-  document.getElementById('adm-modal').classList.add('open');
-}
-function closeAdmin() { document.getElementById('adm-modal').classList.remove('open'); }
-function admTab(tab, btn) {
-  ['users','pw'].forEach(function(t){
-    document.getElementById('at-'+t).style.display = t===tab?'flex':'none';
-  });
-  document.querySelectorAll('.adm-tab').forEach(function(b){ b.classList.remove('on'); });
-  btn.classList.add('on');
-}
-
-async function spinRenderUserList() {
-  var el = document.getElementById('spin-user-list');
-  SPIN_USERS = lsGetUsers();
-  el.innerHTML = '';
-  SPIN_USERS.forEach(function(u) {
-    var r = document.createElement('div'); r.className = 'adm-row';
-    r.innerHTML = '<span class="adm-row-name">' + u.username + '</span>'
-      + '<span class="role-badge ' + (u.role==='admin'?'rb-admin':'rb-guru') + '">' + (u.role==='admin'?'Admin':'Guru') + '</span>'
-      + (u.username === 'admin'
-          ? '<span style="font-size:9px;color:#334155">Dilindungi</span>'
-          : '<button class="adm-del-btn" onclick="spinDelUser(' + u.id + ',\'' + u.username + '\')">Buang</button>');
-    el.appendChild(r);
-  });
-}
-
-async function spinAddUser() {
-  var n = document.getElementById('nu-name').value.trim();
-  var p = document.getElementById('nu-pw').value;
-  var r = document.getElementById('nu-role').value;
-  var m = document.getElementById('msg-user');
-  if (!n) { m.innerHTML = '<span class="a-bad">Nama diperlukan.</span>'; return; }
-  if (p.length < 4) { m.innerHTML = '<span class="a-bad">Min. 4 aksara.</span>'; return; }
-  var users = lsGetUsers();
-  if (users.find(function(x){ return x.username === n; })) {
-    m.innerHTML = '<span class="a-bad">Ralat: nama mungkin sudah wujud.</span>'; return;
-  }
-  var newId = Math.max.apply(null, users.map(function(x){ return x.id||0; })) + 1;
-  users.push({ id: newId, username: n, password: p, role: r });
-  lsSaveUsers(users);
-  SPIN_USERS = users;
-  await spinRenderUserList();
-  document.getElementById('nu-name').value = '';
-  document.getElementById('nu-pw').value = '';
-  m.innerHTML = '<span class="a-ok">&#10003; "' + n + '" ditambah.</span>';
-  setTimeout(function(){ m.textContent = ''; }, 3000);
-}
-
-async function spinDelUser(id, uname) {
-  if (!confirm('Padam pengguna "' + uname + '"?')) return;
-  var users = lsGetUsers().filter(function(x){ return x.id !== id; });
-  lsSaveUsers(users);
-  SPIN_USERS = users;
-  await spinRenderUserList();
-}
-
-async function spinChangePw() {
-  var cur = document.getElementById('pw-cur').value;
-  var nw = document.getElementById('pw-new').value;
-  var cf = document.getElementById('pw-conf').value;
-  var m = document.getElementById('msg-pw');
-  if (SPIN_CU.password !== cur) { m.innerHTML = '<span class="a-bad">Kata laluan semasa salah.</span>'; return; }
-  if (nw.length < 4) { m.innerHTML = '<span class="a-bad">Min. 4 aksara.</span>'; return; }
-  if (nw !== cf) { m.innerHTML = '<span class="a-bad">Tidak sepadan.</span>'; return; }
-  var users = lsGetUsers();
-  var idx = users.findIndex(function(x){ return x.id === SPIN_CU.id; });
-  if (idx >= 0) { users[idx].password = nw; lsSaveUsers(users); }
-  SPIN_CU.password = nw;
-  m.innerHTML = '<span class="a-ok">&#10003; Berjaya ditukar.</span>';
-  ['pw-cur','pw-new','pw-conf'].forEach(function(id){ document.getElementById(id).value = ''; });
-  setTimeout(function(){ m.textContent = ''; }, 3000);
-}
-
-function spinToast(msg) {
-  var t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div'); t.id = 'toast';
-    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1e293b;color:white;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:opacity .3s';
-    document.body.appendChild(t);
-  }
-  t.textContent = msg; t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 2500);
-}
-
-function setSaveStatus(text, type) {
-  var el = document.getElementById('saveStatus');
-  if (!el) return;
-  el.innerHTML = text;
-  el.className = type || '';
-}
-
-// ============================================================
-// DATA PERSISTENCE — localStorage
-// ============================================================
-// ============================================================
-// STATE
-// ============================================================
-var allData = {};
-var curTahun = '2025';
-var curSubject = null;
-var subjects = {};
-var mode = 'kelas';
-var modalResolve = null;
-var tChart = null;
-var gChart = null;
-var tLastData = null;
-var gLastData = null;
-var saveTimer = null;
-
-var gradeRange = { 'A+':90,'A':85,'A-':80,'B+':75,'B':70,'C+':65,'C':60,'D':50,'E':0,'G':-1 };
-
-// ============================================================
-// HELPERS
-// ============================================================
-function num(v){ return isNaN(Number(v)) ? 0 : Number(v); }
-
-function avg(arr){
-  var valid = arr.map(function(m){ return num(m); }).filter(function(m){ return m > 0; });
-  if (!valid.length) return 0;
-  return valid.reduce(function(a,b){ return a+b; }, 0) / valid.length;
-}
-
-function gred(v){
-  var order = ['A+','A','A-','B+','B','C+','C','D','E'];
-  for (var i=0; i<order.length; i++) { if (v >= gradeRange[order[i]]) return order[i]; }
-  return 'G';
-}
-
-function cellClass(v){
-  var g = gred(v);
-  if (['A+','A','A-'].indexOf(g)>=0) return 'cg';
-  if (['B+','B','C+','C'].indexOf(g)>=0) return 'cy';
-  return 'cr';
-}
-
-function barColor(v){
-  var g = gred(v);
-  if (['A+','A','A-'].indexOf(g)>=0) return '#10b981';
-  if (['B+','B','C+','C'].indexOf(g)>=0) return '#f59e0b';
-  return '#ef4444';
-}
-
-function hmColor(v){ return v>=75 ? '#10b981' : v>=60 ? '#f59e0b' : '#ef4444'; }
-
-function toast(msg){
-  var t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(function(){ t.remove(); }, 2500);
-}
-
-function safe(s){ return String(s || '').replace(/[^\x20-\x7E\xA0-\xFF]/g,'?'); }
-
-// ============================================================
-// MODAL
-// ============================================================
-function showModal(title, msg, type, defVal){
-  return new Promise(function(resolve){
-    modalResolve = resolve;
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-msg').textContent = msg;
-    var inp = document.getElementById('modal-input');
-    if (type === 'input'){
-      inp.style.display = 'block';
-      inp.value = defVal || '';
-      setTimeout(function(){ inp.focus(); inp.select(); }, 80);
-    } else {
-      inp.style.display = 'none';
-    }
-    document.getElementById('modal-bg').classList.add('show');
-  });
-}
-
-function modalOK(){
-  var inp = document.getElementById('modal-input');
-  var val = inp.style.display !== 'none' ? inp.value.trim() : true;
-  document.getElementById('modal-bg').classList.remove('show');
-  if (modalResolve){ modalResolve(val); modalResolve = null; }
-}
-
-function modalCancel(){
-  document.getElementById('modal-bg').classList.remove('show');
-  if (modalResolve){ modalResolve(null); modalResolve = null; }
-}
-
-document.getElementById('modal-input').addEventListener('keydown', function(e){
-  if (e.key === 'Enter') modalOK();
-  if (e.key === 'Escape') modalCancel();
-});
-
-// ============================================================
-// DATA PERSISTENCE — SUPABASE
-// ============================================================
-function defaultData(){
-  return {
-    subjects: {
-      'Matematik': {
-        kelasData: {
-          '5A': [
-            {nama:'Ahmad Ali',kelas:'5A',markah:[85,78]},
-            {nama:'Fatimah Hassan',kelas:'5A',markah:[92,88]},
-            {nama:'Muhammad Hafiz',kelas:'5A',markah:[45,52]}
-          ],
-          '5B': [
-            {nama:'Razak Ismail',kelas:'5B',markah:[55,60]},
-            {nama:'Aminah Yusof',kelas:'5B',markah:[78,82]}
-          ]
-        },
-        ujian: ['Ujian 1','Ujian 2']
-      }
-    },
-    currentSubject: 'Matematik'
-  };
-}
-
-async function loadAll(){
-  var saved = lsGetData();
-  if (saved && saved.allData && Object.keys(saved.allData).length) {
-    allData = saved.allData;
-    curTahun = saved.curTahun || Object.keys(allData).sort(function(a,b){return b-a;})[0] || '2025';
-  } else {
-    // Data asal dari Supabase — dipindah masuk
-    var _d = JSON.parse('{"2025": {"subjects": {"Muet": {"ujian": [], "kelasData": {}}, "Matematik": {"ujian": ["Ujian 1", "Ujian 2"], "kelasData": {"5A": [{"nama": "Ahmad Ali", "kelas": "5A", "markah": [85, 78]}, {"nama": "Fatimah Hassan", "kelas": "5A", "markah": [92, 88]}, {"nama": "Muhammad Hafiz", "kelas": "5A", "markah": [45, 52]}], "5B": [{"nama": "Razak Ismail", "kelas": "5B", "markah": [55, 60]}, {"nama": "Aminah Yusof", "kelas": "5B", "markah": [78, 82]}], "UMK25": []}}}, "currentSubject": "Muet"}, "2026": {"subjects": {"SEJARAH": {"ujian": [], "kelasData": {"6AUMS25": [], "6BUNISZA26": []}}}, "currentSubject": "SEJARAH"}}');
-    allData = _d;
-    curTahun = '2026';
-    pushData();
-  }
-  if (!allData[curTahun]) curTahun = Object.keys(allData).sort(function(a,b){return b-a;})[0];
-  subjects = allData[curTahun].subjects || {};
-  curSubject = allData[curTahun].currentSubject;
-  if (!curSubject || !subjects[curSubject]) curSubject = Object.keys(subjects)[0] || null;
-}
-
-function pushData(){
-  lsSaveData({ allData: allData, curTahun: curTahun });
-  return true;
-}
-
-async function saveAll(){
-  allData[curTahun].subjects = subjects;
-  allData[curTahun].currentSubject = curSubject;
-  setSaveStatus('Menyimpan...', 'saving');
-  pushData();
-  setSaveStatus('&#128190; Tersimpan', '');
-  toast('Data tersimpan');
-}
-
-// Auto-save with debounce
-function autoSave(){
-  setSaveStatus('Belum disimpan...', 'saving');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(function(){ saveAll(); }, 1500);
-}
-
-// ============================================================
-// TAHUN
-// ============================================================
-function renderTahunSel(){
-  var sel = document.getElementById('tahunSel');
-  var years = Object.keys(allData).sort(function(a,b){return b-a;});
-  sel.innerHTML = years.map(function(y){
-    return '<option value="'+y+'"'+(y===curTahun?' selected':'')+'>'+y+'</option>';
-  }).join('');
-}
-
-async function switchTahun(t){
-  allData[curTahun].subjects = subjects;
-  allData[curTahun].currentSubject = curSubject;
-  curTahun = t;
-  subjects = allData[t].subjects || {};
-  curSubject = allData[t].currentSubject;
-  if (!curSubject || !subjects[curSubject]) curSubject = Object.keys(subjects)[0] || null;
-  destroyCharts();
-  renderTahunSel();
-  renderKelasSel();
-  renderSubjList();
-  renderAll();
-  await saveAll();
-}
-
-function addTahun(){
-  var next = String(parseInt(curTahun)+1);
-  showModal('Tambah Tahun', 'Masukkan tahun baharu:', 'input', next).then(async function(v){
-    if (!v) return;
-    v = v.trim();
-    if (!v || isNaN(Number(v))){ toast('Tahun tidak sah'); return; }
-    if (allData[v]){ toast('Tahun '+v+' sudah wujud'); return; }
-    allData[v] = { subjects:{}, currentSubject:null };
-    allData[curTahun].subjects = subjects;
-    allData[curTahun].currentSubject = curSubject;
-    curTahun = v;
-    subjects = {};
-    curSubject = null;
-    destroyCharts();
-    renderTahunSel();
-    renderKelasSel();
-    renderSubjList();
-    renderAll();
-    await saveAll();
-    toast('Tahun '+v+' ditambah');
-  });
-}
-
-function delTahun(){
-  if (Object.keys(allData).length <= 1){ toast('Mesti ada sekurang-kurangnya 1 tahun'); return; }
-  showModal('Padam Tahun', 'Padam tahun '+curTahun+'? Semua data tahun ini akan hilang.', 'confirm').then(async function(ok){
-    if (!ok) return;
-    delete allData[curTahun];
-    curTahun = Object.keys(allData).sort(function(a,b){return b-a;})[0];
-    subjects = allData[curTahun].subjects || {};
-    curSubject = allData[curTahun].currentSubject;
-    if (!curSubject||!subjects[curSubject]) curSubject = Object.keys(subjects)[0]||null;
-    destroyCharts();
-    renderTahunSel();
-    renderKelasSel();
-    renderSubjList();
-    renderAll();
-    await saveAll();
-    toast('Tahun dipadamkan');
-  });
-}
-
-// ============================================================
-// SUBJECT
-// ============================================================
-function renderSubjList(){
-  var div = document.getElementById('subjList');
-  div.innerHTML = Object.keys(subjects).map(function(s){
-    return '<span style="display:inline-flex;align-items:center;gap:1px;">'
-      +'<button class="subj-btn'+(s===curSubject?' active':'')+'" onclick="switchSubj(\''+s+'\')">' +s+'</button>'
-      +'<button class="subj-del ic-del" onclick="delSubj(\''+s+'\')" title="Padam">x</button>'
-      +'</span>';
-  }).join('');
-}
-
-function switchSubj(s){
-  curSubject = s;
-  allData[curTahun].currentSubject = s;
-  destroyCharts();
-  renderKelasSel();
-  renderSubjList();
-  renderAll();
-  autoSave();
-}
-
-function doTambahSubjek(){
-  showModal('Tambah Subjek', 'Nama subjek:', 'input', '').then(function(v){
-    if (!v) return;
-    if (subjects[v]){ toast('Subjek sudah wujud'); return; }
-    subjects[v] = { kelasData:{}, ujian:[] };
-    curSubject = v;
-    destroyCharts();
-    renderKelasSel();
-    renderSubjList();
-    renderAll();
-    autoSave();
-  });
-}
-
-function delSubj(s){
-  showModal('Padam Subjek', 'Padam "'+s+'"? Semua data subjek ini hilang.', 'confirm').then(function(ok){
-    if (!ok) return;
-    delete subjects[s];
-    if (curSubject===s) curSubject = Object.keys(subjects)[0]||null;
-    destroyCharts();
-    renderKelasSel();
-    renderSubjList();
-    renderAll();
-    autoSave();
-    toast('"'+s+'" dipadamkan');
-  });
-}
-
-// ============================================================
-// KELAS
-// ============================================================
-function getCurSubj(){
-  if (!curSubject||!subjects[curSubject]) return { kelasData:{}, ujian:[] };
-  return subjects[curSubject];
-}
-
-function renderKelasSel(){
-  var sel = document.getElementById('kelasSel');
-  var prev = sel.value;
-  var kelas = Object.keys(getCurSubj().kelasData);
-  sel.innerHTML = kelas.map(function(k){ return '<option value="'+k+'"'+(k===prev?' selected':'')+'>'+k+'</option>'; }).join('');
-}
-
-function doTambahKelas(){
-  showModal('Tambah Kelas', 'Nama kelas (cth: 5A):', 'input', '').then(function(v){
-    if (!v) return;
-    if (!curSubject){ toast('Pilih atau tambah subjek dahulu'); return; }
-    getCurSubj().kelasData[v] = [];
-    renderKelasSel();
-    renderAll();
-    autoSave();
-  });
-}
-
-function doTambahPelajar(){
-  var k = document.getElementById('kelasSel').value;
-  if (!k){ toast('Pilih kelas dahulu'); return; }
-  showModal('Tambah Pelajar', 'Nama pelajar:', 'input', '').then(function(v){
-    if (!v) return;
-    var subj = getCurSubj();
-    subj.kelasData[k].push({ nama:v, kelas:k, markah:subj.ujian.map(function(){ return 0; }) });
-    renderAll();
-    autoSave();
-  });
-}
-
-function doTambahUjian(){
-  showModal('Tambah Ujian', 'Nama ujian (cth: Ujian 1):', 'input', '').then(function(v){
-    if (!v) return;
-    var subj = getCurSubj();
-    subj.ujian.push(v);
-    Object.values(subj.kelasData).forEach(function(arr){
-      arr.forEach(function(p){ p.markah.push(0); });
-    });
-    renderAll();
-    autoSave();
-  });
-}
-
-function editUjian(i){
-  var subj = getCurSubj();
-  showModal('Edit Ujian', 'Nama baharu:', 'input', subj.ujian[i]).then(function(v){
-    if (!v||v===subj.ujian[i]) return;
-    subj.ujian[i] = v;
-    renderAll();
-    autoSave();
-  });
-}
-
-function delUjian(i){
-  showModal('Padam Ujian', 'Padam ujian ini? Semua markah ujian akan hilang.', 'confirm').then(function(ok){
-    if (!ok) return;
-    var subj = getCurSubj();
-    subj.ujian.splice(i,1);
-    Object.values(subj.kelasData).forEach(function(arr){
-      arr.forEach(function(p){ p.markah.splice(i,1); });
-    });
-    renderAll();
-    autoSave();
-  });
-}
-
-function editPelajar(kelas, nama){
-  showModal('Edit Nama Pelajar', 'Nama baharu:', 'input', nama).then(function(v){
-    if (!v||v===nama) return;
-    var p = getCurSubj().kelasData[kelas].find(function(x){ return x.nama===nama; });
-    if (p){ p.nama=v; renderAll(); autoSave(); }
-  });
-}
-
-function delPelajar(kelas, nama){
-  showModal('Padam Pelajar', 'Padam "'+nama+'" dari kelas '+kelas+'?', 'confirm').then(function(ok){
-    if (!ok) return;
-    var arr = getCurSubj().kelasData[kelas];
-    var i = arr.findIndex(function(x){ return x.nama===nama; });
-    if (i>=0){ arr.splice(i,1); renderAll(); autoSave(); toast('"'+nama+'" dipadamkan'); }
-  });
-}
-
-function updateMark(kelas, nama, i, val){
-  var p = getCurSubj().kelasData[kelas].find(function(x){ return x.nama===nama; });
-  if (p){ p.markah[i] = Math.round(num(val)); renderAll(); autoSave(); }
-}
-
-function doReset(){
-  var k = document.getElementById('kelasSel').value;
-  if (!k){ toast('Pilih kelas dahulu'); return; }
-  showModal('Reset Kelas', 'Reset semua pelajar dalam kelas '+k+'?', 'confirm').then(function(ok){
-    if (!ok) return;
-    getCurSubj().kelasData[k] = [];
-    renderAll();
-    autoSave();
-  });
-}
-
-function doEditGred(){
-  var txt = Object.keys(gradeRange).map(function(g){ return g+':'+gradeRange[g]; }).join('\n');
-  showModal('Tetapan Gred', 'Format: A+:90  (satu per baris)', 'input', txt).then(function(v){
-    if (!v) return;
-    v.split('\n').forEach(function(line){
-      var parts = line.split(':');
-      if (parts.length===2 && !isNaN(Number(parts[1]))) gradeRange[parts[0].trim()] = Number(parts[1]);
-    });
-    autoSave();
-    renderAll();
-  });
-}
-
-// ============================================================
-// MODE
-// ============================================================
-function setMode(m){
-  mode = m;
-  document.getElementById('btnKelas').classList.toggle('active', m==='kelas');
-  document.getElementById('btnMulti').classList.toggle('active', m==='multi');
-  destroyCharts();
-  renderAll();
-}
-
-function getDisplayData(){
-  var subj = getCurSubj();
-  if (mode==='kelas'){
-    var k = document.getElementById('kelasSel').value;
-    return [].concat(subj.kelasData[k]||[]).sort(function(a,b){ return a.nama.localeCompare(b.nama); });
-  }
-  var all = [];
-  Object.values(subj.kelasData).forEach(function(arr){ all = all.concat(arr); });
-  return all.sort(function(a,b){ return a.nama.localeCompare(b.nama); });
-}
-
-// ============================================================
-// RENDER TABLE
-// ============================================================
-function renderTable(data){
-  var subj = getCurSubj();
-  var ranked = [].concat(data).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
-  var rankMap = {};
-  ranked.forEach(function(p,i){ rankMap[p.kelas+'|'+p.nama] = i+1; });
-
-  var h = '<tr><th style="text-align:left;padding-left:14px;">Nama Pelajar</th><th>Kelas</th>';
-  subj.ujian.forEach(function(u,i){
-    h += '<th style="min-width:100px"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">'
-      +'<span>'+u+'</span>'
-      +'<span style="display:flex;gap:2px;">'
-      +'<button class="ic" onclick="editUjian('+i+')" title="Edit">&#9998;</button>'
-      +'<button class="ic ic-del" onclick="delUjian('+i+')" title="Padam">&#10006;</button>'
-      +'</span></div></th>';
-  });
-  h += '<th>Purata</th><th>Gred</th><th>Rank</th><th>Tindakan</th></tr>';
-  document.getElementById('thead').innerHTML = h;
-
-  var b = '';
-  data.forEach(function(p){
-    var a = avg(p.markah);
-    b += '<tr><td style="text-align:left;padding-left:14px;">'
-      +'<div style="display:flex;align-items:center;justify-content:space-between;">'
-      +'<span style="font-weight:600">'+p.nama+'</span>'
-      +'<button class="ic" onclick="editPelajar(\''+p.kelas+'\',\''+p.nama+'\')" title="Edit">&#9998;</button>'
-      +'</div></td>'
-      +'<td style="color:#64748b">'+p.kelas+'</td>';
-    p.markah.forEach(function(m,j){
-      b += '<td class="'+cellClass(num(m))+'">'
-        +'<input type="number" value="'+Math.round(num(m))+'" min="0" max="100" '
-        +'onchange="updateMark(\''+p.kelas+'\',\''+p.nama+'\','+j+',this.value)">'
-        +'</td>';
-    });
-    b += '<td class="'+cellClass(a)+'" style="font-family:monospace;font-weight:700">'+a.toFixed(1)+'</td>'
-      +'<td class="'+cellClass(a)+'" style="font-weight:800">'+gred(a)+'</td>'
-      +'<td style="color:#64748b;font-weight:700">'+rankMap[p.kelas+'|'+p.nama]+'</td>'
-      +'<td><button class="ic ic-del" onclick="delPelajar(\''+p.kelas+'\',\''+p.nama+'\')" title="Padam">&#128465;</button></td>'
-      +'</tr>';
-  });
-
-  var uAvgs = [];
-  subj.ujian.forEach(function(u,i){
-    var vals = data.map(function(p){ return num(p.markah[i]); }).filter(function(m){ return m>0; });
-    uAvgs.push(vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : 0);
-  });
-  var totAvg = uAvgs.filter(function(v){return v>0;}).length
-    ? uAvgs.filter(function(v){return v>0;}).reduce(function(a,b){return a+b;},0)/uAvgs.filter(function(v){return v>0;}).length : 0;
-
-  b += '<tr class="sum-row"><td style="text-align:left;padding-left:14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px">Rumusan</td><td>-</td>';
-  uAvgs.forEach(function(av){ b += '<td style="font-family:monospace">'+av.toFixed(1)+'</td>'; });
-  b += '<td class="'+cellClass(totAvg)+'" style="font-family:monospace;font-weight:800">'+totAvg.toFixed(1)+'</td>'
-    +'<td class="'+cellClass(totAvg)+'" style="font-size:15px;font-weight:800">'+gred(totAvg)+'</td>'
-    +'<td>-</td><td>-</td></tr>';
-
-  document.getElementById('tbody').innerHTML = b;
-}
-
-// ============================================================
-// RENDER ANALYTICS
-// ============================================================
-function renderAnalytics(data){
-  if (!data.length){
-    ['rankDiv','risikoDiv','improveDiv','declineDiv','indeksDiv'].forEach(function(id){
-      document.getElementById(id).innerHTML = '<div class="no-data">Tiada data</div>';
-    });
-    document.getElementById('heatmapDiv').innerHTML = '';
-    return;
-  }
-
-  var ranked = [].concat(data).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
-  document.getElementById('rankDiv').innerHTML = ranked.map(function(p,i){
-    var medals = ['#1','#2','#3'];
-    var badge = i<3 ? medals[i] : (i+1)+'.';
-    return '<div class="stat-row"><span>'+badge+' '+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span>'
-      +'<span class="stat-val">'+avg(p.markah).toFixed(1)+'</span></div>';
-  }).join('');
-
-  var subj = getCurSubj();
-  var indHtml = '';
-  if (mode==='kelas'){
-    var k = document.getElementById('kelasSel').value;
-    var sts = subj.kelasData[k]||[];
-    var av = sts.length ? avg(sts.map(function(p){ return avg(p.markah); })) : 0;
-    var bc = barColor(av);
-    indHtml = '<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'
-      +'<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+bc+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
-  } else {
-    Object.keys(subj.kelasData).forEach(function(k){
-      var sts = subj.kelasData[k]||[];
-      var av = sts.length ? avg(sts.map(function(p){ return avg(p.markah); })) : 0;
-      var bc = barColor(av);
-      indHtml += '<div class="bar-wrap"><div class="bar-label">Kelas '+k+'</div>'
-        +'<div class="bar-track"><div class="bar-fill" style="width:'+av+'%;background:'+bc+'">'+av.toFixed(1)+' ('+gred(av)+')</div></div></div>';
-    });
-  }
-  document.getElementById('indeksDiv').innerHTML = indHtml;
-
-  var risiko = data.filter(function(p){ return avg(p.markah)<40; });
-  document.getElementById('risikoDiv').innerHTML = risiko.length
-    ? risiko.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#ef4444;font-weight:700;font-family:monospace">'+avg(p.markah).toFixed(1)+'</span></div>'; }).join('')
-    : '<div class="no-data" style="color:#10b981">Tiada pelajar berisiko</div>';
-
-  var diffs = data.filter(function(p){ return p.markah.length>=2; }).map(function(p){
-    var valid = p.markah.map(function(m){return num(m);}).filter(function(m){return m>0;});
-    if (valid.length<2) return null;
-    return { nama:p.nama, kelas:p.kelas, diff: valid[valid.length-1]-valid[0] };
-  }).filter(function(d){ return d!==null; });
-
-  var imp = diffs.filter(function(d){return d.diff>0;}).sort(function(a,b){return b.diff-a.diff;}).slice(0,5);
-  document.getElementById('improveDiv').innerHTML = imp.length
-    ? imp.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#10b981;font-weight:700;font-family:monospace">+'+p.diff.toFixed(1)+'</span></div>'; }).join('')
-    : '<div class="no-data">Tiada data mencukupi</div>';
-
-  var dec = diffs.filter(function(d){return d.diff<0;}).sort(function(a,b){return a.diff-b.diff;}).slice(0,5);
-  document.getElementById('declineDiv').innerHTML = dec.length
-    ? dec.map(function(p){ return '<div class="stat-row"><span>'+p.nama+' <span style="color:#94a3b8;font-size:11px">('+p.kelas+')</span></span><span style="color:#ef4444;font-weight:700;font-family:monospace">'+p.diff.toFixed(1)+'</span></div>'; }).join('')
-    : '<div class="no-data">Tiada data mencukupi</div>';
-
-  document.getElementById('heatmapDiv').innerHTML = data.map(function(p){
-    var a = avg(p.markah);
-    return '<div class="hm-cell" style="background:'+hmColor(a)+'" title="'+p.nama+' ('+p.kelas+'): '+a.toFixed(1)+'">'
-      +'<div class="hm-name">'+p.nama.split(' ')[0]+'</div>'
-      +'<div class="hm-kelas">'+p.kelas+'</div>'
-      +'<div class="hm-score">'+a.toFixed(1)+'</div>'
-      +'</div>';
-  }).join('');
-}
-
-// ============================================================
-// CHARTS
-// ============================================================
-function destroyCharts(){
-  if (tChart){ tChart.destroy(); tChart=null; }
-  if (gChart){ gChart.destroy(); gChart=null; }
-  tLastData=null; gLastData=null;
-}
-
-function renderCharts(data){
-  var subj = getCurSubj();
-  var tType = document.getElementById('trendType').value;
-  var gType = document.getElementById('gradeType').value;
-
-  var tLabels = subj.ujian;
-  var tVals = subj.ujian.map(function(u,i){
-    var vals = data.map(function(p){ return num(p.markah[i]); }).filter(function(m){return m>0;});
-    return vals.length ? parseFloat((vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(1)) : 0;
-  });
-  tLastData = { labels:tLabels, vals:tVals };
-  if (tChart){ tChart.destroy(); tChart=null; }
-  tChart = buildChart('trendChart', tType, tLabels, tVals, 'Purata', null);
-
-  var gOrder = ['A+','A','A-','B+','B','C+','C','D','E','G'];
-  var gCount = {};
-  data.forEach(function(p){ var g=gred(avg(p.markah)); gCount[g]=(gCount[g]||0)+1; });
-  var gLabels = gOrder.filter(function(g){return gCount[g];});
-  var gVals = gLabels.map(function(g){return gCount[g];});
-  var gColors = gLabels.map(function(g){
-    if (['A+','A','A-'].indexOf(g)>=0) return '#10b981';
-    if (['B+','B'].indexOf(g)>=0) return '#84cc16';
-    if (['C+','C'].indexOf(g)>=0) return '#f59e0b';
-    if (g==='D') return '#f97316';
-    return '#ef4444';
-  });
-  gLastData = { labels:gLabels, vals:gVals, colors:gColors };
-  if (gChart){ gChart.destroy(); gChart=null; }
-  gChart = buildChart('gradeChart', gType, gLabels, gVals, 'Bilangan', gColors);
-}
-
-function buildChart(id, type, labels, vals, lbl, colors){
-  var isPie = type==='pie';
-  var defColors = ['#1a56db','#0ea5e9','#7c3aed','#10b981','#f59e0b','#ef4444','#ec4899','#8b5cf6'];
-  var bgColor = isPie
-    ? (colors || labels.map(function(_,i){return defColors[i%defColors.length];}))
-    : (type==='bar' ? (colors || 'rgba(26,86,219,0.75)') : 'rgba(26,86,219,0.1)');
-
-  return new Chart(document.getElementById(id), {
-    type: isPie ? 'pie' : type,
-    data: {
-      labels: labels,
-      datasets:[{
-        label: lbl,
-        data: vals,
-        backgroundColor: bgColor,
-        borderColor: (!isPie && type!=='bar') ? '#1a56db' : undefined,
-        borderWidth: isPie ? 2 : 1.5,
-        borderRadius: type==='bar' ? 4 : undefined,
-        tension: 0.4,
-        fill: type==='line',
-        pointRadius: type==='line' ? 5 : undefined,
-        pointBackgroundColor: type==='line' ? '#1a56db' : undefined,
-        hoverOffset: isPie ? 8 : undefined
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{ display:isPie, position:'bottom', labels:{ font:{size:11} } },
-        datalabels:{
-          color: isPie ? '#fff' : '#1e293b',
-          anchor: isPie ? 'center' : 'end',
-          align: isPie ? 'center' : 'top',
-          font:{ weight:'bold', size:11 },
-          formatter: function(v){ return type==='line'||type==='bar' ? (lbl==='Bilangan'?v:v.toFixed(1)) : v; }
-        }
-      },
-      scales: isPie ? {} : {
-        y:{ beginAtZero:true, max: lbl==='Purata'?100:undefined, grid:{color:'rgba(0,0,0,0.04)'} }
-      }
-    }
-  });
-}
-
-function rebuildTrend(type){
-  if (!tLastData) return;
-  if (tChart){ tChart.destroy(); tChart=null; }
-  tChart = buildChart('trendChart', type, tLastData.labels, tLastData.vals, 'Purata', null);
-}
-
-function rebuildGrade(type){
-  if (!gLastData) return;
-  if (gChart){ gChart.destroy(); gChart=null; }
-  gChart = buildChart('gradeChart', type, gLastData.labels, gLastData.vals, 'Bilangan', gLastData.colors);
-}
-
-// ============================================================
-// MAIN RENDER
-// ============================================================
-function renderAll(){
-  var data = getDisplayData();
-  renderTable(data);
-  renderAnalytics(data);
-  renderCharts(data);
-}
-
-// ============================================================
-// IMPORT CSV/EXCEL
-// ============================================================
-function doImport(){ document.getElementById('csvIn').click(); }
-
-function handleCSV(e){
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev){
-    var subj = getCurSubj();
-    var wb = XLSX.read(ev.target.result, {type:'binary'});
-    var sheet = wb.Sheets[wb.SheetNames[0]];
-    var rows = XLSX.utils.sheet_to_json(sheet, {header:1});
-    rows.slice(1).forEach(function(r){
-      if (r.length<2) return;
-      var k=String(r[0]), n=String(r[1]);
-      if (!subj.kelasData[k]) subj.kelasData[k]=[];
-      while (subj.ujian.length < r.length-2) subj.ujian.push('Ujian '+(subj.ujian.length+1));
-      subj.kelasData[k].push({ nama:n, kelas:k, markah:r.slice(2).map(function(v){ return Math.round(num(v)); }) });
-    });
-    renderKelasSel();
-    renderAll();
-    autoSave();
-    toast('Import berjaya');
-  };
-  reader.readAsBinaryString(file);
-  e.target.value='';
-}
-
-// ============================================================
-// EXPORT/IMPORT JSON
-// ============================================================
-function exportJSON(){
-  allData[curTahun].subjects = subjects;
-  allData[curTahun].currentSubject = curSubject;
-  var blob = new Blob([JSON.stringify({allData:allData,curTahun:curTahun},null,2)], {type:'application/json'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'SPIn_Backup_'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-  toast('Data dieksport');
-}
-
-function handleJSON(e){
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev){
-    try {
-      var d = JSON.parse(ev.target.result);
-      if (!d.allData){ toast('Format fail tidak sah'); return; }
-      showModal('Import Data', 'Ini akan GANTIKAN semua data cloud. Teruskan?', 'confirm').then(async function(ok){
-        if (!ok) return;
-        allData = d.allData;
-        curTahun = d.curTahun || Object.keys(allData).sort(function(a,b){return b-a;})[0];
-        subjects = allData[curTahun].subjects || {};
-        curSubject = allData[curTahun].currentSubject;
-        if (!curSubject||!subjects[curSubject]) curSubject=Object.keys(subjects)[0]||null;
-        destroyCharts();
-        renderTahunSel();
-        renderKelasSel();
-        renderSubjList();
-        renderAll();
-        await saveAll();
-        toast('Import JSON berjaya');
-      });
-    } catch(err){ toast('Ralat membaca JSON'); }
-  };
-  reader.readAsText(file);
-  e.target.value='';
-}
-
-// ============================================================
-// PDF
-// ============================================================
-function getJsPDF(){
-  if (window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
-  if (window.jsPDF) return window.jsPDF;
-  throw new Error('jsPDF tidak dimuatkan');
-}
-
-function pdfKelas(){
-  try {
-    var JsPDF = getJsPDF();
-    var doc = new JsPDF('p','mm','a4');
-    var subj = getCurSubj();
-    var k = document.getElementById('kelasSel').value;
-    if (!k){ toast('Pilih kelas dahulu'); return; }
-    var data = [].concat(subj.kelasData[k]||[]).sort(function(a,b){ return avg(b.markah)-avg(a.markah); });
-
-    doc.setFont('helvetica','bold'); doc.setFontSize(16);
-    doc.text(safe(curSubject)+' - Tahun '+curTahun, 10, 15);
-    doc.setFontSize(13);
-    doc.text('Laporan Kelas '+k, 10, 23);
-    doc.setFont('helvetica','normal'); doc.setFontSize(8);
-    doc.text('Dijana: '+new Date().toLocaleString(), 10, 29);
-    doc.line(10, 32, 200, 32);
-
-    var y = 40;
-    doc.setFont('helvetica','bold'); doc.setFontSize(9);
-    doc.text('Bil', 10, y); doc.text('Nama Pelajar', 22, y);
-    doc.text('Purata', 140, y); doc.text('Gred', 160, y); doc.text('Rank', 175, y);
-    y += 7;
-
-    doc.setFont('helvetica','normal');
-    data.forEach(function(p,i){
-      if (y>275){ doc.addPage(); y=15; }
-      var a = avg(p.markah);
-      doc.text(String(i+1), 10, y);
-      doc.text(safe(p.nama).substring(0,35), 22, y);
-      doc.text(a.toFixed(1), 140, y);
-      doc.text(safe(gred(a)), 160, y);
-      doc.text(String(i+1), 175, y);
-      y += 6;
-    });
-
-    y += 4; doc.line(10, y, 200, y); y += 6;
-    doc.setFont('helvetica','bold'); doc.setFontSize(9);
-    var total = data.length;
-    var avgAll = total ? data.reduce(function(s,p){return s+avg(p.markah);},0)/total : 0;
-    doc.text('Jumlah Pelajar: '+total, 12, y); y += 5;
-    doc.text('Purata Kelas: '+avgAll.toFixed(2), 12, y); y += 5;
-    doc.text('Gred Purata: '+safe(gred(avgAll)), 12, y);
-
-    doc.save('Kelas_'+k+'_'+safe(curSubject)+'_'+curTahun+'.pdf');
-    toast('PDF Kelas dimuat turun');
-  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
-}
-
-function pdfMulti(){
-  try {
-    var JsPDF = getJsPDF();
-    var doc = new JsPDF('p','mm','a4');
-    var subj = getCurSubj();
-
-    doc.setFont('helvetica','bold'); doc.setFontSize(16);
-    doc.text(safe(curSubject)+' - Tahun '+curTahun, 10, 15);
-    doc.setFontSize(13);
-    doc.text('Laporan Semua Kelas', 10, 23);
-    doc.setFont('helvetica','normal'); doc.setFontSize(8);
-    doc.text('Dijana: '+new Date().toLocaleString(), 10, 29);
-    doc.line(10, 32, 200, 32);
-
-    var y = 38; var first = true;
-    Object.keys(subj.kelasData).forEach(function(k){
-      var data = [].concat(subj.kelasData[k]).sort(function(a,b){return avg(b.markah)-avg(a.markah);});
-      if (!first && y>210){ doc.addPage(); y=15; }
-      first = false;
-
-      doc.setFont('helvetica','bold'); doc.setFontSize(11);
-      doc.text('Kelas '+k, 10, y); y += 6;
-      doc.setFontSize(8);
-      doc.text('Bil', 10, y); doc.text('Nama Pelajar', 22, y);
-      doc.text('Purata', 140, y); doc.text('Gred', 160, y); y += 5;
-      doc.setFont('helvetica','normal');
-      data.forEach(function(p,i){
-        if (y>275){ doc.addPage(); y=15; }
-        var a = avg(p.markah);
-        doc.text(String(i+1), 10, y);
-        doc.text(safe(p.nama).substring(0,35), 22, y);
-        doc.text(a.toFixed(1), 140, y);
-        doc.text(safe(gred(a)), 160, y);
-        y += 5;
-      });
-      y += 4;
-    });
-
-    doc.save('Multi_'+safe(curSubject)+'_'+curTahun+'.pdf');
-    toast('PDF Multi dimuat turun');
-  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
-}
-
-function pdfFull(btn){
-  var orig = btn.textContent;
-  btn.textContent = 'Menjana...';
-  btn.disabled = true;
-  try {
-    var JsPDF = getJsPDF();
-    var doc = new JsPDF('p','mm','a4');
-    var subj = getCurSubj();
-
-    var y=20, margin=10, cw=190, ph=297;
-    doc.setFont('helvetica','bold'); doc.setFontSize(15);
-    doc.text('Laporan Penuh SPIn Analytics', margin+cw/2, y, {align:'center'}); y+=9;
-    doc.setFont('helvetica','normal'); doc.setFontSize(10);
-    doc.text('Subjek: '+safe(curSubject)+'   Tahun: '+curTahun, margin+cw/2, y, {align:'center'}); y+=6;
-    doc.setFontSize(8);
-    doc.text('Dijana: '+new Date().toLocaleString(), margin+cw/2, y, {align:'center'}); y+=8;
-    doc.line(margin, y, margin+cw, y); y+=6;
-
-    Object.keys(subj.kelasData).forEach(function(k){
-      var students = [].concat(subj.kelasData[k]).sort(function(a,b){return avg(b.markah)-avg(a.markah);});
-      var avgClass = students.length ? avg(students.map(function(p){return avg(p.markah);})) : 0;
-
-      if (y > ph-50){ doc.addPage(); y=20; }
-
-      doc.setFont('helvetica','bold'); doc.setFontSize(11);
-      doc.text('Kelas '+k, margin, y); y+=6;
-
-      doc.setFontSize(8); doc.setFont('helvetica','bold');
-      doc.setFillColor(26,86,219); doc.setTextColor(255,255,255);
-      doc.rect(margin, y-4, cw, 6, 'F');
-      var xp = margin+1;
-      doc.text('Bil', xp, y); xp+=10;
-      doc.text('Nama', xp, y); xp+=42;
-      var colW = subj.ujian.length ? (cw-53-17-12)/subj.ujian.length : 0;
-      subj.ujian.forEach(function(u){
-        doc.text(safe(u).substring(0,7), xp+colW/2, y, {align:'center'});
-        xp+=colW;
-      });
-      doc.text('Purata', xp+2, y); xp+=17;
-      doc.text('Gred', xp+2, y);
-      doc.setTextColor(0,0,0);
-      y+=8;
-
-      doc.setFont('helvetica','normal');
-      students.forEach(function(p,i){
-        if (y>ph-12){ doc.addPage(); y=20; }
-        var a=avg(p.markah);
-        if (i%2===0){ doc.setFillColor(248,250,252); doc.rect(margin,y-4,cw,5,'F'); }
-        xp = margin+1;
-        doc.text(String(i+1), xp, y); xp+=10;
-        doc.text(safe(p.nama).substring(0,24), xp, y); xp+=42;
-        p.markah.forEach(function(m){
-          doc.text(String(Math.round(num(m))), xp+colW/2, y, {align:'center'});
-          xp+=colW;
-        });
-        doc.text(a.toFixed(1), xp+2, y); xp+=17;
-        doc.text(safe(gred(a)), xp+2, y);
-        y+=5;
-      });
-
-      y+=3;
-      doc.setFillColor(240,244,255); doc.rect(margin, y-3, cw, 10, 'F');
-      doc.setFont('helvetica','bold'); doc.setFontSize(8);
-      doc.text('Ringkasan '+k+': Jumlah '+students.length+' pelajar   Purata '+avgClass.toFixed(1)+'   Gred '+safe(gred(avgClass)), margin+2, y+3);
-      y+=12;
-    });
-
-    doc.save('LaporanPenuh_'+safe(curSubject)+'_'+curTahun+'.pdf');
-    toast('Laporan penuh dimuat turun');
-  } catch(e){ console.error(e); toast('Ralat PDF: '+e.message); }
-  finally { btn.textContent=orig; btn.disabled=false; }
-}
-
-// ============================================================
-// INIT
-// ============================================================
-Chart.register(ChartDataLabels);
-document.addEventListener('DOMContentLoaded', function(){
-  try {
-    spinBoot();
-  } catch(e) {
-    console.error('spinBoot error:', e);
-    // Force show auth screen if boot fails
-    var lo = document.getElementById('loading-overlay');
-    if (lo) lo.style.display = 'none';
-    var as = document.getElementById('auth-screen');
-    if (as) { as.style.display = 'flex'; as.style.alignItems = 'center'; as.style.justifyContent = 'center'; }
-  }
-});
-</script>
 </body>
 </html>
