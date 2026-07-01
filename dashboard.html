@@ -476,7 +476,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   }, 6000)
   
-  const clearTO = () => clearTimeout(loadTimeout)
+  window.clearTO = () => clearTimeout(loadTimeout)
 
   // Jika Supabase belum dikonfigurasi, tunjuk halaman login terus
   if (!SB_CONFIGURED) {
