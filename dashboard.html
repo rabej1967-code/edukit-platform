@@ -3,209 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EduKit — Dashboard Saya</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>EduKit — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --p:#1a56db;--pd:#1447c0;--pl:#e8f0fe;
-  --gold:#f59e0b;--ok:#16a34a;--red:#ef4444;
-  --text:#0f172a;--t2:#475569;--t3:#94a3b8;
-  --bg:#f0f4ff;--surf:#fff;--bdr:#e2e8f4;
-  --r:10px;--rl:16px;--sh:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.06);
-}
+:root{--p:#1a56db;--pd:#1240b0;--pl:#e8f0fe;--ok:#16a34a;--red:#ef4444;--gold:#f59e0b;--text:#0f172a;--t2:#475569;--t3:#94a3b8;--bg:#f0f4ff;--surf:#fff;--bdr:#e2e8f4;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);}
-#loadPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;}
-.spin{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite;}
+
+/* LOADING */
+#loadPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.spin{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
-#loginPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;}
-.lbox{background:white;border-radius:24px;width:400px;max-width:94vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.25);}
-.lh{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:32px;text-align:center;}
-.lh-logo{width:52px;height:52px;background:rgba(255,255,255,.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:white;margin:0 auto 12px;}
-.lh h2{font-size:22px;font-weight:800;color:white;margin-bottom:4px;}
+.load-txt{color:rgba(255,255,255,.6);font-size:13px;}
+
+/* LOGIN */
+#loginPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:none;align-items:center;justify-content:center;}
+.lbox{background:white;border-radius:20px;width:380px;max-width:94vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);}
+.lh{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:28px;text-align:center;}
+.lh-logo{width:48px;height:48px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:white;margin:0 auto 10px;}
+.lh h2{font-size:20px;font-weight:800;color:white;margin-bottom:3px;}
 .lh p{font-size:12px;color:rgba(255,255,255,.6);}
-.lbody{padding:28px;}
-.fg{margin-bottom:14px;}
-.fg label{font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px;}
-.fc{width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);background:#f8fafd;outline:none;transition:.15s;}
-.fc:focus{border-color:var(--p);background:white;}
-.lbtn{width:100%;padding:12px;background:var(--p);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;}
+.lbody{padding:24px;}
+.fg{margin-bottom:13px;}
+.fg label{font-size:11px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.fc{width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:9px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:.15s;}
+.fc:focus{border-color:var(--p);}
+.lbtn{width:100%;padding:12px;background:var(--p);color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;min-height:46px;}
 .lbtn:hover{background:var(--pd);}
 .lbtn:disabled{opacity:.5;cursor:not-allowed;}
 .lerr{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:600;margin-top:10px;display:none;text-align:center;}
-.lsucc{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;padding:9px;border-radius:8px;font-size:12px;font-weight:600;margin-top:8px;display:none;text-align:center;}
 .lfoot{text-align:center;padding:14px;background:#f8fafd;border-top:1px solid var(--bdr);font-size:11px;color:var(--t3);}
-.lfoot a{color:var(--p);cursor:pointer;font-weight:600;}
-.lforgot{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr);}
+.lfoot a{color:var(--p);cursor:pointer;font-weight:600;text-decoration:none;}
 
-/* FORCE CHANGE PW */
-#forcePwOverlay{position:fixed;inset:0;background:rgba(10,22,40,.88);z-index:9000;display:none;align-items:center;justify-content:center;}
-.fpw-box{background:white;border-radius:20px;width:440px;max-width:94vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);}
-.fpw-head{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:24px 28px;display:flex;align-items:center;gap:14px;}
-.fpw-head-ic{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.fpw-head h3{font-size:17px;font-weight:800;color:white;margin-bottom:3px;}
-.fpw-head p{font-size:12px;color:rgba(255,255,255,.65);}
-.fpw-body{padding:24px 28px;}
-.fpw-warn{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#92400e;margin-bottom:18px;line-height:1.6;}
-.fpw-foot{padding:14px 28px;background:#f8fafd;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;}
-.btn-save{padding:10px 22px;background:var(--p);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+/* DEMO BUTTONS */
+.demo-wrap{margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr);}
+.demo-lbl{font-size:11px;color:var(--t3);text-align:center;margin-bottom:10px;}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.demo-btn{padding:10px;border:1.5px solid var(--bdr);border-radius:9px;background:white;cursor:pointer;font-family:inherit;text-align:center;transition:.15s;}
+.demo-btn:hover{border-color:var(--p);background:var(--pl);}
+.demo-ic{font-size:18px;margin-bottom:3px;}
+.demo-nm{font-size:11px;font-weight:700;color:var(--text);}
+.demo-tag{font-size:10px;color:var(--t2);}
+.demo-full{grid-column:1/-1;border-color:#f59e0b;background:#fffbeb;}
+.demo-full:hover{background:#fef3c7;}
+.demo-note{font-size:10px;color:var(--t3);text-align:center;}
 
 /* DASHBOARD */
 #dashPage{display:none;min-height:100vh;}
-.topbar{background:var(--p);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,86,219,.3);}
+.topbar{background:var(--p);height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .tb-brand{display:flex;align-items:center;gap:8px;}
 .tb-logo{width:26px;height:26px;background:rgba(255,255,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:white;}
 .tb-name{font-size:16px;font-weight:800;color:white;}
 .tb-right{display:flex;align-items:center;gap:8px;}
-.tb-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:5px 12px;border-radius:8px;}
-.tb-uname{font-size:12.5px;font-weight:600;color:white;}
-.tb-upkg{font-size:10px;color:rgba(255,255,255,.55);}
-.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.75);padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
-.tbtn:hover{background:rgba(255,255,255,.16);color:white;}
-.dash-body{max-width:1100px;margin:0 auto;padding:24px 18px;}
+.tb-user{font-size:12px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:5px 11px;border-radius:7px;}
+.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;}
+.tbtn:hover{background:rgba(255,255,255,.16);}
+.tbtn-red{color:#fca5a5;}
+
+.dash-body{max-width:1100px;margin:0 auto;padding:22px 16px;}
 
 /* TABS */
-.tabs{display:flex;gap:4px;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:4px;margin-bottom:22px;overflow-x:auto;}
-.tab{flex:1;min-width:fit-content;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;text-align:center;color:var(--t2);background:none;border:none;font-family:inherit;white-space:nowrap;}
-.tab.active{background:var(--p);color:white;box-shadow:0 2px 8px rgba(26,86,219,.25);}
+.tabs{display:flex;gap:4px;background:white;border:1px solid var(--bdr);border-radius:10px;padding:4px;margin-bottom:20px;overflow-x:auto;}
+.tab{flex:1;min-width:fit-content;padding:8px 16px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);background:none;border:none;font-family:inherit;white-space:nowrap;transition:.15s;}
+.tab.active{background:var(--p);color:white;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
 
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-
-/* PACKAGE BANNER */
-.pkg-banner{border-radius:var(--rl);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
-.pkb-label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;opacity:.75;}
-.pkb-name{font-size:20px;font-weight:800;}
-.pkb-sub{font-size:12.5px;opacity:.7;margin-top:3px;}
-.pkb-badge{font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;background:rgba(255,255,255,.2);}
+/* PKG BANNER */
+.pkg-banner{border-radius:14px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.pkb-lbl{font-size:11px;font-weight:700;opacity:.65;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.pkb-nm{font-size:18px;font-weight:800;}
+.pkb-sub{font-size:12px;opacity:.65;margin-top:2px;}
+.pkb-badge{font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.2);color:white;white-space:nowrap;}
 
 /* APPS */
-.apps-section{margin-bottom:28px;}
-.apps-sec-t{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.apps-sec-t span{background:var(--pl);color:var(--p);padding:2px 8px;border-radius:20px;font-size:11px;}
-.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px;}
-.app-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:18px;cursor:pointer;transition:.2s;position:relative;}
-.app-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,86,219,.12);border-color:var(--p);}
-.app-card.locked{position:relative;}
-.app-lock-overlay{position:absolute;inset:0;background:rgba(248,250,252,.88);border-radius:var(--rl);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;z-index:2;}
-.app-lock-ic{font-size:22px;}
-.app-lock-t{font-size:11px;font-weight:700;color:var(--t3);}
-.app-lock-pkg{font-size:10px;color:var(--t3);}
-.app-blur{filter:blur(3px) grayscale(.5);pointer-events:none;}
-.app-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:11px;}
-.app-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.app-desc{font-size:11.5px;color:var(--t2);line-height:1.5;}
-.app-open{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--p);margin-top:10px;}
-
-/* KIDS SPARK dalam dashboard */
-.ks-card{background:linear-gradient(135deg,#312e81,#4338ca);border-radius:var(--rl);padding:20px 22px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
-.ks-card-info h3{font-size:16px;font-weight:800;color:white;margin-bottom:4px;}
-.ks-card-info p{font-size:12px;color:rgba(255,255,255,.7);}
-.ks-card-btn{padding:9px 20px;background:#f59e0b;border:none;border-radius:20px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;font-family:inherit;}
-.ks-lock{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.2);border-radius:10px;padding:10px 14px;}
-.ks-lock-t{font-size:12px;font-weight:700;color:white;}
-.ks-lock-s{font-size:11px;color:rgba(255,255,255,.6);}
-
-/* PANDUAN */
-.guide-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-.guide-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;}
-.guide-thumb{background:#0f172a;height:130px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
-.guide-thumb:hover .play-ic{transform:scale(1.1);}
-.play-ic{width:46px;height:46px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;transition:.2s;}
-.guide-info{padding:13px 15px;}
-.guide-nm{font-size:13px;font-weight:700;margin-bottom:4px;}
-.guide-pkg{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:6px;}
-.guide-desc{font-size:12px;color:var(--t2);line-height:1.55;}
+.sec-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-badge{background:var(--pl);color:var(--p);padding:2px 8px;border-radius:20px;font-size:11px;}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
+.app-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:16px;cursor:pointer;transition:.2s;}
+.app-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,86,219,.12);border-color:var(--p);}
+.app-card.locked{position:relative;overflow:hidden;}
+.lock-overlay{position:absolute;inset:0;background:rgba(248,250,252,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:12px;}
+.lock-ic{font-size:20px;}
+.lock-t{font-size:11px;font-weight:700;color:var(--t3);}
+.app-blur{filter:blur(3px) grayscale(.5);}
+.app-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:10px;}
+.app-nm{font-size:13px;font-weight:700;margin-bottom:3px;}
+.app-ds{font-size:11px;color:var(--t2);line-height:1.5;}
+.app-open{font-size:11px;font-weight:700;color:var(--p);margin-top:8px;}
 
 /* PROFIL */
-.profil-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:22px;max-width:480px;}
-.pf-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
-.pf-av{width:52px;height:52px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:white;flex-shrink:0;}
-.pf-nm{font-size:17px;font-weight:800;}
+.profil-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:20px;max-width:440px;}
+.pf-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.pf-av{width:48px;height:48px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:white;}
+.pf-nm{font-size:16px;font-weight:800;}
 .pf-pkg{font-size:12px;color:var(--t2);}
-.pf-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr);}
+.pf-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:13px;}
 .pf-row:last-child{border-bottom:none;}
-.pf-lbl{font-size:12px;color:var(--t3);font-weight:600;}
-.pf-val{font-size:13px;font-weight:600;color:var(--text);}
-
-/* MAKLUM BALAS */
-.fb-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:22px;max-width:520px;}
-.fb-card h3{font-size:15px;font-weight:700;margin-bottom:12px;}
-.fb-ta{width:100%;min-height:100px;border:1.5px solid var(--bdr);border-radius:10px;padding:10px 13px;font-size:13px;font-family:inherit;resize:vertical;outline:none;}
-.fb-ta:focus{border-color:var(--p);}
-.fb-btn{margin-top:10px;padding:10px 22px;background:var(--p);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* MODAL */
-.mbak{position:fixed;inset:0;background:rgba(0,0,0,.44);z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
-.mbak.open{opacity:1;pointer-events:all;}
-.modal{background:white;border-radius:var(--rl);width:380px;max-width:94vw;box-shadow:0 24px 60px rgba(0,0,0,.22);transform:translateY(12px);transition:.2s;}
-.mbak.open .modal{transform:none;}
-.mh{padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;}
-.mh h3{font-size:13.5px;font-weight:700;}
-.mx{background:none;border:none;cursor:pointer;font-size:17px;color:var(--t3);}
-.mb{padding:18px;}
-.mf{padding:12px 18px;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:8px;}
-.btn-sm{padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-p{background:var(--p);color:white;border:none;}
-.btn-o{background:white;color:var(--t2);border:1.5px solid var(--bdr);}
+.pf-lbl{color:var(--t3);font-weight:600;}
+.pf-val{font-weight:600;}
 
 /* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:white;padding:10px 16px;border-radius:10px;font-size:12.5px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,.2);z-index:9999;transform:translateY(60px);opacity:0;transition:.25s;display:flex;align-items:center;gap:8px;}
-.toast.show{transform:none;opacity:1;}
-.tdot{width:7px;height:7px;border-radius:50%;}
+.toast{position:fixed;bottom:18px;right:18px;background:#1e293b;color:white;padding:10px 15px;border-radius:9px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
 
-@media(max-width:600px){.apps-grid{grid-template-columns:1fr 1fr;}}
+/* DEMO BANNER */
+.demo-banner{background:#f59e0b;color:#0f172a;padding:8px 16px;text-align:center;font-size:12px;font-weight:700;}
 
-/* ── VIDEO DALAM DASHBOARD ─────────────────────────────── */
-.app-card{position:relative;}
-.app-vid-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;background:rgba(26,86,219,.1);border:1px solid rgba(26,86,219,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:.2s;z-index:3;}
-.app-vid-btn:hover{background:var(--p);border-color:var(--p);color:white;}
-.app-vid-btn:hover::before{content:'Tutorial';position:absolute;right:32px;top:50%;transform:translateY(-50%);background:#0f172a;color:white;padding:3px 7px;border-radius:6px;font-size:10px;font-weight:600;white-space:nowrap;pointer-events:none;}
-/* MODAL VIDEO DASHBOARD */
-.dv-modal-bak{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:8000;display:none;align-items:flex-end;justify-content:center;}
-@media(min-width:600px){.dv-modal-bak{align-items:center;padding:16px;}}
-.dv-modal-bak.open{display:flex;}
-.dv-modal-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
-@media(min-width:600px){.dv-modal-box{border-radius:20px;}}
-.dv-head{padding:13px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1;}
-.dv-head-info{display:flex;align-items:center;gap:9px;}
-.dv-ic{width:34px;height:34px;border-radius:9px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
-.dv-nm{font-size:13.5px;font-weight:700;color:var(--text);}
-.dv-pkg{font-size:11px;color:var(--t2);}
-.dv-close{width:28px;height:28px;background:#f1f5f9;border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
-.dv-frame-wrap{width:100%;aspect-ratio:16/9;background:#0a1628;position:relative;}
-.dv-frame{width:100%;height:100%;border:none;display:none;}
-.dv-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
-.dv-ph-ic{font-size:36px;margin-bottom:10px;}
-.dv-ph-t{font-size:15px;font-weight:700;color:white;margin-bottom:5px;}
-.dv-ph-s{font-size:12px;color:rgba(255,255,255,.6);max-width:280px;line-height:1.6;}
-.dv-body{padding:14px 16px;}
-.dv-ds{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:12px;}
-.dv-open-btn{width:100%;padding:12px;background:var(--p);color:white;border:none;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;min-height:44px;}
-.dv-open-btn:hover{background:var(--pd);}
-
-/* MOD DEMO */
-.demo-login-wrap{margin-top:18px;padding-top:18px;border-top:1px solid var(--bdr);}
-.demo-divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.demo-divider span{font-size:11px;color:var(--t3);white-space:nowrap;}
-.demo-divider:before,.demo-divider:after{content:'';flex:1;height:1px;background:var(--bdr);}
-.demo-pkg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.demo-pkg-btn{padding:10px 8px;border:1.5px solid var(--bdr);border-radius:10px;background:white;cursor:pointer;font-family:inherit;text-align:center;transition:.15s;}
-.demo-pkg-btn:hover{border-color:var(--p);background:var(--pl);}
-.demo-pkg-ic{font-size:18px;margin-bottom:4px;}
-.demo-pkg-nm{font-size:11px;font-weight:700;color:var(--text);}
-.demo-pkg-tag{font-size:10px;color:var(--t2);margin-top:1px;}
-.demo-gabungan{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border:1.5px solid #f59e0b;background:#fffbeb;}
-.demo-gabungan:hover{background:#fef3c7;border-color:#e68a00;}
-.demo-note{font-size:10.5px;color:var(--t3);text-align:center;line-height:1.5;}
+@media(max-width:600px){.apps-grid{grid-template-columns:1fr 1fr;}.dash-body{padding:14px 12px;}}
 </style>
 </head>
 <body>
 
-<div id="loadPage" style="display:flex;"><div class="spin"></div></div>
+<!-- LOADING -->
+<div id="loadPage">
+  <div class="spin"></div>
+  <div class="load-txt">Memuat akaun anda...</div>
+</div>
 
-<div id="loginPage" style="display:none;">
+<!-- LOGIN -->
+<div id="loginPage">
   <div class="lbox">
     <div class="lh">
       <div class="lh-logo">EK</div>
@@ -213,433 +130,282 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <p>Log masuk ke akaun anda</p>
     </div>
     <div class="lbody">
-      <div id="loginForm">
-        <div class="fg"><label>E-mel</label><input id="leml" class="fc" type="email" placeholder="emel@sekolah.edu.my" autocomplete="email"></div>
-        <div class="fg"><label>Kata Laluan</label><input id="lpw" class="fc" type="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-        <button class="lbtn" id="btnLogin" onclick="doLogin()">Log Masuk →</button>
-        <div class="lerr" id="lerr"></div>
-        <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--t3);">
-          <a onclick="showForgot()" style="color:var(--p);cursor:pointer;font-weight:600;">Lupa kata laluan?</a>
-        </div>
+      <div class="fg">
+        <label>E-mel</label>
+        <input id="leml" class="fc" type="email" placeholder="emel@sekolah.edu.my" autocomplete="email"
+          onkeydown="if(event.key==='Enter')document.getElementById('lpw').focus()">
       </div>
-      <div id="forgotForm" class="lforgot">
-        <div style="font-size:12px;color:var(--t2);background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:9px;margin-bottom:10px;">Masukkan e-mel untuk terima pautan reset kata laluan.</div>
-        <div class="fg"><label>E-mel</label><input id="feml" class="fc" type="email" placeholder="emel@sekolah.edu.my"></div>
-        <button class="lbtn" onclick="doReset()">Hantar Pautan Reset</button>
-        <div class="lerr" id="ferr"></div>
-        <div class="lsucc" id="fsucc"></div>
-        <div style="text-align:center;margin-top:8px;font-size:12px;"><a onclick="showLogin()" style="color:var(--p);cursor:pointer;font-weight:600;">← Kembali</a></div>
+      <div class="fg">
+        <label>Kata Laluan</label>
+        <input id="lpw" class="fc" type="password" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-    </div>
-    <div class="lbody" style="padding-top:0;">
-    <div class="demo-login-wrap">
-      <div class="demo-divider"><span>— atau cuba sebagai —</span></div>
-      <div class="demo-pkg-grid">
-        <button class="demo-pkg-btn" onclick="demoLogin('guru')">
-          <div class="demo-pkg-ic">📚</div>
-          <div class="demo-pkg-nm">Pakej Guru</div>
-          <div class="demo-pkg-tag">10 apps</div>
-        </button>
-        <button class="demo-pkg-btn" onclick="demoLogin('pentadbir')">
-          <div class="demo-pkg-ic">🏫</div>
-          <div class="demo-pkg-nm">Pakej Pentadbir</div>
-          <div class="demo-pkg-tag">8 apps</div>
-        </button>
-        <button class="demo-pkg-btn demo-gabungan" onclick="demoLogin('gabungan')">
-          <div class="demo-pkg-ic">💎</div>
-          <div class="demo-pkg-nm">Pakej Guru + Pentadbir</div>
-          <div class="demo-pkg-tag">17 apps — Akses penuh</div>
-        </button>
-      </div>
-      <div class="demo-note">⚠️ Mod demo — data tidak disimpan. Untuk akses sebenar, beli pakej.</div>
-    </div>
-  </div>
-  <div class="lfoot">Belum ada akaun? <a onclick="location.href='index.html#pricing'">Beli pakej sekarang</a></div>
-  </div>
-</div>
+      <button class="lbtn" id="btnLogin" onclick="doLogin()">Log Masuk →</button>
+      <div class="lerr" id="lerr"></div>
 
-<!-- PAKSA TUKAR KATA LALUAN -->
-<div id="forcePwOverlay" style="display:none;">
-  <div class="fpw-box">
-    <div class="fpw-head">
-      <div class="fpw-head-ic">🔑</div>
-      <div><h3>Tetapkan Kata Laluan Baharu</h3><p>Wajib sebelum menggunakan apps</p></div>
+      <div class="demo-wrap">
+        <div class="demo-lbl">— atau cuba mod demo —</div>
+        <div class="demo-grid">
+          <button class="demo-btn" onclick="demoLogin('guru')">
+            <div class="demo-ic">📚</div>
+            <div class="demo-nm">Pakej Guru</div>
+            <div class="demo-tag">10 apps</div>
+          </button>
+          <button class="demo-btn" onclick="demoLogin('pentadbir')">
+            <div class="demo-ic">🏫</div>
+            <div class="demo-nm">Pakej Pentadbir</div>
+            <div class="demo-tag">8 apps</div>
+          </button>
+          <button class="demo-btn demo-full" onclick="demoLogin('gabungan')">
+            <div class="demo-ic">💎</div>
+            <div class="demo-nm">Pakej Guru + Pentadbir</div>
+            <div class="demo-tag">17 apps — Akses Penuh</div>
+          </button>
+        </div>
+        <div class="demo-note">⚠️ Mod demo — data tidak disimpan</div>
+      </div>
     </div>
-    <div class="fpw-body">
-      <div class="fpw-warn">⚠️ <strong>Anda masih guna kata laluan lalai.</strong> Demi keselamatan, sila tetapkan kata laluan baharu dan nama pengguna anda.</div>
-      <div class="fg"><label>Nama Pengguna Baharu</label><input id="fpwUser" class="fc" placeholder="Nama pengguna anda"></div>
-      <div class="fg"><label>Kata Laluan Baharu</label><input id="fpw1" class="fc" type="password" placeholder="Minimum 8 aksara"></div>
-      <div class="fg" style="margin-bottom:0;"><label>Sahkan Kata Laluan</label><input id="fpw2" class="fc" type="password" placeholder="Ulang kata laluan"></div>
-      <div class="lerr" id="fpwErr" style="margin-top:8px;"></div>
-    </div>
-    <div class="fpw-foot"><button class="btn-save" onclick="doForcePw()">Simpan & Teruskan →</button></div>
+    <div class="lfoot">Belum ada akaun? <a href="index.html#pricing">Beli pakej sekarang →</a></div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashPage">
+  <div id="demoBanner" class="demo-banner" style="display:none;">⚠️ MOD DEMO — Data tidak disimpan. <a href="index.html#pricing" style="color:#0f172a;font-weight:800;text-decoration:underline;">Beli pakej untuk akses sebenar →</a></div>
   <div class="topbar">
     <div class="tb-brand">
       <div class="tb-logo">EK</div>
       <div class="tb-name">EduKit</div>
     </div>
     <div class="tb-right">
-      <div class="tb-user">
-        <div><div class="tb-uname" id="tbName">—</div><div class="tb-upkg" id="tbPkg">—</div></div>
-      </div>
-      <button class="tbtn" onclick="om('chpwMod')">🔑 Kata Laluan</button>
-      <button class="tbtn" style="color:#fca5a5;" onclick="doLogout()">Keluar</button>
+      <div class="tb-user" id="tbUser">—</div>
+      <button class="tbtn tbtn-red" onclick="doLogout()">Keluar</button>
     </div>
   </div>
+
   <div class="dash-body">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('apps',this)">📦 Apps Saya</button>
-      <button class="tab" onclick="switchTab('kidsspark',this)">✨ Kids Spark</button>
-      <button class="tab" onclick="switchTab('panduan',this)">🎬 Panduan</button>
       <button class="tab" onclick="switchTab('profil',this)">👤 Profil</button>
-      <button class="tab" onclick="switchTab('maklumbalas',this)">💬 Maklum Balas</button>
     </div>
 
-    <!-- TAB: APPS -->
-    <div class="tab-content active" id="tab-apps">
+    <div class="tab-pane active" id="tab-apps">
       <div class="pkg-banner" id="pkgBanner"></div>
       <div id="appsContainer"></div>
     </div>
 
-    <!-- TAB: KIDS SPARK -->
-    <div class="tab-content" id="tab-kidsspark">
-      <div id="ksContent"></div>
-    </div>
-
-    <!-- TAB: PANDUAN -->
-    <div class="tab-content" id="tab-panduan">
-      <div class="guide-grid" id="guideGrid">
-        <div style="text-align:center;padding:40px;color:var(--t3);">Memuatkan panduan...</div>
-      </div>
-    </div>
-
-    <!-- TAB: PROFIL -->
-    <div class="tab-content" id="tab-profil">
+    <div class="tab-pane" id="tab-profil">
       <div class="profil-card">
         <div class="pf-top">
           <div class="pf-av" id="pfAv">EK</div>
-          <div><div class="pf-nm" id="pfNm">—</div><div class="pf-pkg" id="pfPkgLbl">—</div></div>
+          <div><div class="pf-nm" id="pfNm">—</div><div class="pf-pkg" id="pfPkg">—</div></div>
         </div>
         <div class="pf-row"><span class="pf-lbl">E-mel</span><span class="pf-val" id="pfEml">—</span></div>
         <div class="pf-row"><span class="pf-lbl">Pakej</span><span class="pf-val" id="pfPkgV">—</span></div>
-        <div class="pf-row"><span class="pf-lbl">Tarikh Daftar</span><span class="pf-val" id="pfDate">—</span></div>
-        <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok);">✓ Aktif</span></div>
-        <div style="margin-top:14px;">
-          <button class="btn-sm btn-p" onclick="om('chpwMod')">🔑 Tukar Kata Laluan</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB: MAKLUM BALAS -->
-    <div class="tab-content" id="tab-maklumbalas">
-      <div class="fb-card">
-        <h3>💬 Hantar Maklum Balas</h3>
-        <div style="font-size:12.5px;color:var(--t2);margin-bottom:14px;line-height:1.6;">Cadangan, laporan masalah, atau pertanyaan. Kami akan balas dalam masa 24 jam.</div>
-        <div class="fg"><label>Jenis</label>
-          <select id="fbType" class="fc"><option>Cadangan peningkatan</option><option>Laporan masalah teknikal</option><option>Pertanyaan tentang apps</option><option>Lain-lain</option></select>
-        </div>
-        <div class="fg"><label>Mesej</label><textarea id="fbMsg" class="fb-ta" placeholder="Tulis mesej anda..."></textarea></div>
-        <button class="fb-btn" onclick="sendFeedback()">Hantar Maklum Balas</button>
-        <div class="lsucc" id="fbSucc" style="margin-top:10px;display:none;">✓ Terima kasih! Maklum balas anda telah dihantar.</div>
+        <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok)">✓ Aktif</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TUKAR KATA LALUAN MODAL -->
-<div class="mbak" id="chpwMod">
-  <div class="modal">
-    <div class="mh"><h3>🔑 Tukar Kata Laluan</h3><button class="mx" onclick="cm('chpwMod')">✕</button></div>
-    <div class="mb">
-      <div class="fg"><label>Kata Laluan Baharu</label><input id="cpw1" class="fc" type="password" placeholder="Min 8 aksara"></div>
-      <div class="fg" style="margin-bottom:0;"><label>Sahkan</label><input id="cpw2" class="fc" type="password" placeholder="Ulang kata laluan"></div>
-      <div class="lerr" id="cpwErr" style="margin-top:8px;"></div>
-      <div class="lsucc" id="cpwSucc" style="margin-top:8px;display:none;"></div>
-    </div>
-    <div class="mf"><button class="btn-sm btn-o" onclick="cm('chpwMod')">Batal</button><button class="btn-sm btn-p" onclick="chgPw()">Simpan</button></div>
-  </div>
-</div>
-
-<div class="toast" id="tst"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
+<div class="toast" id="toast"></div>
 
 <script>
-
-/* ================================================================
-   VIDEO TUTORIAL APPS (17 apps)
-   Kemaskini ytId apabila video YouTube dah sedia
-   ================================================================ */
-const EDUKIT_VIDEOS = {
-  // PAKEJ GURU
-  eduassign:   { nama:'GuruKits',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📋', ringkasan:'Agih dan pantau beban tugas guru mengikut bidang dan jana laporan PDF.',                                     ytId:'GANTI_ID_EDUASSIGN_PRO'         },
-  spin:        { nama:'SPIn Analytics',             pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📈', ringkasan:'Analitik prestasi pelajar OTR vs AR, carta kemajuan dan kenal pasti pelajar berisiko.',                      ytId:'GANTI_ID_SPIN_ANALYTICS'        },
-  spinpro:     { nama:'Dashboard SPIn Pro',         pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📊', ringkasan:'Dashboard visual prestasi pelajar yang komprehensif dengan heatmap dan ranking.',                            ytId:'GANTI_ID_DASHBOARD_SPIN_PRO'    },
-  gantt:       { nama:'GanttPro',                   pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📅', ringkasan:'Carta Gantt digital untuk perancangan projek dan program sekolah.',                                          ytId:'GANTI_ID_GANTT_PRO'             },
-  kokum:       { nama:'KokurikulumTrack',            pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🏅', ringkasan:'Rekod kehadiran kokurikulum — persatuan, sukan, badan beruniform.',                                         ytId:'GANTI_ID_KOKURIKULUM_TRACK'     },
-  moodradar:   { nama:'Mood Radar Pro',              pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🌡️', ringkasan:'Kesan mood dan emosi pelajar dalam kelas menggunakan QR code.',                                             ytId:'GANTI_ID_MOOD_RADAR_PRO'        },
-  orgchart:    { nama:'OrgChart Pro',               pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🗂️', ringkasan:'Jana carta organisasi digital untuk sekolah, masjid, JKK atau korporat.',                                   ytId:'GANTI_ID_ORGCHART_PRO'          },
-  rph:         { nama:'RPH Fleksi KSSR Pro',        pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'📝', ringkasan:'Rancangan Pengajaran Harian dengan Standard Kandungan dan Objektif Pembelajaran.',                          ytId:'GANTI_ID_RPH_FLEKSI'            },
-  senarai:     { nama:'Senarai Semak Ultimate',      pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'✅', ringkasan:'Senarai semak tugas sekolah mengikut bidang, kategori dan status penyelesaian.',                            ytId:'GANTI_ID_SENARAI_SEMAK'         },
-  gamekelas:   { nama:'GameKelas',                  pakej:'guru',      pakejLabel:'Pakej Guru',      ikon:'🎮', ringkasan:'Cipta game interaktif kelas — MCQ, betul/salah, isi kosong, kad kilat.',                                   ytId:'GANTI_ID_GAME_KELAS'            },
-  // PAKEJ PENTADBIR
-  edudash:     { nama:'EduDash Pro',                pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏫', ringkasan:'Dashboard sekolah lengkap — kehadiran, BMI, SEGAK, disiplin, PAJSK, kewangan.',                            ytId:'GANTI_ID_EDUDASH_PRO'           },
-  headcount:   { nama:'H2 Headcount 2.0',           pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🎯', ringkasan:'Pemantauan progres pelajar OTR vs AR per kelas secara visual.',                                             ytId:'GANTI_ID_H2_HEADCOUNT'          },
-  stafftrack:  { nama:'StaffTrack Pro',             pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'👥', ringkasan:'Sistem kehadiran digital staf — import CSV, trend harian, laporan dan analisis.',                           ytId:'GANTI_ID_STAFFTRACK_PRO'        },
-  kokum2:      { nama:'Rekod Kehadiran Kokurikulum', pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🏅', ringkasan:'Pandangan pentadbir ke atas kehadiran kokurikulum seluruh sekolah.',                                       ytId:'GANTI_ID_REKOD_KOKURIKULUM'     },
-  pencerapan:  { nama:'SK@S — Pencerapan',          pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔍', ringkasan:'Cerapan guru Standard 4 SKPMg2 — isi rubrik, kira skor, jana borang PDF rasmi.',                           ytId:'GANTI_ID_SKAS_PENCERAPAN'       },
-  guruganti:   { nama:'Sistem Guru Ganti Pro',      pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'🔄', ringkasan:'Urus guru ganti, rekod ketidakhadiran guru, analisis kekerapan bulanan.',                                   ytId:'GANTI_ID_GURU_GANTI'            },
-  skpm:        { nama:'SKPM Pro',                   pakej:'pentadbir', pakejLabel:'Pakej Pentadbir', ikon:'⭐', ringkasan:'Kualiti pengurusan sekolah — IKS, Standard 1–5, jana laporan kualiti PDF.',                                ytId:'GANTI_ID_SKPM_PRO'              },
-};
-// Auto-generate YouTube URLs
-Object.keys(EDUKIT_VIDEOS).forEach(k => {
-  const v = EDUKIT_VIDEOS[k], id = v.ytId
-  v.hasVideo = !id.startsWith('GANTI_')
-  v.ytUrl = v.hasVideo ? 'https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1' : ''
-  v.thumbnail = v.hasVideo ? 'https://img.youtube.com/vi/'+id+'/mqdefault.jpg' : ''
-})
-
-/* ================================================================
-   SUPABASE CONFIG — gantikan dengan nilai anda
-   ================================================================ */
-/* ================================================================
-   SUPABASE CONFIG — Gantikan dengan nilai sebenar anda
-   Dapatkan dari: Supabase Dashboard → Project Settings → API
-   ================================================================ */
+// ================================================================
+// SUPABASE CONFIG
+// ================================================================
 const SB_URL = 'https://aowzftmdriukxbltjtpm.supabase.co'
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvd3pmdG1kcml1a3hibHRqdHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzAxOTQsImV4cCI6MjA5NDQ0NjE5NH0.17lKaGC-9jx1cDORx2btwfmzDYon3s3CN2dei2BM-Ac'
 
-// Semak sama ada Supabase sudah dikonfigurasi
-const SB_CONFIGURED = !SB_URL.startsWith('GANTI_') && !SB_KEY.startsWith('GANTI_')
+const HDR = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json'
+}
 
-const { createClient } = supabase
-const sb = SB_CONFIGURED
-  ? createClient(SB_URL, SB_KEY, { auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } })
-  : null
-
-/* ================================================================
-   SENARAI APPS — kemaskini URL apabila setiap app di-deploy
-   ================================================================ */
+// ================================================================
+// APPS DATA
+// ================================================================
 const APPS_GURU = [
-  { id:'eduassign',   name:'GuruKits',         desc:'Agihan & pantau beban tugas guru',         ic:'📋', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-gurukits' },
-  { id:'spin',        name:'SPIn Analytics',         desc:'Analitik prestasi pelajar OTR & AR',        ic:'📈', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spin' },
-  { id:'spinpro',     name:'Dashboard SPIn Pro',     desc:'Dashboard visual prestasi pelajar pro',     ic:'📊', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spinpro' },
-  { id:'gantt',       name:'GanttPro',               desc:'Carta Gantt digital projek sekolah',        ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
-  { id:'kokum',       name:'KokurikulumTrack',        desc:'Sistem kehadiran kokurikulum lengkap',      ic:'🏅', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-kokum' },
-  { id:'moodradar',   name:'Mood Radar Pro',          desc:'Pengesan mood & emosi pelajar dalam kelas', ic:'🌡️', bg:'#fdf4ff', url:'https://rabej1967-code.github.io/edukit-moodradar' },
-  { id:'orgchart',    name:'OrgChart Pro',            desc:'Carta organisasi digital sekolah',          ic:'🗂️', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-orgchart' },
-  { id:'rph',         name:'RPH Fleksi KSSR Pro',    desc:'Rancangan Pengajaran Harian fleksibel',     ic:'📝', bg:'#fff7ed', url:'https://rabej1967-code.github.io/edukit-rph' },
-  { id:'senarai',     name:'Senarai Semak Ultimate',  desc:'Senarai semak tugas sekolah lengkap',       ic:'✅', bg:'#fef2f2', url:'https://rabej1967-code.github.io/edukit-senarai' },
-  { id:'gamekelas',   name:'GameKelas',               desc:'Platform game interaktif dalam kelas',      ic:'🎮', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-gamekelas' },
+  { id:'spin',      nm:'SPIn Analytics',        ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spin' },
+  { id:'spinpro',   nm:'Dashboard SPIn Pro',    ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spinpro' },
+  { id:'eduassign', nm:'EduAssign Pro',         ds:'Urus tugasan dan pemantauan pelajar',          ic:'📋', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-eduassign' },
+  { id:'gantt',     nm:'GanttPro',              ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
+  { id:'kokum',     nm:'KokurikulumTrack',      ds:'Rekod kehadiran kokurikulum lengkap',          ic:'🏅', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-kokum' },
+  { id:'moodradar', nm:'Mood Radar Pro',        ds:'Pengesan mood & emosi pelajar dalam kelas',   ic:'🌡️', bg:'#fdf4ff', url:'https://rabej1967-code.github.io/edukit-moodradar' },
+  { id:'orgchart',  nm:'OrgChart Pro',          ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-orgchart' },
+  { id:'rph',       nm:'RPH Fleksi KSSR Pro',  ds:'Rancangan Pengajaran Harian fleksibel',        ic:'📝', bg:'#fff7ed', url:'https://rabej1967-code.github.io/rphfleksi' },
+  { id:'senarai',   nm:'Senarai Semak Ultimate',ds:'Senarai semak tugas sekolah lengkap',         ic:'✅', bg:'#fef2f2', url:'https://rabej1967-code.github.io/edukit-senarai' },
+  { id:'gamekelas', nm:'GameKelas',             ds:'Platform game interaktif dalam kelas',         ic:'🎮', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-gamekelas' },
 ]
 
 const APPS_PENTADBIR = [
-  { id:'edudash',     name:'EduDash Pro',            desc:'Dashboard sekolah — kehadiran, disiplin, BMI', ic:'🏫', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-edudash' },
-  { id:'headcount',   name:'H2 Headcount 2.0',       desc:'Pemantauan OTR vs AR per kelas',             ic:'🎯', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-headcount' },
-  { id:'stafftrack',  name:'StaffTrack Pro',          desc:'Kehadiran digital staf sekolah',             ic:'👥', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-stafftrack' },
-  { id:'eduassign',   name:'GuruKits',           desc:'Agihan & pantau beban tugas guru',           ic:'📋', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gurukits' },
-  { id:'kokum2',      name:'Rekod Kehadiran Kokurikulum', desc:'Kehadiran kokurikulum — pandangan pentadbir', ic:'🏅', bg:'#fdf4ff', url:'https://rabej1967-code.github.io/edukit-kokum2' },
-  { id:'pencerapan',  name:'SK@S — Pencerapan',      desc:'Pencerapan guru Standard 4 SKPMg2',          ic:'🔍', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-pencerapan' },
-  { id:'guruganti',   name:'Sistem Guru Ganti Pro',  desc:'Urus guru ganti & analisis bulanan',         ic:'🔄', bg:'#fff7ed', url:'https://rabej1967-code.github.io/edukit-guruganti' },
-  { id:'skpm',        name:'SKPM Pro',                desc:'Kualiti pengurusan sekolah — IKS, Standard 1–5', ic:'⭐', bg:'#fef2f2', url:'https://rabej1967-code.github.io/edukit-skpm' },
+  { id:'orgchart',   nm:'OrgChart Pro',         ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-orgchart' },
+  { id:'gantt',      nm:'GanttPro',             ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
+  { id:'stafftrack', nm:'StaffTrack Pro',       ds:'Kehadiran digital staf sekolah',               ic:'👥', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-stafftrack' },
+  { id:'pencerapan', nm:'SK@S Pencerapan',      ds:'Pencerapan guru Standard 4 SKPMg2',            ic:'🔍', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-pencerapan' },
+  { id:'agihtugas',  nm:'AgihTugas Pro',        ds:'Agihan tugas guru dan staf sekolah',           ic:'📋', bg:'#fef3c7', url:'https://rabej1967-code.github.io/agihtugas' },
+  { id:'headcount',  nm:'H2 Headcount 2.0',    ds:'Pemantauan OTR vs AR per kelas',               ic:'🎯', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-headcount' },
+  { id:'spin',       nm:'SPIn Analytics',       ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spin' },
+  { id:'spinpro',    nm:'Dashboard SPIn Pro',   ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spinpro' },
 ]
 
-/* ================================================================
-   PANDUAN — kemaskini dengan link YouTube sebenar
-   ================================================================ */
-const GUIDES = [
-  { name:'GuruKits',         pkg:'guru',      label:'Pakej Guru',      yt:'https://youtube.com', desc:'Cara agih tugas guru, set had markah dan jana laporan PDF.' },
-  { name:'SPIn Analytics',        pkg:'guru',      label:'Pakej Guru',      yt:'https://youtube.com', desc:'Cara masuk data OTR dan AR, lihat carta pencapaian pelajar.' },
-  { name:'GameKelas',             pkg:'guru',      label:'Pakej Guru',      yt:'https://youtube.com', desc:'Cara cipta kuiz MCQ, betul/salah dan isi tempat kosong untuk kelas.' },
-  { name:'EduDash Pro',           pkg:'pentadbir', label:'Pakej Pentadbir', yt:'https://youtube.com', desc:'Cara setup dashboard sekolah, masuk data kehadiran dan disiplin.' },
-  { name:'SK@S Pencerapan',       pkg:'pentadbir', label:'Pakej Pentadbir', yt:'https://youtube.com', desc:'Cara rekod pencerapan guru Standard 4, isi rubrik dan jana laporan rasmi.' },
-  { name:'SKPM Pro',              pkg:'pentadbir', label:'Pakej Pentadbir', yt:'https://youtube.com', desc:'Cara isi data Standard 1–5, kira IKS dan jana laporan kualiti sekolah.' },
-]
+// ================================================================
+// STATE
+// ================================================================
+let CU = null // { email, pkg, name, isDemo }
 
-/* ================================================================
-   STATE
-   ================================================================ */
-let curUser = null, curProfile = null, needChangePw = false
-
-/* ================================================================
-   BOOT
-   ================================================================ */
-window.addEventListener('DOMContentLoaded', async () => {
-  // Timeout fallback - jika 6 saat masih loading, tunjuk login
-  const loadTimeout = setTimeout(() => {
-    const lp = document.getElementById('loadPage')
-    if (lp && lp.style.display !== 'none') {
-      showPage('loginPage')
-    }
-  }, 6000)
-  
-  window.clearTO = () => clearTimeout(loadTimeout)
-
-  // Jika Supabase belum dikonfigurasi, tunjuk halaman login terus
-  if (!SB_CONFIGURED) {
-    console.warn('EduKit: Supabase belum dikonfigurasi. Sila isi SB_URL dan SB_KEY.')
-    showPage('loginPage')
-    // Tunjuk notis konfigurasi
-    const errEl = document.getElementById('lerr')
-    if (errEl) {
-      errEl.textContent = '⚙️ Sistem belum dikonfigurasi. Hubungi pentadbir EduKit.'
-      errEl.style.display = 'block'
-      errEl.style.background = '#fffbeb'
-      errEl.style.borderColor = '#fde68a'
-      errEl.style.color = '#92400e'
-    }
-    return
-  }
-  if (window.location.hash.includes('type=recovery')) { showPage('loginPage'); return }
-  try {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) await boot(session.user)
-    else showPage('loginPage')
-  } catch(e) {
-    console.error('EduKit boot error:', e)
-    showPage('loginPage')
+// ================================================================
+// BOOT — semak sesi dari localStorage
+// ================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const sess = getSess()
+  if (sess) {
+    CU = sess
+    showDash()
+  } else {
+    showLogin()
   }
 })
 
-if (SB_CONFIGURED && sb) {
-  sb.auth.onAuthStateChange(async (e, s) => {
-    if (e === 'SIGNED_IN' && s && !curUser) await boot(s.user)
-    else if (e === 'SIGNED_OUT') { curUser = null; showPage('loginPage') }
-  })
+function getSess() {
+  try { return JSON.parse(localStorage.getItem('ek_sess_v1')) } catch(e) { return null }
 }
+function setSess(data) { localStorage.setItem('ek_sess_v1', JSON.stringify(data)) }
+function clearSess() { localStorage.removeItem('ek_sess_v1') }
 
-async function boot(user) {
-  try {
-    // Cuba baca profile
-    let { data: prof, error: selErr } = await sb.from('profiles').select('*').eq('id', user.id).single()
-    
-    if (!prof) {
-      // Cuba insert profile baru
-      const { data: insData, error: insErr } = await sb.from('profiles')
-        .insert({ id:user.id, email:user.email, fullname:user.email.split('@')[0], role:'guru', must_change_password:true })
-        .select().single()
-      
-      if (insData) {
-        prof = insData
-      } else {
-        // Insert gagal (mungkin conflict) — cuba baca semula
-        const { data: retryData } = await sb.from('profiles').select('*').eq('id', user.id).single()
-        prof = retryData
-      }
-    }
-
-    // Jika masih tiada profile, buat minimal profile dari user data
-    if (!prof) {
-      prof = { id: user.id, email: user.email, fullname: user.email.split('@')[0], role: 'guru', package_id: null, must_change_password: false }
-    }
-
-    curUser = user
-    curProfile = prof
-    needChangePw = prof?.must_change_password === true
-    showPage('dashPage')
-    renderDash()
-    if (needChangePw) document.getElementById('forcePwOverlay').style.display = 'flex'
-  } catch(e) {
-    console.error('boot error:', e)
-    // Fallback — tunjuk dashboard dengan data asas
-    curUser = user
-    curProfile = { id: user.id, email: user.email, role: 'guru', package_id: null }
-    needChangePw = false
-    showPage('dashPage')
-    renderDash()
-  }
-}
-
-/* AUTH */
-function showLogin()  { document.getElementById('loginForm').style.display='block'; document.getElementById('forgotForm').style.display='none' }
-function showForgot() { document.getElementById('loginForm').style.display='none'; document.getElementById('forgotForm').style.display='block' }
-
+// ================================================================
+// LOGIN — guna Supabase REST auth endpoint terus
+// ================================================================
 async function doLogin() {
-  const email = document.getElementById('leml').value.trim(), pw = document.getElementById('lpw').value
-  const btn = document.getElementById('btnLogin'), err = document.getElementById('lerr')
-  if (!SB_CONFIGURED || !sb) { showErr(err,'Sistem belum dikonfigurasi. Hubungi pentadbir.'); return }
-  if (!email||!pw) { showErr(err,'Sila masukkan e-mel dan kata laluan'); return }
-  btn.disabled=true; btn.textContent='Menyambung...'; err.style.display='none'
+  const email = document.getElementById('leml').value.trim()
+  const pw    = document.getElementById('lpw').value
+  const btn   = document.getElementById('btnLogin')
+  const err   = document.getElementById('lerr')
+  err.style.display = 'none'
+
+  if (!email || !pw) { showErr('Sila isi e-mel dan kata laluan'); return }
+
+  btn.disabled = true
+  btn.textContent = 'Sedang log masuk...'
+
   try {
-    const { error } = await sb.auth.signInWithPassword({ email, password:pw })
-    btn.disabled=false; btn.textContent='Log Masuk →'
-    if (error) showErr(err,'E-mel atau kata laluan tidak betul.')
+    // Step 1: Auth dengan Supabase
+    const authRes = await fetch(SB_URL + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pw })
+    })
+    const authData = await authRes.json()
+
+    if (!authRes.ok || authData.error) {
+      showErr('E-mel atau kata laluan tidak betul.')
+      btn.disabled = false; btn.textContent = 'Log Masuk →'
+      return
+    }
+
+    const userId = authData.user?.id
+    const token  = authData.access_token
+
+    // Step 2: Ambil profil
+    const profRes = await fetch(SB_URL + '/rest/v1/profiles?id=eq.' + userId + '&select=*', {
+      headers: { ...HDR, 'Authorization': 'Bearer ' + token }
+    })
+    const profData = await profRes.json()
+    const prof = profData[0]
+
+    // Step 3: Ambil package dari purchases
+    let pkg = prof?.package_id || null
+    if (!pkg) {
+      const purchRes = await fetch(SB_URL + '/rest/v1/purchases?user_id=eq.' + userId + '&select=package_id&order=created_at.desc&limit=1', {
+        headers: { ...HDR, 'Authorization': 'Bearer ' + token }
+      })
+      const purchData = await purchRes.json()
+      if (purchData[0]) pkg = purchData[0].package_id
+    }
+
+    CU = {
+      email,
+      name: prof?.fullname || email.split('@')[0],
+      pkg: pkg || null,
+      isDemo: false
+    }
+    setSess(CU)
+    showDash()
+
   } catch(e) {
-    btn.disabled=false; btn.textContent='Log Masuk →'
-    showErr(err,'Ralat sambungan. Sila cuba lagi.')
+    showErr('Ralat sambungan. Sila cuba lagi.')
+    btn.disabled = false; btn.textContent = 'Log Masuk →'
   }
 }
 
-async function doReset() {
-  const email = document.getElementById('feml').value.trim()
-  const err = document.getElementById('ferr'), succ = document.getElementById('fsucc')
-  if (!email) { showErr(err,'Masukkan e-mel'); return }
-  err.style.display='none'; succ.style.display='none'
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin+'/dashboard.html' })
-  if (error) { showErr(err,'Gagal hantar emel.'); return }
-  succ.textContent='E-mel dihantar! Semak peti masuk.'; succ.style.display='block'
+// ================================================================
+// DEMO LOGIN
+// ================================================================
+function demoLogin(pkg) {
+  CU = { email:'demo@edukit.my', name:'Pengguna Demo', pkg, isDemo:true }
+  showDash()
 }
 
-async function doLogout() { await sb.auth.signOut(); curUser=null; showPage('loginPage') }
+// ================================================================
+// LOGOUT
+// ================================================================
+function doLogout() {
+  CU = null
+  clearSess()
+  showLogin()
+}
 
-/* PAKSA TUKAR KATA LALUAN */
-async function doForcePw() {
-  const uname = document.getElementById('fpwUser').value.trim()
-  const p1 = document.getElementById('fpw1').value, p2 = document.getElementById('fpw2').value
-  const err = document.getElementById('fpwErr')
-  err.style.display='none'
-  if (!uname) { showErr(err,'Masukkan nama pengguna'); return }
-  if (p1.length<8) { showErr(err,'Min 8 aksara'); return }
-  if (p1!==p2) { showErr(err,'Kata laluan tidak sepadan'); return }
-  const { error } = await sb.auth.updateUser({ password:p1 })
-  if (error) { showErr(err,'Gagal: '+error.message); return }
-  await sb.from('profiles').update({ fullname:uname, must_change_password:false }).eq('id', curUser.id)
-  curProfile.fullname = uname; needChangePw = false
-  document.getElementById('forcePwOverlay').style.display = 'none'
+// ================================================================
+// SHOW/HIDE PAGES
+// ================================================================
+function showLogin() {
+  document.getElementById('loadPage').style.display = 'none'
+  document.getElementById('loginPage').style.display = 'flex'
+  document.getElementById('dashPage').style.display  = 'none'
+}
+
+function showDash() {
+  document.getElementById('loadPage').style.display  = 'none'
+  document.getElementById('loginPage').style.display = 'none'
+  document.getElementById('dashPage').style.display  = 'block'
+  document.getElementById('demoBanner').style.display = CU.isDemo ? 'block' : 'none'
   renderDash()
-  toast('✓ Selamat datang ke EduKit! Kata laluan berjaya ditetapkan.')
 }
 
-/* RENDER DASHBOARD */
+// ================================================================
+// RENDER DASHBOARD
+// ================================================================
 function renderDash() {
-  const pkg = curProfile?.package_id
-  const name = curProfile?.fullname || curUser?.email || '—'
+  const { email, name, pkg } = CU
   const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()
 
-  // Topbar
-  document.getElementById('tbName').textContent = name
-  document.getElementById('tbPkg').textContent = pkgLabel(pkg)
-
-  // Profil
-  document.getElementById('pfAv').textContent = ini
-  document.getElementById('pfNm').textContent = name
-  document.getElementById('pfPkgLbl').textContent = pkgLabel(pkg)
-  document.getElementById('pfEml').textContent = curUser?.email || '—'
+  document.getElementById('tbUser').textContent = name
+  document.getElementById('pfAv').textContent  = ini
+  document.getElementById('pfNm').textContent  = name
+  document.getElementById('pfEml').textContent = email
+  document.getElementById('pfPkg').textContent = pkgLabel(pkg)
   document.getElementById('pfPkgV').textContent = pkgLabel(pkg)
-  document.getElementById('pfDate').textContent = curProfile?.created_at ? new Date(curProfile.created_at).toLocaleDateString('ms-MY') : '—'
 
   // Banner
-  const bannerMap = {
-    guru:      { bg:'linear-gradient(135deg,#1a56db,#0ea5e9)', nm:'10 Apps Pakej Guru',            sub:'Koleksi apps eksklusif untuk guru sekolah Malaysia' },
-    pentadbir: { bg:'linear-gradient(135deg,#7c3aed,#a855f7)', nm:'8 Apps Pakej Pentadbir',         sub:'Koleksi apps untuk pihak pengurusan sekolah' },
-    gabungan:  { bg:'linear-gradient(135deg,#d97706,#f59e0b)', nm:'17 Apps Pakej Gabungan',         sub:'Akses penuh semua apps EduKit' },
+  const banners = {
+    guru:      { bg:'linear-gradient(135deg,#1a56db,#0ea5e9)', nm:'Pakej Guru — 10 Apps' },
+    pentadbir: { bg:'linear-gradient(135deg,#7c3aed,#a855f7)', nm:'Pakej Pentadbir — 8 Apps' },
+    gabungan:  { bg:'linear-gradient(135deg,#d97706,#f59e0b)', nm:'Pakej Guru + Pentadbir — 17 Apps' },
   }
-  const bc = bannerMap[pkg] || { bg:'linear-gradient(135deg,#64748b,#94a3b8)', nm:'Belum Berlangganan', sub:'Sila beli pakej untuk mengakses apps' }
-  document.getElementById('pkgBanner').style.background = bc.bg
-  document.getElementById('pkgBanner').innerHTML = `
-    <div style="color:white;">
-      <div class="pkb-label">${pkgLabel(pkg)}</div>
-      <div class="pkb-name">${bc.nm}</div>
-      <div class="pkb-sub">${bc.sub}</div>
+  const b = banners[pkg] || { bg:'linear-gradient(135deg,#64748b,#94a3b8)', nm:'Tiada Pakej Aktif' }
+  const banner = document.getElementById('pkgBanner')
+  banner.style.background = b.bg
+  banner.style.color = 'white'
+  banner.innerHTML = `
+    <div>
+      <div class="pkb-lbl">Pakej Anda</div>
+      <div class="pkb-nm">${b.nm}</div>
+      <div class="pkb-sub">${email}</div>
     </div>
-    <div class="pkb-badge" style="color:white;">${pkg ? '✓ Aktif' : '⚠ Belum aktif'}</div>`
+    <div class="pkb-badge">${pkg ? '✓ Aktif' : '⚠ Belum aktif'}</div>`
 
   renderApps(pkg)
-  renderKidsSpark(pkg)
-  renderGuides(pkg)
 }
 
 function pkgLabel(pkg) {
@@ -655,335 +421,86 @@ function hasAccess(appPkg, userPkg) {
 function renderApps(pkg) {
   const container = document.getElementById('appsContainer')
   if (!pkg) {
-    container.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--t3);"><div style="font-size:36px;margin-bottom:10px;">🔒</div><div style="font-size:13px;font-weight:600;margin-bottom:8px;">Anda belum mempunyai pakej.</div><a href="index.html#pricing" style="color:var(--p);font-weight:700;font-size:13px;">Beli pakej sekarang →</a></div>`
+    container.innerHTML = `<div style="text-align:center;padding:48px 20px;">
+      <div style="font-size:40px;margin-bottom:12px;">🔒</div>
+      <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div>
+      <a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a>
+    </div>`
     return
   }
 
   let html = ''
 
-  // Pakej Guru apps
-  html += `<div class="apps-section"><div class="apps-sec-t">📚 Pakej Guru <span>10 Apps</span></div><div class="apps-grid">`
-  APPS_GURU.forEach(app => {
-    const acc = hasAccess('guru', pkg)
-    html += renderAppCard(app, acc, 'guru')
+  html += `<div class="sec-title">📚 Pakej Guru <span class="sec-badge">10 Apps</span></div>`
+  html += `<div class="apps-grid">`
+  APPS_GURU.forEach(a => {
+    html += renderCard(a, hasAccess('guru', pkg))
   })
-  html += '</div></div>'
+  html += `</div>`
 
-  // Pakej Pentadbir apps
-  html += `<div class="apps-section"><div class="apps-sec-t">🏫 Pakej Pentadbir <span>8 Apps</span></div><div class="apps-grid">`
-  APPS_PENTADBIR.forEach(app => {
-    const acc = hasAccess('pentadbir', pkg)
-    html += renderAppCard(app, acc, 'pentadbir')
+  html += `<div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div>`
+  html += `<div class="apps-grid">`
+  APPS_PENTADBIR.forEach(a => {
+    html += renderCard(a, hasAccess('pentadbir', pkg))
   })
-  html += '</div></div>'
+  html += `</div>`
 
   container.innerHTML = html
 }
 
-function renderAppCard(app, access, appPkg) {
-  // Cari video key untuk app ini
-  const vidKey = app.id
-  const hasVidData = (typeof EDUKIT_VIDEOS !== 'undefined') && EDUKIT_VIDEOS[vidKey]
-  const vidBtn = `<button class="app-vid-btn" onclick="event.stopPropagation();openDvModal('${app.id}')" title="Tonton Tutorial">▶</button>`
-
+function renderCard(a, access) {
   if (access) {
-    return `<div class="app-card" onclick="openApp('${app.url}','${app.name}')">
-      ${vidBtn}
-      <div class="app-ic" style="background:${app.bg}">${app.ic}</div>
-      <div class="app-name">${app.name}</div>
-      <div class="app-desc">${app.desc}</div>
-      <div class="app-open">Buka Apps →</div>
+    return `<div class="app-card" onclick="openApp('${a.url}','${a.nm}')">
+      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
+      <div class="app-nm">${a.nm}</div>
+      <div class="app-ds">${a.ds}</div>
+      <div class="app-open">Buka App →</div>
     </div>`
   }
-  const upgLabel = appPkg==='guru' ? 'Pakej Guru' : 'Pakej Pentadbir'
-  return `<div class="app-card locked" style="position:relative;">
-    ${vidBtn}
-    <div class="app-lock-overlay">
-      <div class="app-lock-ic">🔒</div>
-      <div class="app-lock-t">Terkunci</div>
-      <div class="app-lock-pkg">${upgLabel}</div>
+  return `<div class="app-card locked">
+    <div class="lock-overlay">
+      <div class="lock-ic">🔒</div>
+      <div class="lock-t">Terkunci</div>
     </div>
     <div class="app-blur">
-      <div class="app-ic" style="background:${app.bg}">${app.ic}</div>
-      <div class="app-name">${app.name}</div>
-      <div class="app-desc">${app.desc}</div>
+      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
+      <div class="app-nm">${a.nm}</div>
+      <div class="app-ds">${a.ds}</div>
     </div>
   </div>`
 }
 
 function openApp(url, name) {
-  if (needChangePw) { toast('Sila tukar kata laluan dahulu!', false); return }
-  // Demo mode — buka app tapi tunjuk notis
-  if (curUser && curUser.id === 'demo-user-001') {
-    if (url.startsWith('https://GANTI')) {
-      toast('Demo: URL app belum dikonfigurasi. Gantikan URL dalam dashboard.html', false)
-      return
-    }
-    window.open(url, '_blank')
-    return
-  }
-  if (SB_CONFIGURED && sb) {
-    sb.from('app_activity').insert({ user_id:curUser.id, app_name:name, opened_at:new Date().toISOString() }).then()
-  }
   window.open(url, '_blank')
 }
 
-function renderKidsSpark(pkg) {
-  const hasSewa = curProfile?.kids_spark_active === true
-  const el = document.getElementById('ksContent')
-
-  // Senarai apps baru yang akan datang
-  const APPS_BARU = [
-    { ic:'🗓️', nm:'Jadual PDPC Digital',    ds:'Jana jadual mengajar mingguan automatik',         status:'soon' },
-    { ic:'📱', nm:'EduSMS Pro',              ds:'Hantar SMS laporan kepada ibu bapa',               status:'soon' },
-    { ic:'🏆', nm:'Reward Kelas',            ds:'Sistem mata & ganjaran untuk pelajar',             status:'soon' },
-    { ic:'📑', nm:'Minit Mesyuarat Pro',     ds:'Jana minit mesyuarat dalam saat',                  status:'soon' },
-    { ic:'🔔', nm:'Notis Sekolah Digital',   ds:'Hantar notis kepada semua pelajar sekaligus',      status:'soon' },
-  ]
-
-  if (hasSewa) {
-    el.innerHTML = `
-      <div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:18px;overflow:hidden;margin-bottom:20px;">
-        <div style="padding:20px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:48px;height:48px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">✨</div>
-            <div>
-              <h3 style="color:white;font-size:16px;font-weight:800;margin-bottom:3px;">Kids Spark — Aktif</h3>
-              <p style="color:rgba(255,255,255,.65);font-size:12px;">Sewaan RM 3/bulan aktif • Batal bila-bila masa</p>
-            </div>
-          </div>
-          <button onclick="window.open('https://kidspark.website/','_blank')" style="padding:11px 24px;background:#f59e0b;border:none;border-radius:20px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;font-family:inherit;min-height:44px;">
-            Buka Kids Spark →
-          </button>
-        </div>
-        <div style="padding:14px 22px 20px;border-top:1px solid rgba(255,255,255,.1);">
-          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Faedah sewaan anda</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
-            <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:18px;">🎮</span>
-              <span style="font-size:12px;color:white;">Akses penuh Kids Spark</span>
-            </div>
-            <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:18px;">🔄</span>
-              <span style="font-size:12px;color:white;">Semua apps baru auto masuk</span>
-            </div>
-            <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:18px;">🔑</span>
-              <span style="font-size:12px;color:white;">Login unik khas untuk anak</span>
-            </div>
-            <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:18px;">📚</span>
-              <span style="font-size:12px;color:white;">Kurikulum Malaysia</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;margin-bottom:16px;">
-        <div style="padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-size:13px;font-weight:700;color:var(--text);">🚀 Apps Baru Akan Datang</div>
-          <span style="font-size:11px;background:#f0fdf4;color:#15803d;padding:3px 9px;border-radius:20px;font-weight:600;">Auto masuk untuk pelanggan sewaan</span>
-        </div>
-        <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
-          ${APPS_BARU.map(a => `
-            <div style="background:#f8faff;border:1px solid var(--bdr);border-radius:12px;padding:12px;">
-              <div style="font-size:22px;margin-bottom:7px;">${a.ic}</div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;">${a.nm}</div>
-              <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:7px;">${a.ds}</div>
-              <span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-weight:600;">Akan Datang</span>
-            </div>`).join('')}
-        </div>
-      </div>
-
-      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px 15px;font-size:12.5px;color:#92400e;line-height:1.6;">
-        ⚠️ <strong>Nota:</strong> Untuk batal sewaan, hubungi kami atau batalkan terus dari akaun Stripe anda. Selepas batal, akses Kids Spark dan apps baru akan dinyahaktifkan pada penghujung bulan semasa.
-      </div>`
-
-  } else {
-    el.innerHTML = `
-      <div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:18px;padding:28px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;">
-          <div style="width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🔒</div>
-          <div>
-            <h3 style="color:white;font-size:18px;font-weight:800;margin-bottom:4px;">Kids Spark — Belum Aktif</h3>
-            <p style="color:rgba(255,255,255,.65);font-size:13px;">Aktifkan sewaan RM 3/bulan untuk akses semua faedah</p>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:20px;">
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:24px;margin-bottom:6px;">🎮</div>
-            <div style="font-size:12px;font-weight:700;color:white;margin-bottom:3px;">Kids Spark</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.6);">Belajar sambil bermain</div>
-          </div>
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:24px;margin-bottom:6px;">🚀</div>
-            <div style="font-size:12px;font-weight:700;color:white;margin-bottom:3px;">Apps Baru Auto</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.6);">Masuk terus tanpa bayar lagi</div>
-          </div>
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:24px;margin-bottom:6px;">🔑</div>
-            <div style="font-size:12px;font-weight:700;color:white;margin-bottom:3px;">Login Unik Anak</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.6);">Data anak selamat & peribadi</div>
-          </div>
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-size:24px;margin-bottom:6px;">❌</div>
-            <div style="font-size:12px;font-weight:700;color:white;margin-bottom:3px;">Batal Bila-bila</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.6);">Tiada kontrak atau penalti</div>
-          </div>
-        </div>
-        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
-          <div>
-            <div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:2px;">Kadar sewaan</div>
-            <div style="font-size:26px;font-weight:800;color:#f59e0b;">RM 3 <span style="font-size:13px;font-weight:400;color:rgba(255,255,255,.65);">/ bulan</span></div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);">Auto potong • Batal bila-bila masa</div>
-          </div>
-          <button onclick="window.open('https://buy.stripe.com/GANTI_KIDS_SPARK_RM3','_blank')"
-            style="padding:13px 28px;background:#f59e0b;border:none;border-radius:30px;font-size:14px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:48px;">
-            Aktifkan Sekarang →
-          </button>
-        </div>
-        <div style="font-size:11.5px;color:rgba(255,255,255,.45);text-align:center;">
-          Selepas bayar, akses Kids Spark akan diaktifkan dalam masa 5 minit
-        </div>
-      </div>
-
-      <div style="background:var(--surf);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;">
-        <div style="padding:14px 18px;border-bottom:1px solid var(--bdr);">
-          <div style="font-size:13px;font-weight:700;color:var(--text);">🚀 Apps Baru Yang Akan Datang</div>
-          <div style="font-size:12px;color:var(--t2);margin-top:3px;">Semua apps baru akan masuk <strong>secara automatik</strong> kepada pelanggan sewaan</div>
-        </div>
-        <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
-          ${APPS_BARU.map(a => `
-            <div style="background:#f8faff;border:1px solid var(--bdr);border-radius:12px;padding:12px;filter:blur(3px) grayscale(.5);">
-              <div style="font-size:22px;margin-bottom:7px;">${a.ic}</div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;">${a.nm}</div>
-              <div style="font-size:11px;color:var(--t2);line-height:1.5;">${a.ds}</div>
-            </div>`).join('')}
-        </div>
-        <div style="padding:12px 18px;background:#f8faff;border-top:1px solid var(--bdr);text-align:center;font-size:12px;color:var(--t2);">
-          🔒 Aktifkan sewaan RM 3/bulan untuk akses semua apps baru
-        </div>
-      </div>`
-  }
-}
-
-function renderGuides(pkg) {
-  if (!pkg) { document.getElementById('guideGrid').innerHTML = `<div style="text-align:center;padding:40px;color:var(--t3);">Beli pakej untuk akses panduan.</div>`; return }
-  const filtered = GUIDES.filter(g => hasAccess(g.pkg, pkg))
-  document.getElementById('guideGrid').innerHTML = filtered.map(g =>
-    `<div class="guide-card">
-      <div class="guide-thumb" onclick="window.open('${g.yt}','_blank')">
-        <div class="play-ic">▶</div>
-      </div>
-      <div class="guide-info">
-        <div class="guide-nm">${g.name}</div>
-        <div class="guide-pkg" style="${g.pkg==='guru'?'background:#dbeafe;color:#1e40af':'background:#f3e8ff;color:#6b21a8'}">${g.label}</div>
-        <div class="guide-desc">${g.desc}</div>
-      </div>
-    </div>`
-  ).join('') || `<div style="text-align:center;padding:40px;color:var(--t3);">Panduan akan ditambah tidak lama lagi.</div>`
-}
-
-/* TABS */
+// ================================================================
+// TABS
+// ================================================================
 function switchTab(id, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'))
   el.classList.add('active')
-  document.getElementById('tab-'+id).classList.add('active')
+  document.getElementById('tab-' + id).classList.add('active')
 }
 
-/* TUKAR KATA LALUAN */
-async function chgPw() {
-  const p1 = document.getElementById('cpw1').value, p2 = document.getElementById('cpw2').value
-  const err = document.getElementById('cpwErr'), succ = document.getElementById('cpwSucc')
-  err.style.display='none'; succ.style.display='none'
-  if (p1.length<8) { showErr(err,'Min 8 aksara'); return }
-  if (p1!==p2) { showErr(err,'Tidak sepadan'); return }
-  const { error } = await sb.auth.updateUser({ password:p1 })
-  if (error) { showErr(err,'Gagal: '+error.message); return }
-  succ.textContent='✓ Kata laluan berjaya ditukar!'; succ.style.display='block'
-  document.getElementById('cpw1').value=''; document.getElementById('cpw2').value=''
-  toast('Kata laluan berjaya ditukar!')
-  setTimeout(() => cm('chpwMod'), 1800)
+// ================================================================
+// HELPERS
+// ================================================================
+function showErr(msg) {
+  const el = document.getElementById('lerr')
+  el.textContent = msg
+  el.style.display = 'block'
+  document.getElementById('btnLogin').disabled = false
+  document.getElementById('btnLogin').textContent = 'Log Masuk →'
 }
 
-/* MAKLUM BALAS */
-async function sendFeedback() {
-  const type = document.getElementById('fbType').value, msg = document.getElementById('fbMsg').value.trim()
-  if (!msg) { toast('Sila tulis mesej anda', false); return }
-  await sb.from('feedback').insert({ user_id:curUser.id, email:curUser.email, type, message:msg })
-  document.getElementById('fbMsg').value = ''
-  document.getElementById('fbSucc').style.display = 'block'
-  toast('Maklum balas dihantar!')
+function toast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
 }
-
-/* HELPERS */
-function showPage(id) {
-  ['loadPage','loginPage','dashPage'].forEach(p => {
-    const el = document.getElementById(p)
-    if (!el) return
-    el.style.display = p===id ? (p==='dashPage'?'block':'flex') : 'none'
-  })
-  if (typeof clearTO === 'function') clearTO()
-}
-function om(id) { document.getElementById(id).classList.add('open') }
-function cm(id) { document.getElementById(id).classList.remove('open') }
-document.addEventListener('click', e => { ['chpwMod'].forEach(id => { const el=document.getElementById(id); if(el&&e.target===el)cm(id) }) })
-function showErr(el, msg) { el.textContent=msg; el.style.display='block' }
-function toast(msg, ok=true) {
-  const t=document.getElementById('tst'), d=document.getElementById('tdot')
-  document.getElementById('tmsg').textContent=msg
-  t.style.background=ok?'#1e293b':'#7f1d1d'; d.style.background=ok?'#4ade80':'#f87171'
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000)
-}
-
-/* ── MOD DEMO ─────────────────────────────────────────────── */
-function demoLogin(pkg) {
-  const pkgNames = { guru:'Pakej Guru', pentadbir:'Pakej Pentadbir', gabungan:'Pakej Guru + Pentadbir' }
-  curUser    = { id:'demo-user-001', email:'demo@edukit.my' }
-  curProfile = { id:'demo-user-001', email:'demo@edukit.my', fullname:'Pengguna Demo',
-    package_id:pkg, must_change_password:false, kids_spark_active:false,
-    created_at:new Date().toISOString(), role:'guru' }
-  needChangePw = false
-  showPage('dashPage')
-  renderDash()
-  setTimeout(() => {
-    const t = document.createElement('div')
-    t.style.cssText = 'position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#f59e0b;color:#0f172a;padding:9px 18px;border-radius:20px;font-size:12.5px;font-weight:700;z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;'
-    t.textContent = '⚠️ Mod Demo — ' + pkgNames[pkg] + ' — Data tidak disimpan'
-    document.body.appendChild(t)
-    setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400) }, 5000)
-  }, 300)
-}
-
 </script>
-
-<!-- MODAL VIDEO TUTORIAL (DASHBOARD) -->
-<div class="dv-modal-bak" id="dvModal">
-  <div class="dv-modal-box">
-    <div class="dv-head">
-      <div class="dv-head-info">
-        <div class="dv-ic" id="dvIc">📋</div>
-        <div><div class="dv-nm" id="dvNm">App</div><div class="dv-pkg" id="dvPkg">Pakej</div></div>
-      </div>
-      <button class="dv-close" onclick="closeDvModal()">✕</button>
-    </div>
-    <div class="dv-frame-wrap">
-      <iframe id="dvFrame" class="dv-frame" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-      <div class="dv-ph" id="dvPh">
-        <div class="dv-ph-ic">🎬</div>
-        <div class="dv-ph-t" id="dvPhT">Video Akan Datang</div>
-        <div class="dv-ph-s">Tutorial untuk app ini sedang disediakan. Nantikan!</div>
-      </div>
-    </div>
-    <div class="dv-body">
-      <div class="dv-ds" id="dvDs"></div>
-      <button class="dv-open-btn" id="dvOpenBtn" onclick="dvOpenApp()">Buka App →</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
