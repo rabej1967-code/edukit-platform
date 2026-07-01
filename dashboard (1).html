@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EduKit — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#1a56db;--pd:#1240b0;--pl:#e8f0fe;--ok:#16a34a;--red:#ef4444;--gold:#f59e0b;--text:#0f172a;--t2:#475569;--t3:#94a3b8;--bg:#f0f4ff;--surf:#fff;--bdr:#e2e8f4;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);}
+
+/* LOADING */
+#loadPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.spin{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.load-txt{color:rgba(255,255,255,.6);font-size:13px;}
+
+/* LOGIN */
+#loginPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:none;align-items:center;justify-content:center;}
+.lbox{background:white;border-radius:20px;width:380px;max-width:94vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);}
+.lh{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:28px;text-align:center;}
+.lh-logo{width:48px;height:48px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:white;margin:0 auto 10px;}
+.lh h2{font-size:20px;font-weight:800;color:white;margin-bottom:3px;}
+.lh p{font-size:12px;color:rgba(255,255,255,.6);}
+.lbody{padding:24px;}
+.fg{margin-bottom:13px;}
+.fg label{font-size:11px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.fc{width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:9px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:.15s;}
+.fc:focus{border-color:var(--p);}
+.lbtn{width:100%;padding:12px;background:var(--p);color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;min-height:46px;}
+.lbtn:hover{background:var(--pd);}
+.lbtn:disabled{opacity:.5;cursor:not-allowed;}
+.lerr{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:9px 12px;border-radius:8px;font-size:12px;font-weight:600;margin-top:10px;display:none;text-align:center;}
+.lfoot{text-align:center;padding:14px;background:#f8fafd;border-top:1px solid var(--bdr);font-size:11px;color:var(--t3);}
+.lfoot a{color:var(--p);cursor:pointer;font-weight:600;text-decoration:none;}
+
+/* DEMO BUTTONS */
+.demo-wrap{margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr);}
+.demo-lbl{font-size:11px;color:var(--t3);text-align:center;margin-bottom:10px;}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.demo-btn{padding:10px;border:1.5px solid var(--bdr);border-radius:9px;background:white;cursor:pointer;font-family:inherit;text-align:center;transition:.15s;}
+.demo-btn:hover{border-color:var(--p);background:var(--pl);}
+.demo-ic{font-size:18px;margin-bottom:3px;}
+.demo-nm{font-size:11px;font-weight:700;color:var(--text);}
+.demo-tag{font-size:10px;color:var(--t2);}
+.demo-full{grid-column:1/-1;border-color:#f59e0b;background:#fffbeb;}
+.demo-full:hover{background:#fef3c7;}
+.demo-note{font-size:10px;color:var(--t3);text-align:center;}
+
+/* DASHBOARD */
+#dashPage{display:none;min-height:100vh;}
+.topbar{background:var(--p);height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tb-brand{display:flex;align-items:center;gap:8px;}
+.tb-logo{width:26px;height:26px;background:rgba(255,255,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:white;}
+.tb-name{font-size:16px;font-weight:800;color:white;}
+.tb-right{display:flex;align-items:center;gap:8px;}
+.tb-user{font-size:12px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:5px 11px;border-radius:7px;}
+.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;}
+.tbtn:hover{background:rgba(255,255,255,.16);}
+.tbtn-red{color:#fca5a5;}
+
+.dash-body{max-width:1100px;margin:0 auto;padding:22px 16px;}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:white;border:1px solid var(--bdr);border-radius:10px;padding:4px;margin-bottom:20px;overflow-x:auto;}
+.tab{flex:1;min-width:fit-content;padding:8px 16px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);background:none;border:none;font-family:inherit;white-space:nowrap;transition:.15s;}
+.tab.active{background:var(--p);color:white;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* PKG BANNER */
+.pkg-banner{border-radius:14px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.pkb-lbl{font-size:11px;font-weight:700;opacity:.65;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.pkb-nm{font-size:18px;font-weight:800;}
+.pkb-sub{font-size:12px;opacity:.65;margin-top:2px;}
+.pkb-badge{font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.2);color:white;white-space:nowrap;}
+
+/* APPS */
+.sec-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-badge{background:var(--pl);color:var(--p);padding:2px 8px;border-radius:20px;font-size:11px;}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
+.app-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:16px;cursor:pointer;transition:.2s;}
+.app-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,86,219,.12);border-color:var(--p);}
+.app-card.locked{position:relative;overflow:hidden;}
+.lock-overlay{position:absolute;inset:0;background:rgba(248,250,252,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:12px;}
+.lock-ic{font-size:20px;}
+.lock-t{font-size:11px;font-weight:700;color:var(--t3);}
+.app-blur{filter:blur(3px) grayscale(.5);}
+.app-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:10px;}
+.app-nm{font-size:13px;font-weight:700;margin-bottom:3px;}
+.app-ds{font-size:11px;color:var(--t2);line-height:1.5;}
+.app-open{font-size:11px;font-weight:700;color:var(--p);margin-top:8px;}
+
+/* PROFIL */
+.profil-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:20px;max-width:440px;}
+.pf-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.pf-av{width:48px;height:48px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:white;}
+.pf-nm{font-size:16px;font-weight:800;}
+.pf-pkg{font-size:12px;color:var(--t2);}
+.pf-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:13px;}
+.pf-row:last-child{border-bottom:none;}
+.pf-lbl{color:var(--t3);font-weight:600;}
+.pf-val{font-weight:600;}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:18px;background:#1e293b;color:white;padding:10px 15px;border-radius:9px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* DEMO BANNER */
+.demo-banner{background:#f59e0b;color:#0f172a;padding:8px 16px;text-align:center;font-size:12px;font-weight:700;}
+
+@media(max-width:600px){.apps-grid{grid-template-columns:1fr 1fr;}.dash-body{padding:14px 12px;}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadPage">
+  <div class="spin"></div>
+  <div class="load-txt">Memuat akaun anda...</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="lbox">
+    <div class="lh">
+      <div class="lh-logo">EK</div>
+      <h2>EduKit</h2>
+      <p>Log masuk ke akaun anda</p>
+    </div>
+    <div class="lbody">
+      <div class="fg">
+        <label>E-mel</label>
+        <input id="leml" class="fc" type="email" placeholder="emel@sekolah.edu.my" autocomplete="email"
+          onkeydown="if(event.key==='Enter')document.getElementById('lpw').focus()">
+      </div>
+      <div class="fg">
+        <label>Kata Laluan</label>
+        <input id="lpw" class="fc" type="password" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="lbtn" id="btnLogin" onclick="doLogin()">Log Masuk →</button>
+      <div class="lerr" id="lerr"></div>
+
+      <div class="demo-wrap">
+        <div class="demo-lbl">— atau cuba mod demo —</div>
+        <div class="demo-grid">
+          <button class="demo-btn" onclick="demoLogin('guru')">
+            <div class="demo-ic">📚</div>
+            <div class="demo-nm">Pakej Guru</div>
+            <div class="demo-tag">10 apps</div>
+          </button>
+          <button class="demo-btn" onclick="demoLogin('pentadbir')">
+            <div class="demo-ic">🏫</div>
+            <div class="demo-nm">Pakej Pentadbir</div>
+            <div class="demo-tag">8 apps</div>
+          </button>
+          <button class="demo-btn demo-full" onclick="demoLogin('gabungan')">
+            <div class="demo-ic">💎</div>
+            <div class="demo-nm">Pakej Guru + Pentadbir</div>
+            <div class="demo-tag">17 apps — Akses Penuh</div>
+          </button>
+        </div>
+        <div class="demo-note">⚠️ Mod demo — data tidak disimpan</div>
+      </div>
+    </div>
+    <div class="lfoot">Belum ada akaun? <a href="index.html#pricing">Beli pakej sekarang →</a></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashPage">
+  <div id="demoBanner" class="demo-banner" style="display:none;">⚠️ MOD DEMO — Data tidak disimpan. <a href="index.html#pricing" style="color:#0f172a;font-weight:800;text-decoration:underline;">Beli pakej untuk akses sebenar →</a></div>
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tb-logo">EK</div>
+      <div class="tb-name">EduKit</div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-user" id="tbUser">—</div>
+      <button class="tbtn tbtn-red" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('apps',this)">📦 Apps Saya</button>
+      <button class="tab" onclick="switchTab('profil',this)">👤 Profil</button>
+    </div>
+
+    <div class="tab-pane active" id="tab-apps">
+      <div class="pkg-banner" id="pkgBanner"></div>
+      <div id="appsContainer"></div>
+    </div>
+
+    <div class="tab-pane" id="tab-profil">
+      <div class="profil-card">
+        <div class="pf-top">
+          <div class="pf-av" id="pfAv">EK</div>
+          <div><div class="pf-nm" id="pfNm">—</div><div class="pf-pkg" id="pfPkg">—</div></div>
+        </div>
+        <div class="pf-row"><span class="pf-lbl">E-mel</span><span class="pf-val" id="pfEml">—</span></div>
+        <div class="pf-row"><span class="pf-lbl">Pakej</span><span class="pf-val" id="pfPkgV">—</span></div>
+        <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok)">✓ Aktif</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================================================================
+// SUPABASE CONFIG
+// ================================================================
+const SB_URL = 'https://aowzftmdriukxbltjtpm.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvd3pmdG1kcml1a3hibHRqdHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzAxOTQsImV4cCI6MjA5NDQ0NjE5NH0.17lKaGC-9jx1cDORx2btwfmzDYon3s3CN2dei2BM-Ac'
+
+const HDR = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json'
+}
+
+// ================================================================
+// APPS DATA
+// ================================================================
+const APPS_GURU = [
+  { id:'spin',      nm:'SPIn Analytics',        ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spin' },
+  { id:'spinpro',   nm:'Dashboard SPIn Pro',    ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spinpro' },
+  { id:'eduassign', nm:'EduAssign Pro',         ds:'Urus tugasan dan pemantauan pelajar',          ic:'📋', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-eduassign' },
+  { id:'gantt',     nm:'GanttPro',              ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
+  { id:'kokum',     nm:'KokurikulumTrack',      ds:'Rekod kehadiran kokurikulum lengkap',          ic:'🏅', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-kokum' },
+  { id:'moodradar', nm:'Mood Radar Pro',        ds:'Pengesan mood & emosi pelajar dalam kelas',   ic:'🌡️', bg:'#fdf4ff', url:'https://rabej1967-code.github.io/edukit-moodradar' },
+  { id:'orgchart',  nm:'OrgChart Pro',          ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-orgchart' },
+  { id:'rph',       nm:'RPH Fleksi KSSR Pro',  ds:'Rancangan Pengajaran Harian fleksibel',        ic:'📝', bg:'#fff7ed', url:'https://rabej1967-code.github.io/rphfleksi' },
+  { id:'senarai',   nm:'Senarai Semak Ultimate',ds:'Senarai semak tugas sekolah lengkap',         ic:'✅', bg:'#fef2f2', url:'https://rabej1967-code.github.io/edukit-senarai' },
+  { id:'gamekelas', nm:'GameKelas',             ds:'Platform game interaktif dalam kelas',         ic:'🎮', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-gamekelas' },
+]
+
+const APPS_PENTADBIR = [
+  { id:'orgchart',   nm:'OrgChart Pro',         ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-orgchart' },
+  { id:'gantt',      nm:'GanttPro',             ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
+  { id:'stafftrack', nm:'StaffTrack Pro',       ds:'Kehadiran digital staf sekolah',               ic:'👥', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-stafftrack' },
+  { id:'pencerapan', nm:'SK@S Pencerapan',      ds:'Pencerapan guru Standard 4 SKPMg2',            ic:'🔍', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-pencerapan' },
+  { id:'agihtugas',  nm:'AgihTugas Pro',        ds:'Agihan tugas guru dan staf sekolah',           ic:'📋', bg:'#fef3c7', url:'https://rabej1967-code.github.io/agihtugas' },
+  { id:'headcount',  nm:'H2 Headcount 2.0',    ds:'Pemantauan OTR vs AR per kelas',               ic:'🎯', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-headcount' },
+  { id:'spin',       nm:'SPIn Analytics',       ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spin' },
+  { id:'spinpro',    nm:'Dashboard SPIn Pro',   ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spinpro' },
+]
+
+// ================================================================
+// STATE
+// ================================================================
+let CU = null // { email, pkg, name, isDemo }
+
+// ================================================================
+// BOOT — semak sesi dari localStorage
+// ================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const sess = getSess()
+  if (sess) {
+    CU = sess
+    showDash()
+  } else {
+    showLogin()
+  }
+})
+
+function getSess() {
+  try { return JSON.parse(localStorage.getItem('ek_sess_v1')) } catch(e) { return null }
+}
+function setSess(data) { localStorage.setItem('ek_sess_v1', JSON.stringify(data)) }
+function clearSess() { localStorage.removeItem('ek_sess_v1') }
+
+// ================================================================
+// LOGIN — guna Supabase REST auth endpoint terus
+// ================================================================
+async function doLogin() {
+  const email = document.getElementById('leml').value.trim()
+  const pw    = document.getElementById('lpw').value
+  const btn   = document.getElementById('btnLogin')
+  const err   = document.getElementById('lerr')
+  err.style.display = 'none'
+
+  if (!email || !pw) { showErr('Sila isi e-mel dan kata laluan'); return }
+
+  btn.disabled = true
+  btn.textContent = 'Sedang log masuk...'
+
+  try {
+    // Step 1: Auth dengan Supabase
+    const authRes = await fetch(SB_URL + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pw })
+    })
+    const authData = await authRes.json()
+
+    if (!authRes.ok || authData.error) {
+      showErr('E-mel atau kata laluan tidak betul.')
+      btn.disabled = false; btn.textContent = 'Log Masuk →'
+      return
+    }
+
+    const userId = authData.user?.id
+    const token  = authData.access_token
+
+    // Step 2: Ambil profil
+    const profRes = await fetch(SB_URL + '/rest/v1/profiles?id=eq.' + userId + '&select=*', {
+      headers: { ...HDR, 'Authorization': 'Bearer ' + token }
+    })
+    const profData = await profRes.json()
+    const prof = profData[0]
+
+    // Step 3: Ambil package dari purchases
+    let pkg = prof?.package_id || null
+    if (!pkg) {
+      const purchRes = await fetch(SB_URL + '/rest/v1/purchases?user_id=eq.' + userId + '&select=package_id&order=created_at.desc&limit=1', {
+        headers: { ...HDR, 'Authorization': 'Bearer ' + token }
+      })
+      const purchData = await purchRes.json()
+      if (purchData[0]) pkg = purchData[0].package_id
+    }
+
+    CU = {
+      email,
+      name: prof?.fullname || email.split('@')[0],
+      pkg: pkg || null,
+      isDemo: false
+    }
+    setSess(CU)
+    showDash()
+
+  } catch(e) {
+    showErr('Ralat sambungan. Sila cuba lagi.')
+    btn.disabled = false; btn.textContent = 'Log Masuk →'
+  }
+}
+
+// ================================================================
+// DEMO LOGIN
+// ================================================================
+function demoLogin(pkg) {
+  CU = { email:'demo@edukit.my', name:'Pengguna Demo', pkg, isDemo:true }
+  showDash()
+}
+
+// ================================================================
+// LOGOUT
+// ================================================================
+function doLogout() {
+  CU = null
+  clearSess()
+  showLogin()
+}
+
+// ================================================================
+// SHOW/HIDE PAGES
+// ================================================================
+function showLogin() {
+  document.getElementById('loadPage').style.display = 'none'
+  document.getElementById('loginPage').style.display = 'flex'
+  document.getElementById('dashPage').style.display  = 'none'
+}
+
+function showDash() {
+  document.getElementById('loadPage').style.display  = 'none'
+  document.getElementById('loginPage').style.display = 'none'
+  document.getElementById('dashPage').style.display  = 'block'
+  document.getElementById('demoBanner').style.display = CU.isDemo ? 'block' : 'none'
+  renderDash()
+}
+
+// ================================================================
+// RENDER DASHBOARD
+// ================================================================
+function renderDash() {
+  const { email, name, pkg } = CU
+  const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()
+
+  document.getElementById('tbUser').textContent = name
+  document.getElementById('pfAv').textContent  = ini
+  document.getElementById('pfNm').textContent  = name
+  document.getElementById('pfEml').textContent = email
+  document.getElementById('pfPkg').textContent = pkgLabel(pkg)
+  document.getElementById('pfPkgV').textContent = pkgLabel(pkg)
+
+  // Banner
+  const banners = {
+    guru:      { bg:'linear-gradient(135deg,#1a56db,#0ea5e9)', nm:'Pakej Guru — 10 Apps' },
+    pentadbir: { bg:'linear-gradient(135deg,#7c3aed,#a855f7)', nm:'Pakej Pentadbir — 8 Apps' },
+    gabungan:  { bg:'linear-gradient(135deg,#d97706,#f59e0b)', nm:'Pakej Guru + Pentadbir — 17 Apps' },
+  }
+  const b = banners[pkg] || { bg:'linear-gradient(135deg,#64748b,#94a3b8)', nm:'Tiada Pakej Aktif' }
+  const banner = document.getElementById('pkgBanner')
+  banner.style.background = b.bg
+  banner.style.color = 'white'
+  banner.innerHTML = `
+    <div>
+      <div class="pkb-lbl">Pakej Anda</div>
+      <div class="pkb-nm">${b.nm}</div>
+      <div class="pkb-sub">${email}</div>
+    </div>
+    <div class="pkb-badge">${pkg ? '✓ Aktif' : '⚠ Belum aktif'}</div>`
+
+  renderApps(pkg)
+}
+
+function pkgLabel(pkg) {
+  return pkg==='guru'?'Pakej Guru':pkg==='pentadbir'?'Pakej Pentadbir':pkg==='gabungan'?'Pakej Guru + Pentadbir':'Tiada Pakej'
+}
+
+function hasAccess(appPkg, userPkg) {
+  if (!userPkg) return false
+  if (userPkg === 'gabungan') return true
+  return userPkg === appPkg
+}
+
+function renderApps(pkg) {
+  const container = document.getElementById('appsContainer')
+  if (!pkg) {
+    container.innerHTML = `<div style="text-align:center;padding:48px 20px;">
+      <div style="font-size:40px;margin-bottom:12px;">🔒</div>
+      <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div>
+      <a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a>
+    </div>`
+    return
+  }
+
+  let html = ''
+
+  html += `<div class="sec-title">📚 Pakej Guru <span class="sec-badge">10 Apps</span></div>`
+  html += `<div class="apps-grid">`
+  APPS_GURU.forEach(a => {
+    html += renderCard(a, hasAccess('guru', pkg))
+  })
+  html += `</div>`
+
+  html += `<div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div>`
+  html += `<div class="apps-grid">`
+  APPS_PENTADBIR.forEach(a => {
+    html += renderCard(a, hasAccess('pentadbir', pkg))
+  })
+  html += `</div>`
+
+  container.innerHTML = html
+}
+
+function renderCard(a, access) {
+  if (access) {
+    return `<div class="app-card" onclick="openApp('${a.url}','${a.nm}')">
+      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
+      <div class="app-nm">${a.nm}</div>
+      <div class="app-ds">${a.ds}</div>
+      <div class="app-open">Buka App →</div>
+    </div>`
+  }
+  return `<div class="app-card locked">
+    <div class="lock-overlay">
+      <div class="lock-ic">🔒</div>
+      <div class="lock-t">Terkunci</div>
+    </div>
+    <div class="app-blur">
+      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
+      <div class="app-nm">${a.nm}</div>
+      <div class="app-ds">${a.ds}</div>
+    </div>
+  </div>`
+}
+
+function openApp(url, name) {
+  window.open(url, '_blank')
+}
+
+// ================================================================
+// TABS
+// ================================================================
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'))
+  el.classList.add('active')
+  document.getElementById('tab-' + id).classList.add('active')
+}
+
+// ================================================================
+// HELPERS
+// ================================================================
+function showErr(msg) {
+  const el = document.getElementById('lerr')
+  el.textContent = msg
+  el.style.display = 'block'
+  document.getElementById('btnLogin').disabled = false
+  document.getElementById('btnLogin').textContent = 'Log Masuk →'
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
+}
+</script>
+</body>
+</html>
