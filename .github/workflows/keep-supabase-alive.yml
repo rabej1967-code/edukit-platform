@@ -1,0 +1,24 @@
+name: Keep Supabase Alive
+
+# Jalan setiap 3 hari (jauh sebelum had 7 hari Supabase),
+# + boleh trigger manual bila-bila masa dari tab "Actions" di GitHub
+on:
+  schedule:
+    - cron: '0 3 */3 * *'   # 3:00 AM UTC, setiap 3 hari
+  workflow_dispatch: {}
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping projek EduKit utama (aowzftmdriukxbltjtpm)
+        run: |
+          curl -s -o /dev/null -w "aowzftmdriukxbltjtpm: %{http_code}\n" \
+            "https://aowzftmdriukxbltjtpm.supabase.co/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_EDUKIT }}"
+
+      - name: Ping projek SPIn Analytics (icrssjqyyhnlkpxbyjfp)
+        run: |
+          curl -s -o /dev/null -w "icrssjqyyhnlkpxbyjfp: %{http_code}\n" \
+            "https://icrssjqyyhnlkpxbyjfp.supabase.co/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_SPIN }}"
