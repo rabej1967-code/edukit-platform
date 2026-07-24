@@ -22,3 +22,9 @@ jobs:
           curl -s -o /dev/null -w "icrssjqyyhnlkpxbyjfp: %{http_code}\n" \
             "https://icrssjqyyhnlkpxbyjfp.supabase.co/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_SPIN }}"
+
+      - name: Ping projek Agihbeban (ylnxazqxtgyiynwcfxkj)
+        run: |
+          curl -s -o /dev/null -w "ylnxazqxtgyiynwcfxkj: %{http_code}\n" \
+            "https://ylnxazqxtgyiynwcfxkj.supabase.co/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_AGIHBEBAN }}"
