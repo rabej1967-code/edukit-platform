@@ -12,18 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping projek EduKit utama (aowzftmdriukxbltjtpm)
+        continue-on-error: true
         run: |
           curl -s -o /dev/null -w "aowzftmdriukxbltjtpm: %{http_code}\n" \
             "https://aowzftmdriukxbltjtpm.supabase.co/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_EDUKIT }}"
 
       - name: Ping projek SPIn Analytics (icrssjqyyhnlkpxbyjfp)
+        continue-on-error: true
         run: |
           curl -s -o /dev/null -w "icrssjqyyhnlkpxbyjfp: %{http_code}\n" \
             "https://icrssjqyyhnlkpxbyjfp.supabase.co/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_SPIN }}"
 
       - name: Ping projek Agihbeban (ylnxazqxtgyiynwcfxkj)
+        continue-on-error: true
         run: |
           curl -s -o /dev/null -w "ylnxazqxtgyiynwcfxkj: %{http_code}\n" \
             "https://ylnxazqxtgyiynwcfxkj.supabase.co/rest/v1/" \
