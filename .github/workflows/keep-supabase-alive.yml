@@ -11,23 +11,31 @@ jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping projek EduKit utama (aowzftmdriukxbltjtpm)
-        continue-on-error: true
+      - name: Ping semua projek Supabase
         run: |
-          curl -s -o /dev/null -w "aowzftmdriukxbltjtpm: %{http_code}\n" \
-            "https://aowzftmdriukxbltjtpm.supabase.co/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_EDUKIT }}"
+          echo "## Hasil Keep-Alive Supabase" >> $GITHUB_STEP_SUMMARY
+          echo "| Projek | Ref | Kod HTTP | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|---|" >> $GITHUB_STEP_SUMMARY
 
-      - name: Ping projek SPIn Analytics (icrssjqyyhnlkpxbyjfp)
-        continue-on-error: true
-        run: |
-          curl -s -o /dev/null -w "icrssjqyyhnlkpxbyjfp: %{http_code}\n" \
-            "https://icrssjqyyhnlkpxbyjfp.supabase.co/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_SPIN }}"
+          ping_project() {
+            NAME="$1"
+            REF="$2"
+            KEY="$3"
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 \
+              "https://${REF}.supabase.co/rest/v1/" \
+              -H "apikey: ${KEY}")
+            if [ "$CODE" = "200" ] || [ "$CODE" = "401" ] || [ "$CODE" = "404" ]; then
+              STATUS="OK (server hidup)"
+            else
+              STATUS="BERMASALAH"
+              echo "::error::${NAME} (${REF}) - kod HTTP: ${CODE} - server mungkin tak reachable"
+            fi
+            echo "| ${NAME} | ${REF} | ${CODE} | ${STATUS} |" >> $GITHUB_STEP_SUMMARY
+            echo "${NAME} (${REF}): HTTP ${CODE} - ${STATUS}"
+          }
 
-      - name: Ping projek Agihbeban (ylnxazqxtgyiynwcfxkj)
-        continue-on-error: true
-        run: |
-          curl -s -o /dev/null -w "ylnxazqxtgyiynwcfxkj: %{http_code}\n" \
-            "https://ylnxazqxtgyiynwcfxkj.supabase.co/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_AGIHBEBAN }}"
+          ping_project "EduKit utama" "aowzftmdriukxbltjtpm" "${{ secrets.SUPABASE_ANON_KEY_EDUKIT }}"
+          ping_project "SPIn Analytics" "icrssjqyyhnlkpxbyjfp" "${{ secrets.SUPABASE_ANON_KEY_SPIN }}"
+          ping_project "Agihbeban" "ylnxazqxtgyiynwcfxkj" "${{ secrets.SUPABASE_ANON_KEY_AGIHBEBAN }}"
+
+          echo "Selesai. Sila semak tab Summary untuk jadual penuh."
