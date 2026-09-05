@@ -10,13 +10,11 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-/* LOADING */
 #loadPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
 .spin{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .load-txt{color:rgba(255,255,255,.6);font-size:13px;}
 
-/* LOGIN */
 #loginPage{min-height:100vh;background:linear-gradient(135deg,#0f2d7a,#1a56db);display:none;align-items:center;justify-content:center;}
 .lbox{background:white;border-radius:20px;width:380px;max-width:94vw;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);}
 .lh{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:28px;text-align:center;}
@@ -35,7 +33,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .lfoot{text-align:center;padding:14px;background:#f8fafd;border-top:1px solid var(--bdr);font-size:11px;color:var(--t3);}
 .lfoot a{color:var(--p);cursor:pointer;font-weight:600;text-decoration:none;}
 
-/* DEMO BUTTONS */
 .demo-wrap{margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr);}
 .demo-lbl{font-size:11px;color:var(--t3);text-align:center;margin-bottom:10px;}
 .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
@@ -47,6 +44,25 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .demo-full{grid-column:1/-1;border-color:#f59e0b;background:#fffbeb;}
 .demo-full:hover{background:#fef3c7;}
 .demo-note{font-size:10px;color:var(--t3);text-align:center;}
+
+/* FORCE CHANGE PASSWORD OVERLAY */
+#forcePwPage{position:fixed;inset:0;background:rgba(10,22,40,.95);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+.fpw-box{background:white;border-radius:20px;width:100%;max-width:460px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.5);}
+.fpw-head{background:linear-gradient(135deg,#1a3a8f,#1a56db);padding:24px 28px;}
+.fpw-head h3{font-size:18px;font-weight:800;color:white;margin-bottom:4px;}
+.fpw-head p{font-size:12px;color:rgba(255,255,255,.65);}
+.fpw-section{padding:20px 24px;}
+.fpw-cred-box{background:#f0f4ff;border:2px solid #1a56db;border-radius:12px;padding:16px;margin-bottom:16px;}
+.fpw-cred-title{font-size:12px;font-weight:800;color:#1a56db;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.fpw-cred-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #dbeafe;}
+.fpw-cred-row:last-child{border-bottom:none;}
+.fpw-cred-lbl{font-size:12px;color:#475569;font-weight:700;}
+.fpw-cred-val{font-family:monospace;font-size:14px;font-weight:800;color:#1a56db;background:#dbeafe;padding:4px 12px;border-radius:7px;letter-spacing:1px;}
+.fpw-warn{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:16px;line-height:1.6;}
+.fpw-divider{font-size:12px;font-weight:800;color:#0f172a;margin-bottom:12px;padding-top:4px;}
+.fpw-btn{width:100%;padding:14px;background:#1a56db;color:white;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px;transition:.15s;}
+.fpw-btn:hover{background:#1240b0;}
+.fpw-err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:9px;border-radius:8px;font-size:12px;font-weight:600;margin-top:10px;display:none;text-align:center;}
 
 /* DASHBOARD */
 #dashPage{display:none;min-height:100vh;}
@@ -62,21 +78,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 .dash-body{max-width:1100px;margin:0 auto;padding:22px 16px;}
 
-/* TABS */
 .tabs{display:flex;gap:4px;background:white;border:1px solid var(--bdr);border-radius:10px;padding:4px;margin-bottom:20px;overflow-x:auto;}
 .tab{flex:1;min-width:fit-content;padding:8px 16px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);background:none;border:none;font-family:inherit;white-space:nowrap;transition:.15s;}
 .tab.active{background:var(--p);color:white;}
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
 
-/* PKG BANNER */
 .pkg-banner{border-radius:14px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .pkb-lbl{font-size:11px;font-weight:700;opacity:.65;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
 .pkb-nm{font-size:18px;font-weight:800;}
 .pkb-sub{font-size:12px;opacity:.65;margin-top:2px;}
 .pkb-badge{font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.2);color:white;white-space:nowrap;}
 
-/* APPS */
 .sec-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .sec-badge{background:var(--pl);color:var(--p);padding:2px 8px;border-radius:20px;font-size:11px;}
 .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
@@ -92,7 +105,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .app-ds{font-size:11px;color:var(--t2);line-height:1.5;}
 .app-open{font-size:11px;font-weight:700;color:var(--p);margin-top:8px;}
 
-/* PROFIL */
 .profil-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:20px;max-width:440px;}
 .pf-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .pf-av{width:48px;height:48px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:white;}
@@ -102,12 +114,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .pf-row:last-child{border-bottom:none;}
 .pf-lbl{color:var(--t3);font-weight:600;}
 .pf-val{font-weight:600;}
+.chpw-card{background:white;border:1px solid var(--bdr);border-radius:12px;padding:20px;max-width:440px;margin-top:16px;}
+.chpw-card h3{font-size:14px;font-weight:700;margin-bottom:14px;}
 
-/* TOAST */
 .toast{position:fixed;bottom:18px;right:18px;background:#1e293b;color:white;padding:10px 15px;border-radius:9px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
-
-/* DEMO BANNER */
 .demo-banner{background:#f59e0b;color:#0f172a;padding:8px 16px;text-align:center;font-size:12px;font-weight:700;}
 
 @media(max-width:600px){.apps-grid{grid-template-columns:1fr 1fr;}.dash-body{padding:14px 12px;}}
@@ -115,13 +126,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loadPage">
   <div class="spin"></div>
   <div class="load-txt">Memuat akaun anda...</div>
 </div>
 
-<!-- LOGIN -->
 <div id="loginPage">
   <div class="lbox">
     <div class="lh">
@@ -137,12 +146,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       </div>
       <div class="fg">
         <label>Kata Laluan</label>
-        <input id="lpw" class="fc" type="password" placeholder="••••••••"
+        <input id="lpw" class="fc" type="password" placeholder="kata laluan anda"
           onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <button class="lbtn" id="btnLogin" onclick="doLogin()">Log Masuk →</button>
       <div class="lerr" id="lerr"></div>
-
       <div class="demo-wrap">
         <div class="demo-lbl">— atau cuba mod demo —</div>
         <div class="demo-grid">
@@ -169,6 +177,41 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
+<!-- WAJIB TUKAR PASSWORD -->
+<div id="forcePwPage">
+  <div class="fpw-box">
+    <div class="fpw-head">
+      <h3>🔐 Tetapkan Kata Laluan Baharu</h3>
+      <p>Wajib dilakukan sebelum menggunakan EduKit</p>
+    </div>
+    <div class="fpw-section">
+      <div class="fpw-cred-box">
+        <div class="fpw-cred-title">📋 Maklumat Log Masuk Semasa Anda</div>
+        <div class="fpw-cred-row">
+          <span class="fpw-cred-lbl">📧 E-mel</span>
+          <span class="fpw-cred-val" id="fpwEmail">—</span>
+        </div>
+        <div class="fpw-cred-row">
+          <span class="fpw-cred-lbl">🔑 Kata Laluan Sementara</span>
+          <span class="fpw-cred-val" id="fpwTempPw">—</span>
+        </div>
+      </div>
+      <div class="fpw-warn">⚠️ <strong>Sila simpan maklumat di atas.</strong> Selepas tukar kata laluan, kata laluan sementara tidak boleh digunakan lagi.</div>
+      <div class="fpw-divider">🔒 Tetapkan Kata Laluan Baharu Anda</div>
+      <div class="fg">
+        <label>Kata Laluan Baharu</label>
+        <input id="fpw1" class="fc" type="password" placeholder="Minimum 8 aksara">
+      </div>
+      <div class="fg" style="margin-bottom:0;">
+        <label>Sahkan Kata Laluan</label>
+        <input id="fpw2" class="fc" type="password" placeholder="Taip semula kata laluan baharu">
+      </div>
+      <div class="fpw-err" id="fpwErr"></div>
+      <button class="fpw-btn" onclick="doForcePw()">Simpan & Mula Guna EduKit →</button>
+    </div>
+  </div>
+</div>
+
 <!-- DASHBOARD -->
 <div id="dashPage">
   <div id="demoBanner" class="demo-banner" style="display:none;">⚠️ MOD DEMO — Data tidak disimpan. <a href="index.html#pricing" style="color:#0f172a;font-weight:800;text-decoration:underline;">Beli pakej untuk akses sebenar →</a></div>
@@ -179,6 +222,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     </div>
     <div class="tb-right">
       <div class="tb-user" id="tbUser">—</div>
+      <button class="tbtn" onclick="showChgPw()">🔑 Tukar PW</button>
       <button class="tbtn tbtn-red" onclick="doLogout()">Keluar</button>
     </div>
   </div>
@@ -204,6 +248,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <div class="pf-row"><span class="pf-lbl">Pakej</span><span class="pf-val" id="pfPkgV">—</span></div>
         <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok)">✓ Aktif</span></div>
       </div>
+      <div class="chpw-card" id="chpwCard" style="display:none;">
+        <h3>🔑 Tukar Kata Laluan</h3>
+        <div class="fg"><label>Kata Laluan Baharu</label><input id="cpw1" class="fc" type="password" placeholder="Min 8 aksara"></div>
+        <div class="fg" style="margin-bottom:12px;"><label>Sahkan</label><input id="cpw2" class="fc" type="password" placeholder="Ulang kata laluan"></div>
+        <div class="lerr" id="cpwErr" style="margin-bottom:8px;"></div>
+        <button class="lbtn" onclick="doChgPw()">Simpan Kata Laluan</button>
+      </div>
     </div>
   </div>
 </div>
@@ -211,200 +262,169 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <div class="toast" id="toast"></div>
 
 <script>
-// ================================================================
-// SUPABASE CONFIG
-// ================================================================
 const SB_URL = 'https://aowzftmdriukxbltjtpm.supabase.co'
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvd3pmdG1kcml1a3hibHRqdHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzAxOTQsImV4cCI6MjA5NDQ0NjE5NH0.17lKaGC-9jx1cDORx2btwfmzDYon3s3CN2dei2BM-Ac'
+const HDR = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}
 
-const HDR = {
-  'apikey': SB_KEY,
-  'Authorization': 'Bearer ' + SB_KEY,
-  'Content-Type': 'application/json'
-}
-
-// ================================================================
-// APPS DATA
-// ================================================================
 const APPS_GURU = [
-  { id:'spin',      nm:'SPIn Analytics',        ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spin' },
-  { id:'spinpro',   nm:'Dashboard SPIn Pro',    ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spinpro' },
-  { id:'eduassign', nm:'EduAssign Pro',         ds:'Urus tugasan dan pemantauan pelajar',          ic:'📋', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-eduassign' },
-  { id:'gantt',     nm:'GanttPro',              ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
-  { id:'kokum',     nm:'KokurikulumTrack',      ds:'Rekod kehadiran kokurikulum lengkap',          ic:'🏅', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-kokum' },
-  { id:'moodradar', nm:'Mood Radar Pro',        ds:'Pengesan mood & emosi pelajar dalam kelas',   ic:'🌡️', bg:'#fdf4ff', url:'https://rabej1967-code.github.io/edukit-moodradar' },
-  { id:'orgchart',  nm:'OrgChart Pro',          ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-orgchart' },
-  { id:'rph',       nm:'RPH Fleksi KSSR Pro',  ds:'Rancangan Pengajaran Harian fleksibel',        ic:'📝', bg:'#fff7ed', url:'https://rabej1967-code.github.io/rphfleksi' },
-  { id:'senarai',   nm:'Senarai Semak Ultimate',ds:'Senarai semak tugas sekolah lengkap',         ic:'✅', bg:'#fef2f2', url:'https://rabej1967-code.github.io/edukit-senarai' },
-  { id:'gamekelas', nm:'GameKelas',             ds:'Platform game interaktif dalam kelas',         ic:'🎮', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-gamekelas' },
+  {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar OTR & AR',ic:'📈',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-spin'},
+  {id:'spinpro',nm:'Dashboard SPIn Pro',ds:'Dashboard visual prestasi pelajar',ic:'📊',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-spinpro'},
+  {id:'eduassign',nm:'EduAssign Pro',ds:'Urus tugasan dan pemantauan pelajar',ic:'📋',bg:'#e8f0fe',url:'https://rabej1967-code.github.io/edukit-eduassign'},
+  {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
+  {id:'kokum',nm:'KokurikulumTrack',ds:'Rekod kehadiran kokurikulum lengkap',ic:'🏅',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-kokum'},
+  {id:'moodradar',nm:'Mood Radar Pro',ds:'Pengesan mood & emosi pelajar dalam kelas',ic:'🌡️',bg:'#fdf4ff',url:'https://rabej1967-code.github.io/edukit-moodradar'},
+  {id:'orgchart',nm:'OrgChart Pro',ds:'Carta organisasi digital sekolah',ic:'🗂️',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-orgchart'},
+  {id:'rph',nm:'RPH Fleksi KSSR Pro',ds:'Rancangan Pengajaran Harian fleksibel',ic:'📝',bg:'#fff7ed',url:'https://rabej1967-code.github.io/rphfleksi'},
+  {id:'senarai',nm:'Senarai Semak Ultimate',ds:'Senarai semak tugas sekolah lengkap',ic:'✅',bg:'#fef2f2',url:'https://rabej1967-code.github.io/edukit-senarai'},
+  {id:'gamekelas',nm:'GameKelas',ds:'Platform game interaktif dalam kelas',ic:'🎮',bg:'#f5f3ff',url:'https://rabej1967-code.github.io/edukit-gamekelas'},
 ]
 
 const APPS_PENTADBIR = [
-  { id:'orgchart',   nm:'OrgChart Pro',         ds:'Carta organisasi digital sekolah',             ic:'🗂️', bg:'#e8f0fe', url:'https://rabej1967-code.github.io/edukit-orgchart' },
-  { id:'gantt',      nm:'GanttPro',             ds:'Carta Gantt digital projek sekolah',           ic:'📅', bg:'#fef3c7', url:'https://rabej1967-code.github.io/edukit-gantt' },
-  { id:'stafftrack', nm:'StaffTrack Pro',       ds:'Kehadiran digital staf sekolah',               ic:'👥', bg:'#f0fdf4', url:'https://rabej1967-code.github.io/edukit-stafftrack' },
-  { id:'pencerapan', nm:'SK@S Pencerapan',      ds:'Pencerapan guru Standard 4 SKPMg2',            ic:'🔍', bg:'#f5f3ff', url:'https://rabej1967-code.github.io/edukit-pencerapan' },
-  { id:'agihtugas',  nm:'AgihTugas Pro',        ds:'Agihan tugas guru dan staf sekolah',           ic:'📋', bg:'#fef3c7', url:'https://rabej1967-code.github.io/agihtugas' },
-  { id:'headcount',  nm:'H2 Headcount 2.0',    ds:'Pemantauan OTR vs AR per kelas',               ic:'🎯', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-headcount' },
-  { id:'spin',       nm:'SPIn Analytics',       ds:'Analitik prestasi pelajar OTR & AR',           ic:'📈', bg:'#eff6ff', url:'https://rabej1967-code.github.io/edukit-spin' },
-  { id:'spinpro',    nm:'Dashboard SPIn Pro',   ds:'Dashboard visual prestasi pelajar',            ic:'📊', bg:'#dbeafe', url:'https://rabej1967-code.github.io/edukit-spinpro' },
+  {id:'orgchart',nm:'OrgChart Pro',ds:'Carta organisasi digital sekolah',ic:'🗂️',bg:'#e8f0fe',url:'https://rabej1967-code.github.io/edukit-orgchart'},
+  {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
+  {id:'stafftrack',nm:'StaffTrack Pro',ds:'Kehadiran digital staf sekolah',ic:'👥',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-stafftrack'},
+  {id:'pencerapan',nm:'SK@S Pencerapan',ds:'Pencerapan guru Standard 4 SKPMg2',ic:'🔍',bg:'#f5f3ff',url:'https://rabej1967-code.github.io/edukit-pencerapan'},
+  {id:'agihtugas',nm:'AgihTugas Pro',ds:'Agihan tugas guru dan staf sekolah',ic:'📋',bg:'#fef3c7',url:'https://rabej1967-code.github.io/agihtugas'},
+  {id:'headcount',nm:'H2 Headcount 2.0',ds:'Pemantauan OTR vs AR per kelas',ic:'🎯',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-headcount'},
+  {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar OTR & AR',ic:'📈',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-spin'},
+  {id:'spinpro',nm:'Dashboard SPIn Pro',ds:'Dashboard visual prestasi pelajar',ic:'📊',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-spinpro'},
 ]
 
-// ================================================================
-// STATE
-// ================================================================
-let CU = null // { email, pkg, name, isDemo }
+let CU = null
+let SB_TOKEN = null
 
-// ================================================================
-// BOOT — semak sesi dari localStorage
-// ================================================================
 window.addEventListener('DOMContentLoaded', () => {
   const sess = getSess()
-  if (sess) {
-    CU = sess
-    showDash()
-  } else {
-    showLogin()
-  }
+  if (sess) { CU = sess; showDash() }
+  else showLogin()
 })
 
-function getSess() {
-  try { return JSON.parse(localStorage.getItem('ek_sess_v1')) } catch(e) { return null }
-}
-function setSess(data) { localStorage.setItem('ek_sess_v1', JSON.stringify(data)) }
-function clearSess() { localStorage.removeItem('ek_sess_v1') }
+function getSess() { try { return JSON.parse(localStorage.getItem('ek_sess_v2')) } catch(e) { return null } }
+function setSess(d) { localStorage.setItem('ek_sess_v2', JSON.stringify(d)) }
+function clearSess() { localStorage.removeItem('ek_sess_v2') }
 
-// ================================================================
-// LOGIN — guna Supabase REST auth endpoint terus
-// ================================================================
 async function doLogin() {
   const email = document.getElementById('leml').value.trim()
-  const pw    = document.getElementById('lpw').value
-  const btn   = document.getElementById('btnLogin')
-  const err   = document.getElementById('lerr')
+  const pw = document.getElementById('lpw').value
+  const btn = document.getElementById('btnLogin')
+  const err = document.getElementById('lerr')
   err.style.display = 'none'
-
   if (!email || !pw) { showErr('Sila isi e-mel dan kata laluan'); return }
-
-  btn.disabled = true
-  btn.textContent = 'Sedang log masuk...'
-
+  btn.disabled = true; btn.textContent = 'Sedang log masuk...'
   try {
-    // Step 1: Auth dengan Supabase
-    const authRes = await fetch(SB_URL + '/auth/v1/token?grant_type=password', {
-      method: 'POST',
-      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pw })
+    const authRes = await fetch(SB_URL+'/auth/v1/token?grant_type=password', {
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pw})
     })
     const authData = await authRes.json()
-
     if (!authRes.ok || authData.error) {
       showErr('E-mel atau kata laluan tidak betul.')
       btn.disabled = false; btn.textContent = 'Log Masuk →'
       return
     }
-
+    SB_TOKEN = authData.access_token
     const userId = authData.user?.id
-    const token  = authData.access_token
-
-    // Step 2: Ambil profil
-    const profRes = await fetch(SB_URL + '/rest/v1/profiles?id=eq.' + userId + '&select=*', {
-      headers: { ...HDR, 'Authorization': 'Bearer ' + token }
+    const profRes = await fetch(SB_URL+'/rest/v1/profiles?id=eq.'+userId+'&select=*', {
+      headers:{...HDR,'Authorization':'Bearer '+SB_TOKEN}
     })
     const profData = await profRes.json()
     const prof = profData[0]
-
-    // Step 3: Ambil package dari purchases
     let pkg = prof?.package_id || null
-    if (!pkg) {
-      const purchRes = await fetch(SB_URL + '/rest/v1/purchases?user_id=eq.' + userId + '&select=package_id&order=created_at.desc&limit=1', {
-        headers: { ...HDR, 'Authorization': 'Bearer ' + token }
-      })
-      const purchData = await purchRes.json()
-      if (purchData[0]) pkg = purchData[0].package_id
-    }
-
-    CU = {
-      email,
-      name: prof?.fullname || email.split('@')[0],
-      pkg: pkg || null,
-      isDemo: false
-    }
-    setSess(CU)
-    showDash()
-
+    CU = { email, name: prof?.fullname || email.split('@')[0], pkg, isDemo:false, mustChangePw: prof?.must_change_password === true, userId, token: SB_TOKEN, tempPw: pw }
+    setSess({...CU, tempPw: null}) // jangan simpan temp pw dalam storage
+    if (CU.mustChangePw) { showForcePw(email, pw) }
+    else { showDash() }
   } catch(e) {
     showErr('Ralat sambungan. Sila cuba lagi.')
     btn.disabled = false; btn.textContent = 'Log Masuk →'
   }
 }
 
-// ================================================================
-// DEMO LOGIN
-// ================================================================
+function showForcePw(email, tempPw) {
+  document.getElementById('fpwEmail').textContent = email
+  document.getElementById('fpwTempPw').textContent = tempPw
+  document.getElementById('loadPage').style.display = 'none'
+  document.getElementById('loginPage').style.display = 'none'
+  document.getElementById('dashPage').style.display = 'none'
+  document.getElementById('forcePwPage').style.display = 'flex'
+}
+
+async function doForcePw() {
+  const p1 = document.getElementById('fpw1').value
+  const p2 = document.getElementById('fpw2').value
+  const err = document.getElementById('fpwErr')
+  err.style.display = 'none'
+  if (p1.length < 8) { err.textContent = 'Kata laluan mesti sekurang-kurangnya 8 aksara.'; err.style.display = 'block'; return }
+  if (p1 !== p2) { err.textContent = 'Kata laluan tidak sepadan. Sila cuba lagi.'; err.style.display = 'block'; return }
+  try {
+    // Update password via Supabase auth
+    const r = await fetch(SB_URL+'/auth/v1/user', {
+      method:'PUT',
+      headers:{...HDR,'Authorization':'Bearer '+CU.token},
+      body:JSON.stringify({password:p1})
+    })
+    const d = await r.json()
+    if (!r.ok) { err.textContent = 'Ralat: '+d.message; err.style.display='block'; return }
+    // Update must_change_password = false
+    await fetch(SB_URL+'/rest/v1/profiles?id=eq.'+CU.userId, {
+      method:'PATCH',
+      headers:{...HDR,'Authorization':'Bearer '+CU.token},
+      body:JSON.stringify({must_change_password:false})
+    })
+    CU.mustChangePw = false
+    setSess(CU)
+    document.getElementById('forcePwPage').style.display = 'none'
+    showDash()
+    toast('✓ Kata laluan berjaya ditetapkan! Selamat menggunakan EduKit.')
+  } catch(e) {
+    err.textContent = 'Ralat sambungan. Sila cuba lagi.'
+    err.style.display = 'block'
+  }
+}
+
 function demoLogin(pkg) {
-  CU = { email:'demo@edukit.my', name:'Pengguna Demo', pkg, isDemo:true }
+  CU = {email:'demo@edukit.my',name:'Pengguna Demo',pkg,isDemo:true}
   showDash()
 }
 
-// ================================================================
-// LOGOUT
-// ================================================================
-function doLogout() {
-  CU = null
-  clearSess()
-  showLogin()
-}
+function doLogout() { CU = null; clearSess(); showLogin() }
 
-// ================================================================
-// SHOW/HIDE PAGES
-// ================================================================
 function showLogin() {
   document.getElementById('loadPage').style.display = 'none'
   document.getElementById('loginPage').style.display = 'flex'
-  document.getElementById('dashPage').style.display  = 'none'
+  document.getElementById('dashPage').style.display = 'none'
+  document.getElementById('forcePwPage').style.display = 'none'
 }
 
 function showDash() {
-  document.getElementById('loadPage').style.display  = 'none'
+  document.getElementById('loadPage').style.display = 'none'
   document.getElementById('loginPage').style.display = 'none'
-  document.getElementById('dashPage').style.display  = 'block'
+  document.getElementById('dashPage').style.display = 'block'
+  document.getElementById('forcePwPage').style.display = 'none'
   document.getElementById('demoBanner').style.display = CU.isDemo ? 'block' : 'none'
   renderDash()
 }
 
-// ================================================================
-// RENDER DASHBOARD
-// ================================================================
 function renderDash() {
-  const { email, name, pkg } = CU
+  const {email,name,pkg} = CU
   const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()
-
   document.getElementById('tbUser').textContent = name
-  document.getElementById('pfAv').textContent  = ini
-  document.getElementById('pfNm').textContent  = name
+  document.getElementById('pfAv').textContent = ini
+  document.getElementById('pfNm').textContent = name
   document.getElementById('pfEml').textContent = email
   document.getElementById('pfPkg').textContent = pkgLabel(pkg)
   document.getElementById('pfPkgV').textContent = pkgLabel(pkg)
-
-  // Banner
   const banners = {
-    guru:      { bg:'linear-gradient(135deg,#1a56db,#0ea5e9)', nm:'Pakej Guru — 10 Apps' },
-    pentadbir: { bg:'linear-gradient(135deg,#7c3aed,#a855f7)', nm:'Pakej Pentadbir — 8 Apps' },
-    gabungan:  { bg:'linear-gradient(135deg,#d97706,#f59e0b)', nm:'Pakej Guru + Pentadbir — 17 Apps' },
+    guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — 10 Apps'},
+    pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — 8 Apps'},
+    gabungan:{bg:'linear-gradient(135deg,#d97706,#f59e0b)',nm:'Pakej Guru + Pentadbir — 17 Apps'},
   }
-  const b = banners[pkg] || { bg:'linear-gradient(135deg,#64748b,#94a3b8)', nm:'Tiada Pakej Aktif' }
+  const b = banners[pkg] || {bg:'linear-gradient(135deg,#64748b,#94a3b8)',nm:'Tiada Pakej Aktif'}
   const banner = document.getElementById('pkgBanner')
   banner.style.background = b.bg
   banner.style.color = 'white'
-  banner.innerHTML = `
-    <div>
-      <div class="pkb-lbl">Pakej Anda</div>
-      <div class="pkb-nm">${b.nm}</div>
-      <div class="pkb-sub">${email}</div>
-    </div>
-    <div class="pkb-badge">${pkg ? '✓ Aktif' : '⚠ Belum aktif'}</div>`
-
+  banner.innerHTML = '<div><div class="pkb-lbl">Pakej Anda</div><div class="pkb-nm">'+b.nm+'</div><div class="pkb-sub">'+email+'</div></div><div class="pkb-badge">'+(pkg?'✓ Aktif':'⚠ Belum aktif')+'</div>'
   renderApps(pkg)
 }
 
@@ -421,85 +441,70 @@ function hasAccess(appPkg, userPkg) {
 function renderApps(pkg) {
   const container = document.getElementById('appsContainer')
   if (!pkg) {
-    container.innerHTML = `<div style="text-align:center;padding:48px 20px;">
-      <div style="font-size:40px;margin-bottom:12px;">🔒</div>
-      <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div>
-      <a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a>
-    </div>`
+    container.innerHTML = '<div style="text-align:center;padding:48px 20px;"><div style="font-size:40px;margin-bottom:12px;">🔒</div><div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div><a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a></div>'
     return
   }
-
-  let html = ''
-
-  html += `<div class="sec-title">📚 Pakej Guru <span class="sec-badge">10 Apps</span></div>`
-  html += `<div class="apps-grid">`
-  APPS_GURU.forEach(a => {
-    html += renderCard(a, hasAccess('guru', pkg))
-  })
-  html += `</div>`
-
-  html += `<div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div>`
-  html += `<div class="apps-grid">`
-  APPS_PENTADBIR.forEach(a => {
-    html += renderCard(a, hasAccess('pentadbir', pkg))
-  })
-  html += `</div>`
-
+  let html = '<div class="sec-title">📚 Pakej Guru <span class="sec-badge">10 Apps</span></div><div class="apps-grid">'
+  APPS_GURU.forEach(a => { html += renderCard(a, hasAccess('guru', pkg)) })
+  html += '</div><div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div><div class="apps-grid">'
+  APPS_PENTADBIR.forEach(a => { html += renderCard(a, hasAccess('pentadbir', pkg)) })
+  html += '</div>'
   container.innerHTML = html
 }
 
 function renderCard(a, access) {
   if (access) {
-    return `<div class="app-card" onclick="openApp('${a.url}','${a.nm}')">
-      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
-      <div class="app-nm">${a.nm}</div>
-      <div class="app-ds">${a.ds}</div>
-      <div class="app-open">Buka App →</div>
-    </div>`
+    return '<div class="app-card" onclick="openApp(\''+a.url+'\')"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div><div class="app-open">Buka App →</div></div>'
   }
-  return `<div class="app-card locked">
-    <div class="lock-overlay">
-      <div class="lock-ic">🔒</div>
-      <div class="lock-t">Terkunci</div>
-    </div>
-    <div class="app-blur">
-      <div class="app-ic" style="background:${a.bg}">${a.ic}</div>
-      <div class="app-nm">${a.nm}</div>
-      <div class="app-ds">${a.ds}</div>
-    </div>
-  </div>`
+  return '<div class="app-card locked"><div class="lock-overlay"><div class="lock-ic">🔒</div><div class="lock-t">Terkunci</div></div><div class="app-blur"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div></div></div>'
 }
 
-function openApp(url, name) {
-  window.open(url, '_blank')
-}
+function openApp(url) { window.open(url, '_blank') }
 
-// ================================================================
-// TABS
-// ================================================================
 function switchTab(id, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
-  document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'))
   el.classList.add('active')
-  document.getElementById('tab-' + id).classList.add('active')
+  document.getElementById('tab-'+id).classList.add('active')
 }
 
-// ================================================================
-// HELPERS
-// ================================================================
+function showChgPw() {
+  switchTab('profil', document.querySelectorAll('.tab')[1])
+  document.getElementById('chpwCard').style.display = 'block'
+  document.getElementById('chpwCard').scrollIntoView({behavior:'smooth'})
+}
+
+async function doChgPw() {
+  const p1 = document.getElementById('cpw1').value
+  const p2 = document.getElementById('cpw2').value
+  const err = document.getElementById('cpwErr')
+  err.style.display = 'none'
+  if (p1.length < 8) { err.textContent = 'Min 8 aksara.'; err.style.display='block'; return }
+  if (p1 !== p2) { err.textContent = 'Tidak sepadan.'; err.style.display='block'; return }
+  if (!CU.token) { err.textContent = 'Sila log masuk semula.'; err.style.display='block'; return }
+  const r = await fetch(SB_URL+'/auth/v1/user', {
+    method:'PUT',
+    headers:{...HDR,'Authorization':'Bearer '+CU.token},
+    body:JSON.stringify({password:p1})
+  })
+  if (!r.ok) { err.textContent = 'Ralat. Cuba lagi.'; err.style.display='block'; return }
+  document.getElementById('cpw1').value = ''
+  document.getElementById('cpw2').value = ''
+  toast('✓ Kata laluan berjaya ditukar!')
+  document.getElementById('chpwCard').style.display = 'none'
+}
+
 function showErr(msg) {
   const el = document.getElementById('lerr')
-  el.textContent = msg
-  el.style.display = 'block'
+  el.textContent = msg; el.style.display = 'block'
   document.getElementById('btnLogin').disabled = false
   document.getElementById('btnLogin').textContent = 'Log Masuk →'
 }
 
 function toast(msg) {
   const t = document.getElementById('toast')
-  t.textContent = msg
-  t.classList.add('show')
-  setTimeout(() => t.classList.remove('show'), 3000)
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),3500)
 }
 </script>
 </body>
