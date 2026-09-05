@@ -246,6 +246,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         </div>
         <div class="pf-row"><span class="pf-lbl">E-mel</span><span class="pf-val" id="pfEml">—</span></div>
         <div class="pf-row"><span class="pf-lbl">Pakej</span><span class="pf-val" id="pfPkgV">—</span></div>
+        <div class="pf-row"><span class="pf-lbl">Kod Sekolah</span><span class="pf-val" id="pfKod" style="font-family:monospace;color:#7c3aed;background:#fdf4ff;padding:3px 10px;border-radius:6px;">—</span></div>
         <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok)">✓ Aktif</span></div>
       </div>
       <div class="chpw-card" id="chpwCard" style="display:none;">
@@ -323,8 +324,9 @@ async function doLogin() {
     const profData = await profRes.json()
     const prof = profData[0]
     let pkg = prof?.package_id || null
-    CU = { email, name: prof?.fullname || email.split('@')[0], pkg, isDemo:false, mustChangePw: prof?.must_change_password === true, userId, token: SB_TOKEN, tempPw: pw }
-    setSess({...CU, tempPw: null}) // jangan simpan temp pw dalam storage
+    const kodSekolah = prof?.kod_sekolah || null
+    CU = { email, name: prof?.fullname || email.split('@')[0], pkg, isDemo:false, mustChangePw: prof?.must_change_password === true, userId, token: SB_TOKEN, tempPw: pw, kodSekolah }
+    setSess({...CU, tempPw: null, kodSekolah}) // jangan simpan temp pw dalam storage
     if (CU.mustChangePw) { showForcePw(email, pw) }
     else { showDash() }
   } catch(e) {
@@ -407,6 +409,8 @@ function renderDash() {
   document.getElementById('pfEml').textContent = email
   document.getElementById('pfPkg').textContent = pkgLabel(pkg)
   document.getElementById('pfPkgV').textContent = pkgLabel(pkg)
+  const kodEl = document.getElementById('pfKod')
+  if (kodEl) kodEl.textContent = CU.kodSekolah || 'Tiada'
   const banners = {
     guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — 7 Apps'},
     pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — 3 Apps'},
@@ -446,7 +450,8 @@ function renderApps(pkg) {
 
 function renderCard(a, access) {
   if (access) {
-    return '<div class="app-card" onclick="openApp(\''+a.url+'\')"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div><div class="app-open">Buka App →</div></div>'
+    const appUrl = CU.kodSekolah ? a.url+'?t='+CU.kodSekolah : a.url
+    return '<div class="app-card" onclick="openApp(\''+appUrl+'\')"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div><div class="app-open">Buka App →</div></div>'
   }
   return '<div class="app-card locked"><div class="lock-overlay"><div class="lock-ic">🔒</div><div class="lock-t">Terkunci</div></div><div class="app-blur"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div></div></div>'
 }
