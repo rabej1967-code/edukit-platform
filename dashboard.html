@@ -309,19 +309,25 @@ const APPS_KIDSPARK_COMING = [
 ]
 
 const APPS_GURU = [
-  {id:'spinpro',nm:'Dashboard SPIn Pro',ds:'Dashboard visual prestasi pelajar',ic:'📊',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-spinpro'},
-  {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
+  {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar — OTR & AR',ic:'📈',bg:'#dbeafe',url:'https://rabej1967-code.github.io/spinkt6t'},
+  {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital untuk projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
   {id:'kokum',nm:'KokurikulumTrack',ds:'Rekod kehadiran kokurikulum lengkap',ic:'🏅',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-kokum'},
   {id:'moodradar',nm:'Mood Radar Pro',ds:'Pengesan mood & emosi pelajar dalam kelas',ic:'🌡️',bg:'#fdf4ff',url:'https://rabej1967-code.github.io/edukit-moodradar'},
   {id:'orgchart',nm:'OrgChart Pro',ds:'Carta organisasi digital sekolah',ic:'🗂️',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-orgchart'},
-  {id:'senarai',nm:'Senarai Semak Ultimate',ds:'Senarai semak tugas sekolah lengkap',ic:'✅',bg:'#fef2f2',url:'https://rabej1967-code.github.io/edukit-senarai'},
-  {id:'gamekelas',nm:'GameKelas',ds:'Platform game interaktif dalam kelas',ic:'🎮',bg:'#f5f3ff',url:'https://rabej1967-code.github.io/edukit-gamekelas'},
+  {id:'rphkssr',nm:'RPH Fleksi KSSR',ds:'Rancangan Pengajaran Harian KSSR',ic:'📝',bg:'#fff7ed',url:'https://rabej1967-code.github.io/edukit-rph'},
+  {id:'rphkssm',nm:'RPH Fleksi KSSM',ds:'Rancangan Pengajaran Harian KSSM',ic:'📋',bg:'#fef9c3',url:'https://rabej1967-code.github.io/rph-canva'},
+  {id:'senarai',nm:'Senarai Semak',ds:'Senarai semak tugas sekolah lengkap',ic:'✅',bg:'#fef2f2',url:'https://rabej1967-code.github.io/edukit-senarai'},
 ]
 
 const APPS_PENTADBIR = [
+  {id:'agihsk',nm:'EduAssign Pro SK',ds:'Agihan tugas guru sekolah rendah',ic:'📋',bg:'#e8f0fe',url:'https://rabej1967-code.github.io/agihtugas'},
+  {id:'agihsmk',nm:'EduAssign Pro SMK',ds:'Agihan tugas guru sekolah menengah',ic:'📌',bg:'#ede9fe',url:'https://rabej1967-code.github.io/edukit-gurukits'},
+  {id:'edudash',nm:'EduDash Pro',ds:'Dashboard sekolah lengkap',ic:'🏫',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-edudash'},
+  {id:'headcount',nm:'H2 Headcount 2.0',ds:'Pemantauan OTR vs AR per kelas',ic:'🎯',bg:'#dcfce7',url:'https://rabej1967-code.github.io/edukit-headcount'},
   {id:'stafftrack',nm:'StaffTrack Pro',ds:'Kehadiran digital staf sekolah',ic:'👥',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-stafftrack'},
   {id:'pencerapan',nm:'SK@S Pencerapan',ds:'Pencerapan guru Standard 4 SKPMg2',ic:'🔍',bg:'#f5f3ff',url:'https://rabej1967-code.github.io/edukit-pencerapan'},
-  {id:'headcount',nm:'H2 Headcount 2.0',ds:'Pemantauan OTR vs AR per kelas',ic:'🎯',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-headcount'},
+  {id:'guruganti',nm:'Guru Ganti Pro',ds:'Urus guru ganti & analisis bulanan',ic:'🔄',bg:'#fff7ed',url:'https://rabej1967-code.github.io/edukit-guruganti'},
+  {id:'skpm',nm:'SKPM Pro',ds:'Kualiti pengurusan sekolah — Standard 1–5',ic:'⭐',bg:'#fef2f2',url:'https://rabej1967-code.github.io/edukit-skpm'},
 ]
 
 let CU = null
@@ -493,9 +499,9 @@ function renderDash() {
   const kodEl = document.getElementById('pfKod')
   if (kodEl) kodEl.textContent = CU.kodSekolah || 'Tiada'
   const banners = {
-    guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — 7 Apps'},
-    pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — 3 Apps'},
-    gabungan:{bg:'linear-gradient(135deg,#d97706,#f59e0b)',nm:'Pakej Guru + Pentadbir — 10 Apps'},
+    guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — 8 Apps'},
+    pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — 8 Apps'},
+    gabungan:{bg:'linear-gradient(135deg,#d97706,#f59e0b)',nm:'Pakej Guru + Pentadbir — 16 Apps'},
   }
   const b = banners[pkg] || {bg:'linear-gradient(135deg,#64748b,#94a3b8)',nm:'Tiada Pakej Aktif'}
   const banner = document.getElementById('pkgBanner')
@@ -522,9 +528,9 @@ function renderApps(pkg) {
     container.innerHTML = '<div style="text-align:center;padding:48px 20px;"><div style="font-size:40px;margin-bottom:12px;">🔒</div><div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div><a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a></div>'
     return
   }
-  let html = '<div class="sec-title">📚 Pakej Guru <span class="sec-badge">7 Apps</span></div><div class="apps-grid">'
+  let html = '<div class="sec-title">📚 Pakej Guru <span class="sec-badge">8 Apps</span></div><div class="apps-grid">'
   APPS_GURU.forEach(a => { html += renderCard(a, hasAccess('guru', pkg)) })
-  html += '</div><div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">3 Apps</span></div><div class="apps-grid">'
+  html += '</div><div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div><div class="apps-grid">'
   APPS_PENTADBIR.forEach(a => { html += renderCard(a, hasAccess('pentadbir', pkg)) })
   html += '</div>'
   container.innerHTML = html
