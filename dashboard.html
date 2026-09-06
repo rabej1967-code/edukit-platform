@@ -119,6 +119,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 .toast{position:fixed;bottom:18px;right:18px;background:#1e293b;color:white;padding:10px 15px;border-radius:9px;font-size:12.5px;font-weight:600;z-index:9999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
+
+/* KIDS SPARK TAB */
+.ks-banner{background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:14px;padding:24px;margin-bottom:20px;color:white;}
+.ks-banner h2{font-size:18px;font-weight:800;margin-bottom:6px;}
+.ks-banner p{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:16px;}
+.ks-price{font-size:28px;font-weight:800;margin-bottom:4px;}
+.ks-price span{font-size:13px;font-weight:400;opacity:.7;}
+.ks-btn{display:inline-block;padding:12px 28px;background:#f59e0b;border:none;border-radius:30px;font-size:13px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;text-decoration:none;transition:.2s;}
+.ks-btn:hover{background:#e68a00;}
+.ks-active-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:700;color:#4ade80;margin-bottom:14px;}
+.ks-apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.ks-coming{background:#f8faff;border:2px dashed #e2e8f4;border-radius:12px;padding:16px;text-align:center;opacity:.6;}
+.ks-coming-ic{font-size:24px;margin-bottom:8px;}
+.ks-coming-nm{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.ks-coming-tag{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px;font-weight:600;}
+.ks-features{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px;}
+.ks-feat{background:rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center;}
+.ks-feat-ic{font-size:22px;margin-bottom:6px;}
+.ks-feat-t{font-size:11px;font-weight:700;color:white;margin-bottom:2px;}
+.ks-feat-s{font-size:10px;color:rgba(255,255,255,.6);}
+
 .demo-banner{background:#f59e0b;color:#0f172a;padding:8px 16px;text-align:center;font-size:12px;font-weight:700;}
 
 @media(max-width:600px){.apps-grid{grid-template-columns:1fr 1fr;}.dash-body{padding:14px 12px;}}
@@ -230,12 +251,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   <div class="dash-body">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('apps',this)">📦 Apps Saya</button>
+      <button class="tab" onclick="switchTab('kidspark',this)">✨ Kids Spark</button>
       <button class="tab" onclick="switchTab('profil',this)">👤 Profil</button>
     </div>
 
     <div class="tab-pane active" id="tab-apps">
       <div class="pkg-banner" id="pkgBanner"></div>
       <div id="appsContainer"></div>
+    </div>
+
+    
+    <div class="tab-pane" id="tab-kidspark">
+      <div id="ksContainer"></div>
     </div>
 
     <div class="tab-pane" id="tab-profil">
@@ -266,6 +293,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 const SB_URL = 'https://aowzftmdriukxbltjtpm.supabase.co'
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvd3pmdG1kcml1a3hibHRqdHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzAxOTQsImV4cCI6MjA5NDQ0NjE5NH0.17lKaGC-9jx1cDORx2btwfmzDYon3s3CN2dei2BM-Ac'
 const HDR = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}
+
+
+const APPS_KIDSPARK = [
+  // Tambah apps KidSpark di sini
+  // { id:'app1', nm:'Nama App', ds:'Penerangan', ic:'🎮', bg:'#dbeafe', url:'https://...' },
+]
+
+const APPS_KIDSPARK_COMING = [
+  { ic:'🗓️', nm:'Jadual PDPC Digital', ds:'Jana jadual mengajar mingguan automatik' },
+  { ic:'📱', nm:'EduSMS Pro', ds:'Hantar SMS laporan kepada ibu bapa' },
+  { ic:'🏆', nm:'Reward Kelas', ds:'Sistem mata & ganjaran untuk pelajar' },
+  { ic:'📑', nm:'Minit Mesyuarat Pro', ds:'Jana minit mesyuarat dalam saat' },
+  { ic:'🔔', nm:'Notis Sekolah Digital', ds:'Hantar notis kepada semua pelajar sekaligus' },
+]
 
 const APPS_GURU = [
   {id:'spinpro',nm:'Dashboard SPIn Pro',ds:'Dashboard visual prestasi pelajar',ic:'📊',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-spinpro'},
@@ -400,6 +441,46 @@ function showDash() {
   renderDash()
 }
 
+
+function renderKidsSpark() {
+  const el = document.getElementById('ksContainer')
+  if (!el) return
+  const hasKs = CU.kidspark_active === true
+  const kodSekolah = CU.kodSekolah || ''
+
+  if (hasKs) {
+    // AKTIF
+    let appsHtml = ''
+    if (APPS_KIDSPARK.length > 0) {
+      appsHtml = '<div class="sec-title" style="margin-top:20px;">🎮 Apps Kids Spark <span class="sec-badge">' + APPS_KIDSPARK.length + ' Apps</span></div>'
+      appsHtml += '<div class="ks-apps-grid">'
+      APPS_KIDSPARK.forEach(a => {
+        const url = kodSekolah ? a.url + '?t=' + kodSekolah : a.url
+        appsHtml += '<div class="app-card" onclick="openApp(\''+url+'\')"><div class="app-ic" style="background:'+a.bg+'">'+a.ic+'</div><div class="app-nm">'+a.nm+'</div><div class="app-ds">'+a.ds+'</div><div class="app-open">Buka App →</div></div>'
+      })
+      appsHtml += '</div>'
+    }
+
+    let comingHtml = '<div class="sec-title" style="margin-top:20px;">🚀 Akan Datang <span class="sec-badge">Auto masuk</span></div><div class="ks-apps-grid">'
+    APPS_KIDSPARK_COMING.forEach(a => {
+      comingHtml += '<div class="ks-coming"><div class="ks-coming-ic">'+a.ic+'</div><div class="ks-coming-nm">'+a.nm+'</div><div style="font-size:10px;color:var(--t2);margin-bottom:6px;">'+a.ds+'</div><span class="ks-coming-tag">Akan Datang</span></div>'
+    })
+    comingHtml += '</div>'
+
+    el.innerHTML = '<div class="ks-banner"><div class="ks-active-badge"><span>●</span> Kids Spark Aktif</div><h2>✨ Kids Spark — Pakej Sewaan</h2><p>Semua apps baru akan masuk secara automatik tanpa bayaran tambahan.</p><button class="ks-btn" onclick="window.open(\'https://kidspark.website/\',\'_blank\')">Buka Kids Spark →</button></div>' + appsHtml + comingHtml
+
+  } else {
+    // BELUM AKTIF
+    let comingHtml = '<div class="sec-title" style="margin-top:0;">🚀 Apps Yang Akan Datang</div><div class="ks-apps-grid">'
+    APPS_KIDSPARK_COMING.forEach(a => {
+      comingHtml += '<div class="ks-coming"><div class="ks-coming-ic">'+a.ic+'</div><div class="ks-coming-nm">'+a.nm+'</div><div style="font-size:10px;color:var(--t2);margin-bottom:6px;">'+a.ds+'</div><span class="ks-coming-tag">Akan Datang</span></div>'
+    })
+    comingHtml += '</div>'
+
+    el.innerHTML = '<div class="ks-banner"><h2>✨ Kids Spark — Belum Aktif</h2><p>Dapatkan akses kepada semua apps Kids Spark dan apps baru yang akan datang secara automatik.</p><div class="ks-features"><div class="ks-feat"><div class="ks-feat-ic">🎮</div><div class="ks-feat-t">Kids Spark</div><div class="ks-feat-s">Belajar sambil bermain</div></div><div class="ks-feat"><div class="ks-feat-ic">🚀</div><div class="ks-feat-t">Apps Baru Auto</div><div class="ks-feat-s">Masuk tanpa bayar lagi</div></div><div class="ks-feat"><div class="ks-feat-ic">❌</div><div class="ks-feat-t">Batal Bila-bila</div><div class="ks-feat-s">Tiada kontrak</div></div></div><div class="ks-price">RM 3 <span>/ bulan</span></div><a href="https://buy.stripe.com/aFacN41Gh7CqdPCg777g404" target="_blank" class="ks-btn">Langgan Kids Spark →</a></div>' + comingHtml
+  }
+}
+
 function renderDash() {
   const {email,name,pkg} = CU
   const ini = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()
@@ -422,6 +503,7 @@ function renderDash() {
   banner.style.color = 'white'
   banner.innerHTML = '<div><div class="pkb-lbl">Pakej Anda</div><div class="pkb-nm">'+b.nm+'</div><div class="pkb-sub">'+email+'</div></div><div class="pkb-badge">'+(pkg?'✓ Aktif':'⚠ Belum aktif')+'</div>'
   renderApps(pkg)
+  renderKidsSpark()
 }
 
 function pkgLabel(pkg) {
