@@ -312,6 +312,7 @@ const APPS_GURU = [
   {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar — OTR & AR',ic:'📈',bg:'#dbeafe',url:'https://rabej1967-code.github.io/spinkt6t/spin.html'},
   {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital untuk projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
   {id:'kokum',nm:'KokurikulumTrack',ds:'Rekod kehadiran kokurikulum lengkap',ic:'🏅',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-kokum'},
+  {id:'kokum2',nm:'Rekod Kehadiran Kokurikulum',ds:'Rekod kehadiran persatuan, beruniform & sukan',ic:'📋',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-kokum2v2'},
   {id:'moodradar',nm:'Mood Radar Pro',ds:'Pengesan mood & emosi pelajar dalam kelas',ic:'🌡️',bg:'#fdf4ff',url:'https://rabej1967-code.github.io/edukit-moodradar'},
   {id:'orgchart',nm:'OrgChart Pro',ds:'Carta organisasi digital sekolah',ic:'🗂️',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-orgchart'},
   {id:'rphkssr',nm:'RPH Fleksi KSSR',ds:'Rancangan Pengajaran Harian KSSR',ic:'📝',bg:'#fff7ed',url:'https://rabej1967-code.github.io/edukit-rph'},
@@ -499,9 +500,9 @@ function renderDash() {
   const kodEl = document.getElementById('pfKod')
   if (kodEl) kodEl.textContent = CU.kodSekolah || 'Tiada'
   const banners = {
-    guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — 8 Apps'},
-    pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — 8 Apps'},
-    gabungan:{bg:'linear-gradient(135deg,#d97706,#f59e0b)',nm:'Pakej Guru + Pentadbir — 16 Apps'},
+    guru:{bg:'linear-gradient(135deg,#1a56db,#0ea5e9)',nm:'Pakej Guru — '+APPS_GURU.length+' Apps'},
+    pentadbir:{bg:'linear-gradient(135deg,#7c3aed,#a855f7)',nm:'Pakej Pentadbir — '+APPS_PENTADBIR.length+' Apps'},
+    gabungan:{bg:'linear-gradient(135deg,#d97706,#f59e0b)',nm:'Pakej Guru + Pentadbir — '+(APPS_GURU.length+APPS_PENTADBIR.length)+' Apps'},
   }
   const b = banners[pkg] || {bg:'linear-gradient(135deg,#64748b,#94a3b8)',nm:'Tiada Pakej Aktif'}
   const banner = document.getElementById('pkgBanner')
@@ -528,9 +529,9 @@ function renderApps(pkg) {
     container.innerHTML = '<div style="text-align:center;padding:48px 20px;"><div style="font-size:40px;margin-bottom:12px;">🔒</div><div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;">Anda belum mempunyai pakej aktif.</div><a href="index.html#pricing" style="display:inline-block;padding:11px 24px;background:var(--p);color:white;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;">Beli Pakej Sekarang →</a></div>'
     return
   }
-  let html = '<div class="sec-title">📚 Pakej Guru <span class="sec-badge">8 Apps</span></div><div class="apps-grid">'
+  let html = '<div class="sec-title">📚 Pakej Guru <span class="sec-badge">'+APPS_GURU.length+' Apps</span></div><div class="apps-grid">'
   APPS_GURU.forEach(a => { html += renderCard(a, hasAccess('guru', pkg)) })
-  html += '</div><div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">8 Apps</span></div><div class="apps-grid">'
+  html += '</div><div class="sec-title">🏫 Pakej Pentadbir <span class="sec-badge">'+APPS_PENTADBIR.length+' Apps</span></div><div class="apps-grid">'
   APPS_PENTADBIR.forEach(a => { html += renderCard(a, hasAccess('pentadbir', pkg)) })
   html += '</div>'
   container.innerHTML = html
