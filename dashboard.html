@@ -172,6 +172,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       </div>
       <button class="lbtn" id="btnLogin" onclick="doLogin()">Log Masuk →</button>
       <div class="lerr" id="lerr"></div>
+      <div style="text-align:center;margin-top:12px;"><a href="#" onclick="doForgot();return false;" style="font-size:12px;color:#1a56db;font-weight:600;text-decoration:none;">Lupa kata laluan?</a></div>
       <div class="demo-wrap">
         <div class="demo-lbl">— atau cuba mod demo —</div>
         <div class="demo-grid">
@@ -276,6 +277,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <div class="pf-row"><span class="pf-lbl">Kod Sekolah</span><span class="pf-val" id="pfKod" style="font-family:monospace;color:#7c3aed;background:#fdf4ff;padding:3px 10px;border-radius:6px;">—</span></div>
         <div class="pf-row"><span class="pf-lbl">Status</span><span class="pf-val" style="color:var(--ok)">✓ Aktif</span></div>
       </div>
+      <div id="selfServ" style="margin:14px 0;display:none;">
+        <button id="btnResetApp" onclick="doResetApp()" style="width:100%;padding:11px;border-radius:9px;border:1.5px solid #1a56db;background:#eff6ff;color:#1a56db;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:8px;">🔑 Lupa kata laluan app? Tetapkan semula kepada admin123</button>
+        <button id="btnPortal" onclick="window.open(PORTAL_URL,'_blank')" style="display:none;width:100%;padding:11px;border-radius:9px;border:1.5px solid #64748b;background:#f8fafc;color:#334155;font-weight:700;font-size:13px;cursor:pointer;">💳 Urus langganan, kad & resit</button>
+      </div>
       <div class="chpw-card" id="chpwCard" style="display:none;">
         <h3>🔑 Tukar Kata Laluan</h3>
         <div class="fg"><label>Kata Laluan Baharu</label><input id="cpw1" class="fc" type="password" placeholder="Min 8 aksara"></div>
@@ -331,10 +336,14 @@ const APPS_PENTADBIR = [
   {id:'skpm',nm:'SKPM Pro',ds:'Kualiti pengurusan sekolah — Standard 1–5',ic:'⭐',bg:'#fef2f2',url:'https://rabej1967-code.github.io/edukit-skpm'},
 ]
 
+// Tampal pautan Stripe Customer Portal di sini (Stripe > Settings > Billing > Customer portal > Login link)
+const PORTAL_URL = ''
+
 let CU = null
 let SB_TOKEN = null
 
 window.addEventListener('DOMContentLoaded', () => {
+  if (location.hash.includes('type=recovery') && location.hash.includes('access_token=')) { startRecovery(); return }
   const sess = getSess()
   if (sess) { CU = sess; showDash() }
   else showLogin()
@@ -373,14 +382,52 @@ async function doLogin() {
     const prof = profData[0]
     let pkg = prof?.package_id || null
     const kodSekolah = prof?.kod_sekolah || null
-    CU = { email, name: prof?.fullname || email.split('@')[0], pkg, isDemo:false, mustChangePw: prof?.must_change_password === true, userId, token: SB_TOKEN, tempPw: pw, kodSekolah }
-    setSess({...CU, tempPw: null, kodSekolah}) // jangan simpan temp pw dalam storage
+    CU = { email, name: prof?.fullname || email.split('@')[0], pkg, isDemo:false, mustChangePw: prof?.must_change_password === true, userId, token: SB_TOKEN, tempPw: pw, kodSekolah, kidspark_active: prof?.kidspark_active === true }
+    setSess({...CU, tempPw: null, kodSekolah, kidspark_active: CU.kidspark_active}) // jangan simpan temp pw dalam storage
     if (CU.mustChangePw) { showForcePw(email, pw) }
     else { showDash() }
   } catch(e) {
     showErr('Ralat sambungan. Sila cuba lagi.')
     btn.disabled = false; btn.textContent = 'Log Masuk →'
   }
+}
+
+async function doForgot() {
+  const e0 = document.getElementById('leml').value.trim()
+  const email = e0 || (prompt('Masukkan e-mel pembelian anda:') || '').trim()
+  if (!email) return
+  try {
+    await fetch(SB_URL+'/auth/v1/recover?redirect_to='+encodeURIComponent(location.origin+location.pathname), {
+      method:'POST', headers:{'apikey':SB_KEY,'Content-Type':'application/json'}, body:JSON.stringify({email})
+    })
+  } catch(e) {}
+  alert('Jika e-mel itu berdaftar, pautan tetapan semula kata laluan telah dihantar. Semak peti masuk (dan Spam).')
+}
+
+async function startRecovery() {
+  const h = new URLSearchParams(location.hash.slice(1))
+  const token = h.get('access_token')
+  history.replaceState(null, '', location.pathname)
+  try {
+    const r = await fetch(SB_URL+'/auth/v1/user', {headers:{'apikey':SB_KEY,'Authorization':'Bearer '+token}})
+    const u = await r.json()
+    if (!r.ok || !u.id) throw new Error('x')
+    CU = {email:u.email, userId:u.id, token, recovery:true}
+    showForcePw(u.email, '(melalui pautan e-mel)')
+  } catch(e) {
+    showLogin(); showErr('Pautan tamat tempoh. Klik "Lupa kata laluan?" untuk pautan baharu.')
+  }
+}
+
+async function doResetApp() {
+  if (!CU || !CU.token) { toast('Sila log masuk semula.'); return }
+  if (!confirm('Tetapkan semula kata laluan app anda kepada admin123? Anda akan diminta menukarnya semula.')) return
+  const r = await fetch(SB_URL+'/rest/v1/rpc/edukit_reset_my_app_password', {
+    method:'POST', headers:{...HDR,'Authorization':'Bearer '+CU.token}, body:'{}'
+  })
+  let d = null; try { d = await r.json() } catch(e) {}
+  if (r.ok && d === true) toast('✓ Siap. Log masuk app dengan admin / admin123, kemudian tukar kata laluan.')
+  else toast('Gagal. Sila hubungi sokongan.')
 }
 
 function showForcePw(email, tempPw) {
@@ -414,6 +461,11 @@ async function doForcePw() {
       headers:{...HDR,'Authorization':'Bearer '+CU.token},
       body:JSON.stringify({must_change_password:false})
     })
+    if (CU.recovery) {
+      CU = null; clearSess(); showLogin()
+      toast('✓ Kata laluan ditetapkan. Sila log masuk dengan kata laluan baharu.')
+      return
+    }
     CU.mustChangePw = false
     setSess(CU)
     document.getElementById('forcePwPage').style.display = 'none'
@@ -511,6 +563,12 @@ function renderDash() {
   banner.innerHTML = '<div><div class="pkb-lbl">Pakej Anda</div><div class="pkb-nm">'+b.nm+'</div><div class="pkb-sub">'+email+'</div></div><div class="pkb-badge">'+(pkg?'✓ Aktif':'⚠ Belum aktif')+'</div>'
   renderApps(pkg)
   renderKidsSpark()
+  const ss = document.getElementById('selfServ')
+  if (ss) {
+    ss.style.display = CU.isDemo ? 'none' : 'block'
+    document.getElementById('btnResetApp').style.display = (pkg && !CU.isDemo) ? 'block' : 'none'
+    document.getElementById('btnPortal').style.display = (PORTAL_URL && CU.kidspark_active) ? 'block' : 'none'
+  }
 }
 
 function pkgLabel(pkg) {
