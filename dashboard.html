@@ -573,7 +573,16 @@ async function doChgPw() {
     headers:{...HDR,'Authorization':'Bearer '+CU.token},
     body:JSON.stringify({password:p1})
   })
-  if (!r.ok) { err.textContent = 'Ralat. Cuba lagi.'; err.style.display='block'; return }
+  if (!r.ok) {
+    let d = {}; try { d = await r.json() } catch(e) {}
+    const m = String(d.message || d.msg || d.error_description || '').toLowerCase()
+    let t = 'Gagal tukar kata laluan. Cuba log keluar dan log masuk semula.'
+    if (r.status === 401 || r.status === 403 || m.includes('jwt') || m.includes('expired') || m.includes('session')) t = 'Sesi sudah tamat. Sila Log Keluar, log masuk semula, kemudian tukar kata laluan.'
+    else if (m.includes('different') || m.includes('same')) t = 'Kata laluan baharu mesti BERBEZA daripada kata laluan lama.'
+    else if (m.includes('reauth') || m.includes('recently')) t = 'Sila Log Keluar dan log masuk semula, kemudian tukar kata laluan.'
+    else if (m.includes('weak') || m.includes('password should')) t = 'Kata laluan terlalu lemah. Guna huruf besar, kecil, nombor dan simbol.'
+    err.textContent = t; err.style.display='block'; return
+  }
   document.getElementById('cpw1').value = ''
   document.getElementById('cpw2').value = ''
   toast('✓ Kata laluan berjaya ditukar!')
@@ -592,6 +601,23 @@ function toast(msg) {
   t.textContent = msg; t.classList.add('show')
   setTimeout(()=>t.classList.remove('show'),3500)
 }
+</script>
+
+<script>
+(function(){
+  function addEye(inp){
+    if(!inp || inp.dataset.eye) return; inp.dataset.eye='1';
+    var w=document.createElement('div'); w.style.cssText='position:relative;display:block;width:100%';
+    inp.parentNode.insertBefore(w,inp); w.appendChild(inp);
+    inp.style.paddingRight='44px';
+    var b=document.createElement('button'); b.type='button'; b.textContent='👁'; b.setAttribute('aria-label','Tunjuk atau sembunyi kata laluan');
+    b.style.cssText='position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;cursor:pointer;font-size:18px;opacity:.6;padding:4px 6px';
+    b.onclick=function(e){e.preventDefault(); var h=inp.type==='password'; inp.type=h?'text':'password'; b.style.opacity=h?'1':'.6';};
+    w.appendChild(b);
+  }
+  function run(){ ['lpw','fpw1','fpw2','cpw1','cpw2'].forEach(function(id){ addEye(document.getElementById(id)); }); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+})();
 </script>
 </body>
 </html>
