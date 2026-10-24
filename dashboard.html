@@ -314,7 +314,7 @@ const APPS_KIDSPARK_COMING = [
 ]
 
 const APPS_GURU = [
-  {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar — OTR & AR',ic:'📈',bg:'#dbeafe',url:'https://rabej1967-code.github.io/spinkt6t/spin.html'},
+  {id:'spin',nm:'SPIn Analytics',ds:'Analitik prestasi pelajar — OTR & AR',ic:'📈',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-spinprof'},
   {id:'gantt',nm:'GanttPro',ds:'Carta Gantt digital untuk projek sekolah',ic:'📅',bg:'#fef3c7',url:'https://rabej1967-code.github.io/edukit-gantt'},
   {id:'kokum',nm:'KokurikulumTrack',ds:'Rekod kehadiran kokurikulum lengkap',ic:'🏅',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-kokum'},
   {id:'kokum2',nm:'Rekod Kehadiran Kokurikulum',ds:'Rekod kehadiran persatuan, beruniform & sukan',ic:'📋',bg:'#eff6ff',url:'https://rabej1967-code.github.io/edukit-kokum2v2'},
@@ -327,7 +327,7 @@ const APPS_GURU = [
 
 const APPS_PENTADBIR = [
   {id:'agihsk',nm:'EduAssign Pro SK',ds:'Agihan tugas guru sekolah rendah',ic:'📋',bg:'#e8f0fe',url:'https://rabej1967-code.github.io/agihtugas'},
-  {id:'agihsmk',nm:'EduAssign Pro SMK',ds:'Agihan tugas guru sekolah menengah',ic:'📌',bg:'#ede9fe',url:'https://rabej1967-code.github.io/edukit-gurukits'},
+  {id:'agihsmk',nm:'EduAssign Pro SMK',ds:'Agihan tugas guru sekolah menengah',ic:'📌',bg:'#ede9fe',url:'https://rabej1967-code.github.io/aghtugas-smk'},
   {id:'edudash',nm:'EduDash Pro',ds:'Dashboard sekolah lengkap',ic:'🏫',bg:'#dbeafe',url:'https://rabej1967-code.github.io/edukit-edudash'},
   {id:'headcount',nm:'H2 Headcount 2.0',ds:'Pemantauan OTR vs AR per kelas',ic:'🎯',bg:'#dcfce7',url:'https://rabej1967-code.github.io/edukit-headcount'},
   {id:'stafftrack',nm:'StaffTrack Pro',ds:'Kehadiran digital staf sekolah',ic:'👥',bg:'#f0fdf4',url:'https://rabej1967-code.github.io/edukit-stafftrack'},
@@ -566,7 +566,7 @@ function renderDash() {
   const ss = document.getElementById('selfServ')
   if (ss) {
     ss.style.display = CU.isDemo ? 'none' : 'block'
-    document.getElementById('btnResetApp').style.display = (pkg && !CU.isDemo) ? 'block' : 'none'
+    document.getElementById('btnResetApp').style.display = (['guru','pentadbir','gabungan'].includes(pkg) && !CU.isDemo) ? 'block' : 'none'
     document.getElementById('btnPortal').style.display = (PORTAL_URL && CU.kidspark_active) ? 'block' : 'none'
   }
 }
