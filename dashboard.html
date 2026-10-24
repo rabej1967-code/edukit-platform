@@ -520,13 +520,13 @@ function renderKidsSpark() {
       appsHtml += '</div>'
     }
 
-    let comingHtml = '<div class="sec-title" style="margin-top:20px;">🚀 Akan Datang <span class="sec-badge">Auto masuk</span></div><div class="ks-apps-grid">'
+    let comingHtml = '<div class="sec-title" style="margin-top:20px;">🚀 Akan Datang <span class="sec-badge">Akan datang</span></div><div class="ks-apps-grid">'
     APPS_KIDSPARK_COMING.forEach(a => {
       comingHtml += '<div class="ks-coming"><div class="ks-coming-ic">'+a.ic+'</div><div class="ks-coming-nm">'+a.nm+'</div><div style="font-size:10px;color:var(--t2);margin-bottom:6px;">'+a.ds+'</div><span class="ks-coming-tag">Akan Datang</span></div>'
     })
     comingHtml += '</div>'
 
-    el.innerHTML = '<div class="ks-banner"><div class="ks-active-badge"><span>●</span> Kids Spark Aktif</div><h2>✨ Kids Spark — Pakej Sewaan</h2><p>Semua apps baru akan masuk secara automatik tanpa bayaran tambahan.</p><button class="ks-btn" onclick="window.open(\'https://kidspark.website/\',\'_blank\')">Buka Kids Spark →</button></div>' + appsHtml + comingHtml
+    el.innerHTML = '<div class="ks-banner"><div class="ks-active-badge"><span>●</span> Kids Spark Aktif</div><h2>✨ KidSpark — Akses Seumur Hidup</h2><p>Terima kasih kerana memiliki KidSpark. Log masuk dengan nama pengguna &amp; kata laluan yang dihantar kepada anda.</p><button class="ks-btn" onclick="window.open(\'https://kidspark.website/\',\'_blank\')">Buka Kids Spark →</button></div>' + appsHtml + comingHtml
 
   } else {
     // BELUM AKTIF
@@ -536,7 +536,7 @@ function renderKidsSpark() {
     })
     comingHtml += '</div>'
 
-    el.innerHTML = '<div class="ks-banner"><h2>✨ Kids Spark — Belum Aktif</h2><p>Dapatkan akses kepada semua apps Kids Spark dan apps baru yang akan datang secara automatik.</p><div class="ks-features"><div class="ks-feat"><div class="ks-feat-ic">🎮</div><div class="ks-feat-t">Kids Spark</div><div class="ks-feat-s">Belajar sambil bermain</div></div><div class="ks-feat"><div class="ks-feat-ic">🚀</div><div class="ks-feat-t">Apps Baru Auto</div><div class="ks-feat-s">Masuk tanpa bayar lagi</div></div><div class="ks-feat"><div class="ks-feat-ic">❌</div><div class="ks-feat-t">Batal Bila-bila</div><div class="ks-feat-s">Tiada kontrak</div></div></div><div class="ks-price">RM 3 <span>/ bulan</span></div><a href="https://buy.stripe.com/aFacN41Gh7CqdPCg777g404" target="_blank" class="ks-btn">Langgan Kids Spark →</a></div>' + comingHtml
+    el.innerHTML = '<div class="ks-banner"><h2>✨ KidSpark — Belum Dimiliki</h2><p>Pembelajaran sambil bermain untuk rumah, sekolah dan pusat jagaan kanak-kanak.</p><div class="ks-features"><div class="ks-feat"><div class="ks-feat-ic">🎮</div><div class="ks-feat-t">KidSpark</div><div class="ks-feat-s">Belajar sambil bermain</div></div><div class="ks-feat"><div class="ks-feat-ic">♾️</div><div class="ks-feat-t">Sekali Bayar</div><div class="ks-feat-s">Seumur hidup</div></div></div><div class="ks-price">RM 37 <span>/ sekali bayar</span></div><a href="https://apps.cikgukita.com/#kidspark" target="_blank" class="ks-btn">Lihat KidSpark →</a></div>' + comingHtml
   }
 }
 

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>EduKit — 17 Apps Untuk Atasi Masalah Paling Kritikal & Strategik Dalam Kerjaya Guru dan Pentadbir Sekolah</title>
-<meta name="description" content="17 apps eksklusif untuk guru dan pentadbir sekolah Malaysia. Jimatkan masa, pulangkan hidup anda. Pakej dari RM 95 sahaja!">
+<meta name="description" content="Pakej Guru, Pakej Pentadbir, Pakej Gabungan (17 apps) dan KidSpark untuk anak-anak. Bayar sekali, guna seumur hidup. Dari RM 37.">
 <meta property="og:title" content="EduKit — 17 Apps Untuk Guru & Pentadbir Sekolah Malaysia">
-<meta property="og:description" content="Bukan apps biasa. Direka oleh orang yang faham setiap borang, setiap laporan, setiap malam yang anda habiskan di meja kerja. Pakej dari RM 95.">
+<meta property="og:description" content="Apps untuk guru &amp; pentadbir sekolah Malaysia, serta KidSpark — pembelajaran menyeronokkan untuk rumah, sekolah dan pusat jagaan kanak-kanak. Bayar sekali.\">
 <meta property="og:image" content="https://apps.cikgukita.com/og-image.jpg">
 <meta name="theme-color" content="#1a56db">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -220,7 +220,7 @@ a{text-decoration:none;color:inherit;}
 .ks-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.88);}
 .ks-fic{width:24px;height:24px;border-radius:6px;background:rgba(165,180,252,.15);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
 .ks-price{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 18px;display:inline-flex;align-items:center;gap:12px;margin-bottom:20px;}
-.ks-rm{font-size:26px;font-weight:900;color:#f59e0b;}
+.ks-rm{font-size:26px;font-weight:900;color:#f59e0b;white-space:nowrap;}
 .ks-note{font-size:12px;color:rgba(255,255,255,.6);}
 .ks-btn{padding:14px 28px;background:#f59e0b;border:none;border-radius:30px;font-size:14px;font-weight:800;color:#0f172a;cursor:pointer;font-family:inherit;min-height:50px;}
 .ks-btn:hover{background:#e68a00;}
@@ -275,6 +275,23 @@ footer a{color:rgba(255,255,255,.4);}
 .spp-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;position:absolute;top:10px;right:10px;}
 .toast-el{position:fixed;bottom:16px;right:16px;background:#1e293b;color:white;padding:10px 14px;border-radius:10px;font-size:12.5px;font-weight:600;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.2);animation:tIn .2s ease;}
 @keyframes tIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* PILIHAN 4 — KIDSPARK */
+.ks-opt{margin-top:18px;background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:22px;padding:24px 22px;display:grid;grid-template-columns:1fr;gap:18px;align-items:center;color:white;}
+@media(min-width:768px){.ks-opt{grid-template-columns:1.4fr 1fr;padding:28px 32px;}}
+.ks-opt-n{font-size:24px;font-weight:900;margin:4px 0 8px;}
+.ks-opt-d{font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.8;}
+.ks-opt-r{text-align:center;}
+.ks-opt-p{font-size:44px;font-weight:900;color:#f59e0b;line-height:1;}.ks-opt-p span{font-size:18px;margin-right:4px;}
+.ks-opt-s{font-size:12px;color:rgba(255,255,255,.65);margin:6px 0 12px;}
+.ks-opt-a{display:inline-block;margin-top:10px;font-size:12px;color:#c7d2fe;text-decoration:underline;}
+.ks-use{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.ks-usec{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 14px;}
+.ks-usei{font-size:22px;line-height:1;}
+.ks-usec strong{display:block;color:#fff;font-size:14px;margin-bottom:2px;}
+.ks-usec span{font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.6;}
+.ks-small{font-size:11.5px;color:rgba(255,255,255,.55);margin-top:12px;line-height:1.6;}
+.ks-visit{display:block;text-align:center;margin-top:12px;font-size:13px;font-weight:700;color:#fbbf24;text-decoration:underline;}
 </style>
 <!-- cache-bust: 1788441305 -->
 </head>
@@ -299,12 +316,13 @@ footer a{color:rgba(255,255,255,.4);}
   <div class="hero-btns">
     <button class="bhm" onclick="goTo('demo')">Cuba Demo Percuma — Tanpa Daftar →</button>
     <button class="bhs" onclick="goTo('apps')">Lihat Semua 17 Apps</button>
+    <button class="bhs" onclick="goTo('kidspark')">✨ KidSpark untuk Anak</button>
   </div>
   <div class="hstats">
-    <div class="hst"><div class="hst-v">500+</div><div class="hst-l">Pengguna Aktif</div></div>
+    <div class="hst"><div class="hst-v">4</div><div class="hst-l">Pilihan Pakej</div></div>
     <div class="hst"><div class="hst-v">17</div><div class="hst-l">Apps Eksklusif</div></div>
-    <div class="hst"><div class="hst-v">4.9★</div><div class="hst-l">Rating</div></div>
-    <div class="hst"><div class="hst-v">100%</div><div class="hst-l">Seumur Hidup</div></div>
+    <div class="hst"><div class="hst-v">1</div><div class="hst-l">Log Masuk Sahaja</div></div>
+    <div class="hst"><div class="hst-v">1×</div><div class="hst-l">Bayar, Guna Seumur Hidup</div></div>
   </div>
 </section>
 
@@ -362,7 +380,7 @@ footer a{color:rgba(255,255,255,.4);}
       <div class="sol-card"><div class="sol-ic">📱</div><div class="sol-t">Phone & Tablet</div><div class="sol-d">Guna dari mana-mana, bila-bila masa.</div></div>
       <div class="sol-card"><div class="sol-ic">🔒</div><div class="sol-t">Data 100% Peribadi</div><div class="sol-d">Diasingkan sepenuhnya. Tiada orang lain nampak.</div></div>
       <div class="sol-card"><div class="sol-ic">📋</div><div class="sol-t">Jana PDF Rasmi</div><div class="sol-d">Laporan siap dalam saat, bukan jam.</div></div>
-      <div class="sol-card"><div class="sol-ic">🔄</div><div class="sol-t">Apps Baru Auto Masuk</div><div class="sol-d">Langgan RM 3/bulan, dapat semua apps baru percuma.</div></div>
+      <div class="sol-card"><div class="sol-ic">🔑</div><div class="sol-t">Satu Log Masuk</div><div class="sol-d">Satu e-mel &amp; satu kata laluan untuk semua apps yang anda beli.</div></div>
       <div class="sol-card"><div class="sol-ic">🎓</div><div class="sol-t">Tutorial Lengkap</div><div class="sol-d">Video panduan setiap app. Mudah dipelajari.</div></div>
     </div>
   </div>
@@ -373,7 +391,7 @@ footer a{color:rgba(255,255,255,.4);}
   <div class="sec-in">
     <div class="sec-lbl">Cuba Sendiri — Percuma</div>
     <h2 class="sec-t">Jangan Percaya Kata Kami.<br>Cuba Sendiri — Sekarang.</h2>
-    <p class="sec-s">Dalam masa 3 minit, anda akan faham kenapa 500+ guru dan pentadbir tidak mahu kembali kepada cara lama.</p>
+    <p class="sec-s">Dalam masa 3 minit, anda akan nampak sendiri bagaimana apps ini menjimatkan masa kerja anda.</p>
     <div class="demo-tabs">
       <button class="dtab ag" id="dtab1" onclick="switchDemo(1)">📊 SPIn Analytics — Pakej Guru</button>
       <button class="dtab" id="dtab2" onclick="switchDemo(2)">🔍 SK@S Pencerapan — Pakej Pentadbir</button>
@@ -392,31 +410,6 @@ footer a{color:rgba(255,255,255,.4);}
 </section>
 
 <div class="divider"></div>
-
-<!-- 6. TESTIMONIALS -->
-<section class="testi-wrap">
-  <div class="testi-in">
-    <div class="sec-lbl" style="color:rgba(255,255,255,.6);">Kata Mereka</div>
-    <h2 class="sec-t" style="color:white;text-align:center;">Mereka Dulu Rasa Sama Seperti Anda.<br>Ini Yang Berlaku Selepas Itu.</h2>
-    <div class="tgrid">
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"Saya ingat lagi malam sebelum guna EduKit — tengah malam masih buat laporan SPIn. Sekarang? Sama kerja, 20 minit je. Saya dah boleh balik awal tengok anak buat homework."</div>
-        <div class="tc-user"><div class="tc-av">NZ</div><div><div class="tc-nm">Norazlin Zainudin</div><div class="tc-loc">Guru Kanan — Selangor</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"Jujur — saya skeptikal. Tapi bila SK@S Pencerapan jana borang PDF rasmi dalam 5 minit yang biasanya ambil 2 jam... saya telefon kawan saya terus suruh dia beli juga."</div>
-        <div class="tc-user"><div class="tc-av">AH</div><div><div class="tc-nm">Ahmad Hafiz Mohd</div><div class="tc-loc">GPK Pentadbiran — Perak</div></div></div>
-      </div>
-      <div class="tc">
-        <div class="tc-stars">★★★★★</div>
-        <div class="tc-text">"RM 95 untuk seumur hidup? Saya bayar lebih dari tu untuk makan malam keluarga sekali. Ini pelaburan terbaik dalam kerjaya saya sejak mula mengajar 33 tahun lalu."</div>
-        <div class="tc-user"><div class="tc-av">SR</div><div><div class="tc-nm">Siti Rohani Abd. Aziz</div><div class="tc-loc">Pengetua — Johor</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- 7. APPS SHOWCASE -->
 <section class="apps-showcase" id="apps">
@@ -496,8 +489,6 @@ footer a{color:rgba(255,255,255,.4);}
         </div>
         <div class="pfoot">
           <button class="pbtn blue" onclick="window.location.href=STRIPE[1]">Beli Pakej Guru — RM 95 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
           <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
         </div>
       </div>
@@ -518,8 +509,6 @@ footer a{color:rgba(255,255,255,.4);}
         </div>
         <div class="pfoot">
           <button class="pbtn blue" onclick="window.location.href=STRIPE[2]">Beli Pakej Pentadbir — RM 95 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
           <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
         </div>
       </div>
@@ -551,10 +540,21 @@ footer a{color:rgba(255,255,255,.4);}
         </div>
         <div class="pfoot">
           <button class="pbtn gold" onclick="window.location.href=STRIPE[3]">Beli Semua 17 Apps — RM 165 →</button>
-          <button class="pbtn ks" onclick="window.location.href=STRIPE.ks">✨ Langgan + Kids Spark — RM 3/bulan</button>
-          <div class="ks-tag">🚀 Apps baru EduKit masuk automatik & percuma • Batal bila-bila masa</div>
           <div class="pguar">🛡️ Jaminan wang balik 7 hari</div>
         </div>
+      </div>
+
+    <div class="ks-opt" id="pilihan-kidspark">
+      <div class="ks-opt-l">
+        <div class="ptier" style="color:#a5b4fc;">Pilihan 4 — Produk Berasingan</div>
+        <div class="ks-opt-n">✨ KidSpark</div>
+        <div class="ks-opt-d">Pembelajaran menyeronokkan untuk anak-anak di rumah, murid di sekolah dan kanak-kanak di pusat jagaan. Bukan sebahagian daripada Pakej Guru/Pentadbir.</div>
+      </div>
+      <div class="ks-opt-r">
+        <div class="ks-opt-p"><span>RM</span>37</div>
+        <div class="ks-opt-s">sekali bayar • seumur hidup</div>
+        <button class="pbtn gold" onclick="buyKS()">Beli KidSpark — RM 37 →</button>
+        <a class="ks-opt-a" href="#kidspark" onclick="goTo('kidspark');return false;">Baca lebih lanjut ↓</a>
       </div>
     </div>
   </div>
@@ -564,35 +564,33 @@ footer a{color:rgba(255,255,255,.4);}
 <section class="ks-wrap" id="kidspark">
   <div class="ks-in">
     <div>
-      <div class="ks-lbl">✨ Satu Lagi Hadiah — Untuk Anda Yang Nak Lebih</div>
-      <h2>Hanya <em>RM 3 Sebulan</em> —<br>Masa Anda Lebih Berharga Dari Itu</h2>
-      <p>Bayangkan ini. Anda selesai kerja awal. Balik rumah. Anak anda bukan tengok YouTube — mereka belajar sambil bermain di Kids Spark. Dan setiap apps baru EduKit yang kami lancarkan? Terus masuk ke akaun anda. Percuma. Selama-lamanya. Harga sebulan? Kurang dari sebotol air mineral di pejabat.</p>
-      <div class="warn-box">
-        <div class="warn-box-ic">⚠️</div>
-        <div class="warn-box-t">Tanpa langgan, apps baru EduKit akan dijual berasingan pada harga penuh bila ditambah pada masa hadapan. Langgan sekarang — kunci harga untuk selamanya.</div>
+      <div class="ks-lbl">✨ KidSpark — Untuk Anak-Anak, Murid &amp; Kanak-Kanak</div>
+      <h2>Belajar Itu Seronok Bila <em>Rasa Macam Bermain</em></h2>
+      <p>Anak anda boleh terus belajar tanpa dibiarkan dengan YouTube dan permainan yang tiada nilai. KidSpark menggabungkan aktiviti, lembaran kerja dan apps pembelajaran supaya kanak-kanak belajar sambil bermain — di mana sahaja mereka berada.</p>
+      <div class="ks-use">
+        <div class="ks-usec"><div class="ks-usei">🏠</div><div><strong>Di Rumah</strong><span>Ibu bapa mahu anak belajar sambil bermain, bukan sekadar menonton.</span></div></div>
+        <div class="ks-usec"><div class="ks-usei">🏫</div><div><strong>Di Sekolah</strong><span>Guru boleh gunakan sebagai aktiviti pengukuhan, pengayaan dan bahan bantu mengajar.</span></div></div>
+        <div class="ks-usec"><div class="ks-usei">🧸</div><div><strong>Pusat Jagaan Kanak-Kanak</strong><span>Taska dan pusat jagaan boleh mengisi masa kanak-kanak dengan aktiviti yang ada unsur pembelajaran.</span></div></div>
       </div>
       <div class="ks-feats">
-        <div class="ks-feat"><div class="ks-fic">🚀</div>Semua apps EduKit baru — auto masuk, <strong>percuma selama-lamanya</strong></div>
-        <div class="ks-feat"><div class="ks-fic">🎮</div>Akses penuh <strong>Kids Spark</strong> — pembelajaran fun untuk anak</div>
-        <div class="ks-feat"><div class="ks-fic">🔓</div>Akses awal apps baru sebelum orang lain</div>
-        <div class="ks-feat"><div class="ks-fic">❌</div>Batal bila-bila masa — tiada kontrak, tiada soal jawab</div>
+        <div class="ks-feat"><div class="ks-fic">🎮</div><div>Aktiviti &amp; apps pembelajaran <strong>interaktif</strong></div></div>
+        <div class="ks-feat"><div class="ks-fic">📄</div><div>Lembaran kerja untuk latihan tambahan</div></div>
+        <div class="ks-feat"><div class="ks-fic">🤖</div><div>Ciri Smart AI untuk sokongan pembelajaran</div></div>
+        <div class="ks-feat"><div class="ks-fic">📱</div><div>Guna di phone, tablet atau komputer</div></div>
+        <div class="ks-feat"><div class="ks-fic">♾️</div><div><strong>Bayar sekali</strong> — akses seumur hidup, tiada bayaran bulanan</div></div>
       </div>
       <div class="ks-price">
-        <div><div class="ks-rm">RM 3</div></div>
-        <div><div class="ks-note">/ bulan sahaja</div><div class="ks-note">Auto potong • Batal bila-bila masa</div></div>
+        <div><div class="ks-rm">RM 37</div></div>
+        <div><div class="ks-note">sekali bayar • seumur hidup</div><div class="ks-note">Nama pengguna &amp; kata laluan dihantar kepada anda (dalam 24 jam)</div></div>
       </div>
-      <button class="ks-btn" onclick="window.location.href=STRIPE.ks">🚀 Aktifkan Sewaan RM 3/Bulan →</button>
+      <div><button class="ks-btn" onclick="buyKS()">🚀 Beli KidSpark — RM 37 →</button></div>
+      <div class="ks-small">KidSpark ialah produk berasingan. Ia tidak termasuk apps EduKit Pakej Guru atau Pakej Pentadbir.</div>
     </div>
     <div>
       <div class="ks-fw">
-        <iframe class="ks-iframe" src="https://kidspark.website/" title="Kids Spark" sandbox="allow-scripts allow-same-origin"></iframe>
-        <div class="ks-blur">
-          <div class="ks-blur-ic">🔒</div>
-          <div class="ks-blur-t">Kids Spark — Terkunci</div>
-          <div class="ks-blur-s">Langgan RM 3/bulan untuk akses penuh Kids Spark dan semua apps EduKit baru</div>
-          <button style="padding:10px 22px;background:#f59e0b;border:none;border-radius:20px;font-size:13px;font-weight:700;color:#0f172a;cursor:pointer;font-family:inherit;" onclick="window.location.href=STRIPE.ks">Aktifkan Sekarang →</button>
-        </div>
+        <iframe class="ks-iframe" src="https://kidspark.website/" title="KidSpark" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
       </div>
+      <a class="ks-visit" href="https://kidspark.website/" target="_blank" rel="noopener">Lawati kidspark.website untuk lihat sendiri →</a>
     </div>
   </div>
 </section>
@@ -601,13 +599,16 @@ footer a{color:rgba(255,255,255,.4);}
 <section class="faq-wrap">
   <div class="sec-lbl" style="text-align:center;">Soalan Lazim</div>
   <h2 class="sec-t" style="margin-bottom:30px;">Ada Soalan? Kami Jawab.</h2>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Berapa lama boleh guna apps ini?</div><div class="faq-a">Akses seumur hidup. Bayar sekali, guna selama-lamanya. Semua kemaskini apps percuma. Langgan RM 3/bulan untuk dapat semua apps baru secara automatik — tanpa perlu bayar tambahan.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Apa yang dapat kalau langgan RM 3/bulan?</div><div class="faq-a">Anda dapat akses penuh Kids Spark untuk anak-anak DAN semua apps EduKit baru yang akan ditambah pada masa hadapan — masuk ke akaun anda secara automatik dan percuma selama-lamanya. Tanpa langgan, apps baru perlu dibeli berasingan.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh guna dari phone atau tablet?</div><div class="faq-a">Ya, semua apps EduKit dioptimumkan untuk phone, tablet dan komputer. Guna dari mana-mana device tanpa perlu install apa-apa.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Data sekolah saya selamat ke?</div><div class="faq-a">Ya, 100% selamat. Kami guna teknologi Supabase dengan Row Level Security — data anda tidak boleh dilihat oleh pengguna lain langsung. Setiap akaun diasingkan sepenuhnya.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Sewaan RM 3/bulan tu wajib ke?</div><div class="faq-a">Tidak wajib sama sekali. Ia pilihan semata-mata. Tanpa langgan, anda tetap guna semua apps yang dibeli. Cuma apps baru yang ditambah pada masa hadapan tidak masuk automatik.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh upgrade pakej kemudian?</div><div class="faq-a">Boleh! Hubungi kami dan kami proses upgrade dengan caj perbezaan harga sahaja. Tidak perlu bayar penuh semula.</div></div>
-  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Ada jaminan wang balik?</div><div class="faq-a">Ya! Jaminan wang balik 7 hari penuh tanpa soal jika tidak berpuas hati. Kami yakin dengan apa yang kami bina.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Berapa lama boleh guna apps ini?</div><div class="faq-a">Akses seumur hidup. Bayar sekali, guna selama-lamanya. Tiada yuran tahunan atau bulanan untuk Pakej Guru, Pentadbir, Gabungan dan KidSpark.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Apakah bezanya 4 pilihan ini?</div><div class="faq-a"><strong>Pakej Guru (RM 95)</strong> — apps untuk guru. <strong>Pakej Pentadbir (RM 95)</strong> — apps untuk GPK, pengetua dan pentadbir. <strong>Pakej Gabungan (RM 165)</strong> — kedua-duanya, 17 apps, jimat RM 25. <strong>KidSpark (RM 37)</strong> — produk pembelajaran untuk anak-anak, berasingan daripada tiga pakej lain.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Pakej Guru dan Pakej Pentadbir boleh dibuka bersama?</div><div class="faq-a">Setiap pakej hanya membuka apps dalam pakej itu. Jika anda mahukan kedua-duanya, pilih Pakej Gabungan RM 165 — lebih jimat daripada membeli berasingan.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">KidSpark sesuai untuk siapa?</div><div class="faq-a">Untuk anak-anak di rumah, murid di sekolah, dan kanak-kanak di pusat jagaan atau taska — mana-mana tempat yang mahu aktiviti dengan unsur pembelajaran.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Bagaimana saya dapat akses KidSpark selepas bayar?</div><div class="faq-a">Selepas pembayaran, nama pengguna dan kata laluan KidSpark dihantar kepada anda secara manual (biasanya dalam 24 jam). Jika belum terima, hubungi kami melalui WhatsApp.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Bagaimana saya dapat akses Pakej Guru / Pentadbir / Gabungan?</div><div class="faq-a">Selepas bayar, e-mel dihantar dengan maklumat log masuk dashboard dan semua apps dalam pakej anda. Anda akan diminta menukar kata laluan pada log masuk pertama.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh guna dari phone atau tablet?</div><div class="faq-a">Ya, apps dioptimumkan untuk phone, tablet dan komputer. Tiada apa-apa yang perlu dipasang.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Jika saya lupa kata laluan?</div><div class="faq-a">Pada halaman Log Masuk, klik "Lupa kata laluan" dan pautan tetapan semula akan dihantar ke e-mel anda.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Boleh upgrade pakej kemudian?</div><div class="faq-a">Boleh. Hubungi kami dan kami proses upgrade dengan caj perbezaan harga sahaja.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Ada jaminan wang balik?</div><div class="faq-a">Ya, jaminan wang balik 7 hari jika tidak berpuas hati. Hubungi kami melalui WhatsApp.</div></div>
 </section>
 
 <!-- 12. FINAL CTA -->
@@ -629,22 +630,21 @@ footer a{color:rgba(255,255,255,.4);}
 </div>
 
 <footer>
-  <p>© 2025 EduKit — Platform Digital untuk Warga Pendidik Malaysia<br>
+  <p>© 2026 EduKit — Platform Digital untuk Warga Pendidik Malaysia<br>
   <a href="#">Dasar Privasi</a> &nbsp;|&nbsp; <a href="#">Hubungi Kami</a> &nbsp;|&nbsp; <a href="dashboard.html">Log Masuk</a></p>
 </footer>
-
-<div class="spp" id="spp">
-  <div class="spp-av" id="sppAv">AZ</div>
-  <div><div class="spp-nm" id="sppNm"></div><div class="spp-inf" id="sppInf"></div><div class="spp-tm" id="sppTm"></div></div>
-  <div class="spp-dot"></div>
-</div>
 
 <script>
 const STRIPE = {
   1: 'https://buy.stripe.com/4gM5kC1Gh2i6cLycUV7g400',
   2: 'https://buy.stripe.com/bJefZg5Wx6ym8vi6wx7g402',
   3: 'https://buy.stripe.com/5kQdR8doZbSG7reg777g403',
-  ks: 'https://buy.stripe.com/aFacN41Gh7CqdPCg777g404'
+  ks: ''
+}
+const KS_PRICE_TEXT = 'RM 37'
+function buyKS(){
+  if (STRIPE.ks) { window.location.href = STRIPE.ks; return }
+  window.open('https://wa.me/60198634496?text=' + encodeURIComponent('Salam, saya berminat membeli KidSpark (RM 37 sekali bayar). Boleh bantu?'), '_blank')
 }
 
 const EDUKIT_VIDEOS = {
@@ -739,35 +739,8 @@ function copyLink() {
 }
 function toast(m) { const t=document.createElement('div');t.className='toast-el';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},2400) }
 
-const SPD = [
-  {nm:'Azlan b. Hamid',pkg:'Pakej Guru',loc:'Selangor',m:2},
-  {nm:'Norhafiza Md. Noor',pkg:'Pakej Pentadbir',loc:'Perak',m:5},
-  {nm:'Rashidah Kamarudin',pkg:'Pakej Guru + Pentadbir',loc:'Johor',m:9},
-  {nm:'Hafiz Abd. Rahman',pkg:'Pakej Guru',loc:'Kedah',m:14},
-  {nm:'Zarina bt. Yusof',pkg:'Pakej Pentadbir',loc:'Terengganu',m:18},
-  {nm:'Mohd. Izzat Saad',pkg:'Pakej Guru + Pentadbir',loc:'Pahang',m:25},
-  {nm:'Faridah Mohamad',pkg:'Pakej Guru',loc:'Kelantan',m:33},
-  {nm:'Suhaimi bt. Kassim',pkg:'Pakej Pentadbir',loc:'N. Sembilan',m:41},
-  {nm:'Rozita Ahmad',pkg:'Pakej Guru + Pentadbir',loc:'Melaka',m:50},
-  {nm:'Khairul Nizam',pkg:'Pakej Guru',loc:'Pulau Pinang',m:58},
-  {nm:'Salmah bt. Salleh',pkg:'Pakej Pentadbir',loc:'Sabah',m:66},
-  {nm:'Amirul Hakimi',pkg:'Pakej Guru + Pentadbir',loc:'Sarawak',m:78},
-]
-let si = 0
-const spp = document.getElementById('spp')
-function showSP() {
-  const d = SPD[si % SPD.length]
-  const ini = d.nm.split(' ').filter(w=>/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('')
-  document.getElementById('sppAv').textContent = ini
-  document.getElementById('sppNm').textContent = d.nm
-  document.getElementById('sppInf').innerHTML = 'membeli <strong>' + d.pkg + '</strong>'
-  const t = d.m < 60 ? d.m+' min lalu' : Math.floor(d.m/60)+' jam lalu'
-  document.getElementById('sppTm').textContent = t + ' · ' + d.loc
-  spp.classList.add('show'); setTimeout(()=>spp.classList.remove('show'), 4200); si++
-}
-setTimeout(()=>{ showSP(); setInterval(showSP, 7500) }, 3500)
 
-const TI = ['🎉 Azlan dari Selangor beli Pakej Guru','✅ Norhafiza dari Perak beli Pakej Pentadbir','🏆 Rashidah dari Johor beli Pakej Gabungan','🎓 500+ warga pendidik dah guna EduKit','⭐ Rating 4.9/5 daripada pengguna','🔍 SK@S Pencerapan — borang PDF dalam 5 minit','📊 SPIn Analytics — pantau prestasi pelajar','🎮 GameKelas — kelas lebih aktif & seronok','🏫 EduDash Pro — dashboard sekolah lengkap','💎 17 apps hanya RM 165 seumur hidup','📱 Mesra phone & tablet','🔒 Data selamat & peribadi sepenuhnya']
+const TI = ['📚 Pakej Guru — RM 95 seumur hidup','🏫 Pakej Pentadbir — RM 95 seumur hidup','💎 Gabungan 17 apps — RM 165 seumur hidup','✨ KidSpark — RM 37 sekali bayar, untuk rumah, sekolah & pusat jagaan','🔍 SK@S Pencerapan — borang PDF dalam minit','📊 SPIn Analytics — pantau prestasi pelajar','🎮 GameKelas — kelas lebih aktif & seronok','🏫 EduDash Pro — dashboard sekolah lengkap','📱 Mesra phone & tablet','🔑 Satu log masuk untuk semua apps yang dibeli']
 document.getElementById('tickerEl').innerHTML = [...TI,...TI].map(t=>'<div class="tick-item"><div class="tick-dot"></div>'+t+'</div>').join('')
 
 let v17Current = 1
