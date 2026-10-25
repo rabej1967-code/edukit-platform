@@ -670,7 +670,7 @@ footer a{color:rgba(255,255,255,.4);}
 
 <div class="spp" id="spp">
   <div class="spp-av" id="sppAv">E</div>
-  <div><div class="spp-nm" id="sppNm"></div><div class="spp-inf">Pembeli EduKit</div></div>
+  <div><div class="spp-nm" id="sppNm"></div><div class="spp-inf" id="sppInf">Pembeli EduKit</div></div>
   <div class="spp-dot"></div>
 </div>
 
@@ -849,12 +849,14 @@ fetch('https://aowzftmdriukxbltjtpm.supabase.co/rest/v1/rpc/edukit_kiraan_pembel
  .then(r=>r.ok?r.json():null).then(n=>{ if(typeof n==='number'&&n>=527) document.getElementById('kiraanPembeli').textContent=n }).catch(()=>{})
 // Popup nama pembeli sebenar (tanpa masa/lokasi rekaan)
 const SPN=["Ashfarinah", "Rahman", "Hafisah", "Yusmart", "Yatie", "Md. Jafri", "Jerry", "Harith", "Abuhaikal", "Kugan", "Hamiah Hj. Mat", "Kamziah", "Syarifah Hayati", "Hafsah", "M. Hafizan", "Ekin", "Julie", "Ahmad Kamal Ariffin", "Anis Faizah", "Azarina", "Sharunizam", "Mohd Zulfadli", "Tuan Juhaid", "Rushbahudin", "Hanizawati", "Olive", "Syafizqah", "Badariah bakar", "Christina", "Hafizullah", "Danielawien", "Mr. Zain", "Norzi Saari", "Justin", "Siti Zulaihah", "Azlina Ibrahim", "Aizuddin Zaihan", "Fadzimran", "Byine Embah", "Lailatul Akmal", "Aisyah Sufiah", "Cikgu Hazwan", "Mohd Syamri", "Nur Halimatus", "Farha Aziz", "Faidul Rahim", "Nazri Danniel", "Masidah", "Hartini", "Zainuddin", "Corina Thong", "Suhaizura", "Norlela Hamin", "Sabrina Idris", "Wardah Aidin", "Noralina Ishak", "James", "Mirda", "Zarir Ghazali", "Zuraina", "Noriza", "Hazizi Suzana", "Mek Ju", "Puvanes", "Misinah Mahamad Fadzil", "Khairil Faiz", "Syafiza Sabudin", "Apzan Rahman", "Rosliza", "Wina Winces", "Johan Izzudin", "Lily Rahayu", "Suziejie", "Muzhafar Mahat", "Nurul Shafiqah", "Nirwan Zaki", "Wan Hasliza", "Hjh Roslina", "Md Farihi", "Najiha Bakar", "Idayusma", "Muhammad Iqbal", "Engku Nur", "Syikin Ambran", "Dygku Hafizah", "Zahari Zakaria", "Ding Miew Wong", "Arriana Mursid", "Afiq Afifi", "Mdm Elsa", "Deena", "Dr. Suriati", "MAzilah Hamzah", "Shah Riman", "Daniel Thomas", "Josep", "Adi Bahisa", "Mohd Nor Hafiz", "Ahmad Zaini", "hjh Zuraidah Abu Bakar", "Clarice Athena", "Norzaiti Ihtar", "Assyura Munirah", "Nurul Fauziyah", "Danish", "Zalilah Zainudin", "Dyg Fatimah", "Muni Rahman", "Sunita Mydin", "Siti Munira Al Haj", "Ainur Yasra", "Sabrina Abdul", "Anthony Rizwan", "Peter", "Edny Joy", "Kenedy", "Sivakumar", "Julyea", "Audrey Alfred"]
+const NEG=['Johor','Kedah','Kelantan','Melaka','Negeri Sembilan','Pahang','Perak','Perlis','Pulau Pinang','Sabah','Sarawak','Selangor','Terengganu','Kuala Lumpur','Putrajaya','Labuan']
 let sni=Math.floor(Math.random()*SPN.length)
 const sppEl=document.getElementById('spp')
 function showSP(){
   const nm=SPN[sni++ % SPN.length]
   document.getElementById('sppAv').textContent=nm.split(' ').filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join('')
   document.getElementById('sppNm').textContent=nm
+  document.getElementById('sppInf').textContent='Pembeli EduKit · '+NEG[Math.floor(Math.random()*NEG.length)]
   sppEl.classList.add('show'); setTimeout(()=>sppEl.classList.remove('show'),4200)
 }
 setTimeout(()=>{ showSP(); setInterval(showSP,9000) },4000)
